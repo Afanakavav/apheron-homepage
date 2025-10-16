@@ -1,5 +1,5 @@
 // APHERON Service Worker
-const CACHE_NAME = 'apheron-v3';
+const CACHE_NAME = 'apheron-v4';
 const urlsToCache = [
   'https://afanakavav.github.io/apheron-homepage/',
   'https://afanakavav.github.io/apheron-homepage/index.html',

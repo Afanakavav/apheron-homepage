@@ -326,7 +326,7 @@ function showItalianContent() {
 // Service Worker
 function initializeServiceWorker() {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('https://afanakavav.github.io/apheron-homepage/sw.js?v=3')
+        navigator.serviceWorker.register('https://afanakavav.github.io/apheron-homepage/sw.js?v=4')
             .then(registration => {
                 console.log('SW registered:', registration);
             })
@@ -423,8 +423,8 @@ function initializeDownloadButton() {
     
     if (!downloadBtn) return;
     
-    // Show button only on mobile devices
-    if (!isMobileDevice()) {
+    // Show button only on mobile devices and not in standalone mode
+    if (!isMobileDevice() || isInStandaloneMode()) {
         downloadBtn.style.display = 'none';
         return;
     }
