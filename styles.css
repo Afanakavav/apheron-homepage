@@ -11,6 +11,7 @@
     --bg-secondary: #0D1B2A;
     --text-primary: #D4AF37;
     --text-secondary: #757575;
+    --text-tertiary: #B8B8B8;
     --accent: #D4AF37;
     --border: #757575;
 }
@@ -340,7 +341,7 @@ body::before {
 .bio-content h2 {
     font-family: 'Cinzel', serif;
     font-size: 1.8rem;
-    color: #D4AF37;
+    color: var(--text-tertiary);
     margin-bottom: 1rem;
     font-weight: 600;
 }
@@ -354,7 +355,7 @@ body::before {
 
 .bio-subtext {
     font-size: 0.95rem;
-    color: #D4AF37;
+    color: var(--text-tertiary);
     font-style: italic;
 }
 
