@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeGeolocation();
     initializeServiceWorker();
     initializePWA();
+    initializeDownloadButton();
     
     // Parallax effect per il logo
     const logo = document.querySelector('.logo');
@@ -352,6 +353,7 @@ function initializePWA() {
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
+        window.deferredPrompt = e; // Save globally for download button
         
         // Show install banner after 3 seconds
         setTimeout(() => {
@@ -413,4 +415,192 @@ function isInStandaloneMode() {
 function showIOSInstructions() {
     // Show instructions for iOS users to add to home screen
     console.log('iOS detected - show add to home screen instructions');
+}
+
+// Download App Button
+function initializeDownloadButton() {
+    const downloadBtn = document.getElementById('download-app-btn');
+    
+    if (!downloadBtn) return;
+    
+    // Show button only on mobile devices
+    if (!isMobileDevice()) {
+        downloadBtn.style.display = 'none';
+        return;
+    }
+    
+    downloadBtn.addEventListener('click', () => {
+        if (isIOS()) {
+            showIOSInstallInstructions();
+        } else if (isAndroid()) {
+            triggerAndroidInstall();
+        } else {
+            showGenericInstructions();
+        }
+        
+        trackEvent('download_app_clicked', { 
+            device: getDeviceType(),
+            platform: isIOS() ? 'ios' : isAndroid() ? 'android' : 'other'
+        });
+    });
+}
+
+// Helper functions for device detection
+function isMobileDevice() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
+function isAndroid() {
+    return /Android/i.test(navigator.userAgent);
+}
+
+function getDeviceType() {
+    if (isIOS()) return 'ios';
+    if (isAndroid()) return 'android';
+    return 'other';
+}
+
+// iOS Install Instructions
+function showIOSInstallInstructions() {
+    const modal = document.createElement('div');
+    modal.className = 'ios-instructions-modal';
+    modal.innerHTML = `
+        <div class="modal-overlay">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Scarica l'app APHERON</h3>
+                    <button class="modal-close">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="instruction-step">
+                        <div class="step-number">1</div>
+                        <div class="step-text">Tocca il pulsante <strong>Condividi</strong> <span class="share-icon">⎋</span> nella barra inferiore</div>
+                    </div>
+                    <div class="instruction-step">
+                        <div class="step-number">2</div>
+                        <div class="step-text">Scorri e tocca <strong>"Aggiungi alla schermata Home"</strong></div>
+                    </div>
+                    <div class="instruction-step">
+                        <div class="step-number">3</div>
+                        <div class="step-text">Tocca <strong>"Aggiungi"</strong> per installare l'app</div>
+                    </div>
+                    <div class="instruction-note">
+                        <p>L'app APHERON sarà disponibile sulla tua schermata Home!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Close modal handlers
+    modal.querySelector('.modal-close').addEventListener('click', () => {
+        modal.remove();
+    });
+    
+    modal.querySelector('.modal-overlay').addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) {
+            modal.remove();
+        }
+    });
+}
+
+// Android Install
+function triggerAndroidInstall() {
+    // Try to trigger the PWA install prompt
+    if (window.deferredPrompt) {
+        window.deferredPrompt.prompt();
+        window.deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                trackEvent('android_install_accepted');
+            } else {
+                trackEvent('android_install_declined');
+            }
+            window.deferredPrompt = null;
+        });
+    } else {
+        // Fallback: show instructions
+        showAndroidInstructions();
+    }
+}
+
+// Android Instructions
+function showAndroidInstructions() {
+    const modal = document.createElement('div');
+    modal.className = 'android-instructions-modal';
+    modal.innerHTML = `
+        <div class="modal-overlay">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Scarica l'app APHERON</h3>
+                    <button class="modal-close">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="instruction-step">
+                        <div class="step-number">1</div>
+                        <div class="step-text">Tocca il menu <span class="menu-icon">⋮</span> in alto a destra</div>
+                    </div>
+                    <div class="instruction-step">
+                        <div class="step-number">2</div>
+                        <div class="step-text">Seleziona <strong>"Aggiungi alla schermata Home"</strong></div>
+                    </div>
+                    <div class="instruction-step">
+                        <div class="step-number">3</div>
+                        <div class="step-text">Tocca <strong>"Aggiungi"</strong> per installare l'app</div>
+                    </div>
+                    <div class="instruction-note">
+                        <p>L'app APHERON sarà disponibile sulla tua schermata Home!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Close modal handlers
+    modal.querySelector('.modal-close').addEventListener('click', () => {
+        modal.remove();
+    });
+    
+    modal.querySelector('.modal-overlay').addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) {
+            modal.remove();
+        }
+    });
+}
+
+// Generic Instructions
+function showGenericInstructions() {
+    const modal = document.createElement('div');
+    modal.className = 'generic-instructions-modal';
+    modal.innerHTML = `
+        <div class="modal-overlay">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Scarica l'app APHERON</h3>
+                    <button class="modal-close">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="instruction-note">
+                        <p>Per installare l'app APHERON, cerca l'opzione <strong>"Aggiungi alla schermata Home"</strong> o <strong>"Installa app"</strong> nel menu del tuo browser.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Close modal handlers
+    modal.querySelector('.modal-close').addEventListener('click', () => {
+        modal.remove();
+    });
+    
+    modal.querySelector('.modal-overlay').addEventListener('click', (e) => {
+        if (e.target === e.currentTarget) {
+            modal.remove();
+        }
+    });
 }
