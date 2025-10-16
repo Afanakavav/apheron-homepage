@@ -635,150 +635,69 @@ body::before {
     margin-top: auto;
 }
 
-/* CTA Section */
-.cta-section {
-    margin: 4rem 0;
-    animation: fadeInUp 1.5s ease-out 1.3s both;
-}
-
-.cta-grid {
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-}
-
-.cta-button {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 1rem 2rem;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.cta-button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    transition: left 0.5s ease;
-}
-
-.cta-button:hover::before {
-    left: 100%;
-}
-
-.cta-button.primary {
-    background: linear-gradient(135deg, #D4AF37, #B8941F);
-    color: #0A0A0A;
-    border: 1px solid #D4AF37;
-}
-
-.cta-button.primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(212, 175, 55, 0.4);
-}
-
-.cta-button.secondary {
-    background: transparent;
-    color: #D4AF37;
-    border: 1px solid #D4AF37;
-}
-
-.cta-button.secondary:hover {
-    background: #D4AF37;
-    color: #0A0A0A;
-    transform: translateY(-3px);
-}
-
-.cta-button.tertiary {
-    background: transparent;
-    color: #757575;
-    border: 1px solid #757575;
-}
-
-.cta-button.tertiary:hover {
-    color: #D4AF37;
-    border-color: #D4AF37;
-    transform: translateY(-3px);
-}
-
-.cta-icon {
-    font-size: 1.2rem;
-}
-
-.urgency-text {
-    text-align: center;
-    margin-top: 1rem;
-    animation: pulse 2s ease-in-out infinite;
-}
-
-.urgency-text p {
-    color: var(--accent);
-    font-weight: 600;
-    font-size: 0.9rem;
-    margin: 0;
-}
 
 /* Footer */
 .footer {
-    margin-top: auto;
-    padding-top: 2rem;
+    margin-top: 4rem;
+    padding: 2rem 0;
+    border-top: 1px solid var(--border);
     animation: fadeInUp 1.5s ease-out 1.5s both;
 }
 
 .footer-content {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
 }
 
-.footer-main p {
-    color: #757575;
+.footer-left {
+    flex: 1;
+    min-width: 250px;
+}
+
+.footer-right {
+    flex: 1;
+    min-width: 300px;
+    text-align: right;
+}
+
+.copyright {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin: 0 0 0.5rem 0;
+    font-weight: 400;
+}
+
+.tagline {
+    color: var(--text-primary);
+    font-size: 1rem;
+    margin: 0;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+}
+
+.contact-info {
+    color: var(--text-secondary);
     font-size: 0.9rem;
     margin: 0;
+    line-height: 1.5;
 }
 
-.footer-social {
-    display: flex;
-    gap: 1.5rem;
-}
-
-.social-link {
-    color: #757575;
-    text-decoration: none;
-    font-size: 0.9rem;
+.contact-link {
+    color: #4A90E2;
+    text-decoration: underline;
     transition: all 0.3s ease;
-    position: relative;
+    font-weight: 500;
 }
 
-.social-link::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 0;
-    height: 1px;
-    background: #D4AF37;
-    transition: width 0.3s ease;
-}
-
-.social-link:hover {
-    color: #D4AF37;
-}
-
-.social-link:hover::after {
-    width: 100%;
+.contact-link:hover {
+    color: var(--accent);
+    text-decoration: none;
 }
 
 
@@ -857,24 +776,19 @@ body::before {
         padding: 1.5rem;
     }
     
-    .cta-grid {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .cta-button {
-        width: 100%;
-        max-width: 300px;
-        justify-content: center;
-    }
     
     .footer-content {
         flex-direction: column;
         text-align: center;
+        gap: 1.5rem;
     }
     
-    .footer-social {
-        justify-content: center;
+    .footer-right {
+        text-align: center;
+    }
+    
+    .contact-info {
+        font-size: 0.85rem;
     }
 }
 
@@ -904,8 +818,4 @@ body::before {
         font-size: 1.1rem;
     }
     
-    .cta-button {
-        padding: 0.8rem 1.5rem;
-        font-size: 0.9rem;
-    }
 }
