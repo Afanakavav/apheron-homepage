@@ -27,19 +27,19 @@
   ],
   "icons": [
     {
-      "src": "https://afanakavav.github.io/apheron-homepage/icon-192-android.png",
+      "src": "https://afanakavav.github.io/apheron-homepage/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "https://afanakavav.github.io/apheron-homepage/icon-512-android.png",
+      "src": "https://afanakavav.github.io/apheron-homepage/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "https://afanakavav.github.io/apheron-homepage/apple-touch-icon-180.png",
+      "src": "https://afanakavav.github.io/apheron-homepage/apple-touch-icon.png",
       "sizes": "180x180",
       "type": "image/png",
       "purpose": "any"

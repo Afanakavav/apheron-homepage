@@ -326,7 +326,7 @@ function showItalianContent() {
 // Service Worker
 function initializeServiceWorker() {
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('https://afanakavav.github.io/apheron-homepage/sw.js')
+        navigator.serviceWorker.register('https://afanakavav.github.io/apheron-homepage/sw.js?v=3')
             .then(registration => {
                 console.log('SW registered:', registration);
             })
