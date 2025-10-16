@@ -3,8 +3,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize all features
     initializeLoadingScreen();
-    initializeThemeToggle();
-    initializeChatWidget();
     initializeFAQ();
     initializeAnalytics();
     initializeA_BTesting();
@@ -209,96 +207,7 @@ function initializeLoadingScreen() {
     }
 }
 
-// Theme Toggle
-function initializeThemeToggle() {
-    const themeToggle = document.getElementById('theme-toggle');
-    const body = document.body;
-    
-    // Load saved theme
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    body.setAttribute('data-theme', savedTheme);
-    updateThemeIcon(savedTheme);
-    
-    if (themeToggle) {
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = body.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            
-            body.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateThemeIcon(newTheme);
-            
-            // Analytics
-            trackEvent('theme_toggle', { theme: newTheme });
-        });
-    }
-}
 
-function updateThemeIcon(theme) {
-    const themeIcon = document.querySelector('.theme-icon');
-    if (themeIcon) {
-        themeIcon.textContent = theme === 'dark' ? '☀️' : '🌙';
-    }
-}
-
-// Chat Widget
-function initializeChatWidget() {
-    const chatToggle = document.getElementById('chat-toggle');
-    const chatPanel = document.getElementById('chat-panel');
-    const chatClose = document.getElementById('chat-close');
-    const chatSend = document.getElementById('chat-send');
-    const chatInput = document.getElementById('chat-input');
-    
-    if (chatToggle && chatPanel) {
-        chatToggle.addEventListener('click', () => {
-            chatPanel.classList.toggle('active');
-            trackEvent('chat_opened');
-        });
-        
-        if (chatClose) {
-            chatClose.addEventListener('click', () => {
-                chatPanel.classList.remove('active');
-            });
-        }
-        
-        if (chatSend && chatInput) {
-            chatSend.addEventListener('click', sendChatMessage);
-            chatInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    sendChatMessage();
-                }
-            });
-        }
-    }
-}
-
-function sendChatMessage() {
-    const chatInput = document.getElementById('chat-input');
-    const chatContent = document.querySelector('.chat-content');
-    const message = chatInput.value.trim();
-    
-    if (message) {
-        // Add user message
-        const userMessage = document.createElement('div');
-        userMessage.className = 'chat-message user';
-        userMessage.innerHTML = `<p>${message}</p>`;
-        chatContent.appendChild(userMessage);
-        
-        // Clear input
-        chatInput.value = '';
-        
-        // Simulate bot response
-        setTimeout(() => {
-            const botMessage = document.createElement('div');
-            botMessage.className = 'chat-message bot';
-            botMessage.innerHTML = `<p>Great question! Let's discuss this in a strategy call. You can reach me at francesco.perone00@gmail.com or +353 894040077</p>`;
-            chatContent.appendChild(botMessage);
-            chatContent.scrollTop = chatContent.scrollHeight;
-        }, 1000);
-        
-        trackEvent('chat_message_sent', { message: message });
-    }
-}
 
 // FAQ Accordion
 function initializeFAQ() {
