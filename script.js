@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeFAQ();
     initializeAnalytics();
     initializeA_BTesting();
-    initializeGeolocation();
     initializeServiceWorker();
     initializePWA();
     initializeDownloadButton();
@@ -289,38 +288,6 @@ function initializeA_BTesting() {
     }
 }
 
-// Geolocation
-function initializeGeolocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const country = getCountryFromCoordinates(position.coords.latitude, position.coords.longitude);
-                trackEvent('geolocation_detected', { country: country });
-                
-                // Show location-specific content
-                if (country === 'IT') {
-                    showItalianContent();
-                }
-            },
-            (error) => {
-                console.log('Geolocation error:', error);
-            }
-        );
-    }
-}
-
-function getCountryFromCoordinates(lat, lng) {
-    // Simplified country detection (in real app, use reverse geocoding API)
-    if (lat >= 35 && lat <= 47 && lng >= 6 && lng <= 19) {
-        return 'IT';
-    }
-    return 'US';
-}
-
-function showItalianContent() {
-    // Could show Italian-specific content or offers
-    console.log('Showing Italian content');
-}
 
 
 // Service Worker
