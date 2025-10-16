@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeAnalytics();
     initializeA_BTesting();
     initializeGeolocation();
-    initializeExitIntent();
     initializeServiceWorker();
     
     // Parallax effect per il logo
@@ -292,7 +291,7 @@ function sendChatMessage() {
         setTimeout(() => {
             const botMessage = document.createElement('div');
             botMessage.className = 'chat-message bot';
-            botMessage.innerHTML = `<p>Great question! Let's discuss this in a strategy call. Would you like to book one?</p>`;
+            botMessage.innerHTML = `<p>Great question! Let's discuss this in a strategy call. You can reach me at francesco.perone00@gmail.com or +353 894040077</p>`;
             chatContent.appendChild(botMessage);
             chatContent.scrollTop = chatContent.scrollHeight;
         }, 1000);
@@ -412,35 +411,6 @@ function showItalianContent() {
     console.log('Showing Italian content');
 }
 
-// Exit Intent
-function initializeExitIntent() {
-    let exitIntentShown = false;
-    
-    document.addEventListener('mouseleave', (e) => {
-        if (e.clientY <= 0 && !exitIntentShown) {
-            showExitIntentPopup();
-            exitIntentShown = true;
-        }
-    });
-}
-
-function showExitIntentPopup() {
-    const popup = document.createElement('div');
-    popup.className = 'exit-intent-popup';
-    popup.innerHTML = `
-        <div class="popup-content">
-            <h3>Wait! Get Your Free AI Strategy Guide</h3>
-            <p>Don't miss out on transforming your business with AI</p>
-            <button onclick="window.open('https://calendly.com/francesco/strategy-call', '_blank')" class="popup-cta">
-                Get Free Guide
-            </button>
-            <button onclick="this.parentElement.parentElement.remove()" class="popup-close">×</button>
-        </div>
-    `;
-    
-    document.body.appendChild(popup);
-    trackEvent('exit_intent_popup_shown');
-}
 
 // Service Worker
 function initializeServiceWorker() {
