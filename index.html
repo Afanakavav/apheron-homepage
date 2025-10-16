@@ -39,6 +39,14 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="APHERON">
     
+    <!-- PWA Splash Screen -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-startup-image" href="splash-screen-iphone.png">
+    
+    <!-- Mobile Optimizations -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="APHERON">
+    
     <!-- Manifest -->
     <link rel="manifest" href="manifest.json">
     
@@ -74,6 +82,19 @@
     </script>
 </head>
 <body>
+    <!-- Install App Banner -->
+    <div id="install-banner" class="install-banner">
+        <div class="install-content">
+            <div class="install-icon">📱</div>
+            <div class="install-text">
+                <h4>Install APHERON App</h4>
+                <p>Get quick access to my portfolio and services</p>
+            </div>
+            <button id="install-btn" class="install-btn">Install</button>
+            <button id="dismiss-install" class="dismiss-btn">×</button>
+        </div>
+    </div>
+
     <!-- Loading State -->
     <div id="loading-screen" class="loading-screen">
         <div class="loading-logo">

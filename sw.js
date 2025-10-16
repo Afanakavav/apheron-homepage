@@ -1,11 +1,15 @@
 // APHERON Service Worker
-const CACHE_NAME = 'apheron-v1';
+const CACHE_NAME = 'apheron-v2';
 const urlsToCache = [
   '/',
   '/index.html',
   '/styles.css',
   '/script.js',
   '/manifest.json',
+  '/logo.svg',
+  '/icon-192.png',
+  '/icon-512.png',
+  '/apple-touch-icon.png',
   'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Manrope:wght@300;400;500;600&display=swap'
 ];
 

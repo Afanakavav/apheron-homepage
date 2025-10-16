@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeA_BTesting();
     initializeGeolocation();
     initializeServiceWorker();
+    initializePWA();
     
     // Parallax effect per il logo
     const logo = document.querySelector('.logo');
@@ -332,4 +333,84 @@ function initializeServiceWorker() {
                 console.log('SW registration failed:', error);
             });
     }
+}
+
+// PWA Installation
+function initializePWA() {
+    let deferredPrompt;
+    const installBanner = document.getElementById('install-banner');
+    const installBtn = document.getElementById('install-btn');
+    const dismissBtn = document.getElementById('dismiss-install');
+    
+    // Check if app is already installed
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+        console.log('App is already installed');
+        return;
+    }
+    
+    // Listen for beforeinstallprompt event
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        
+        // Show install banner after 3 seconds
+        setTimeout(() => {
+            if (!localStorage.getItem('install-banner-dismissed')) {
+                installBanner.classList.add('show');
+            }
+        }, 3000);
+    });
+    
+    // Install button click
+    if (installBtn) {
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                
+                if (outcome === 'accepted') {
+                    trackEvent('pwa_install_accepted');
+                    installBanner.classList.remove('show');
+                } else {
+                    trackEvent('pwa_install_declined');
+                }
+                
+                deferredPrompt = null;
+            }
+        });
+    }
+    
+    // Dismiss button click
+    if (dismissBtn) {
+        dismissBtn.addEventListener('click', () => {
+            installBanner.classList.remove('show');
+            localStorage.setItem('install-banner-dismissed', 'true');
+            trackEvent('pwa_install_dismissed');
+        });
+    }
+    
+    // Track app installed
+    window.addEventListener('appinstalled', () => {
+        trackEvent('pwa_installed');
+        installBanner.classList.remove('show');
+    });
+    
+    // Add to home screen instructions for iOS
+    if (isIOS() && !isInStandaloneMode()) {
+        showIOSInstructions();
+    }
+}
+
+// Helper functions
+function isIOS() {
+    return /iPad|iPhone|iPod/.test(navigator.userAgent);
+}
+
+function isInStandaloneMode() {
+    return window.matchMedia('(display-mode: standalone)').matches;
+}
+
+function showIOSInstructions() {
+    // Show instructions for iOS users to add to home screen
+    console.log('iOS detected - show add to home screen instructions');
 }
