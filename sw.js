@@ -1,15 +1,15 @@
 // APHERON Service Worker
 const CACHE_NAME = 'apheron-v2';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/styles.css',
-  '/script.js',
-  '/manifest.json',
-  '/logo.svg',
-  '/icon-192.png',
-  '/icon-512.png',
-  '/apple-touch-icon.png',
+  'https://afanakavav.github.io/apheron-homepage/',
+  'https://afanakavav.github.io/apheron-homepage/index.html',
+  'https://afanakavav.github.io/apheron-homepage/styles.css',
+  'https://afanakavav.github.io/apheron-homepage/script.js',
+  'https://afanakavav.github.io/apheron-homepage/manifest.json',
+  'https://afanakavav.github.io/apheron-homepage/logo.svg',
+  'https://afanakavav.github.io/apheron-homepage/icon-192-android.png',
+  'https://afanakavav.github.io/apheron-homepage/icon-512-android.png',
+  'https://afanakavav.github.io/apheron-homepage/apple-touch-icon-180.png',
   'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Manrope:wght@300;400;500;600&display=swap'
 ];
 
@@ -29,8 +29,15 @@ self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
       .then(response => {
-        // Return cached version or fetch from network
-        return response || fetch(event.request);
+        if (response) {
+          return response;
+        }
+        return fetch(event.request).catch(() => {
+          // Return cached index.html for navigation requests
+          if (event.request.mode === 'navigate') {
+            return caches.match('https://afanakavav.github.io/apheron-homepage/index.html');
+          }
+        });
       })
   );
 });
