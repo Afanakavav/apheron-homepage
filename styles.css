@@ -543,6 +543,12 @@ body::before {
     filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3));
 }
 
+.project-icon.italian-flag {
+    font-family: "Segoe UI Emoji", "Noto Color Emoji", "Apple Color Emoji", "Segoe UI Symbol", sans-serif;
+    font-style: normal;
+    font-weight: normal;
+}
+
 .project-card h3 {
     font-family: 'Cinzel', serif;
     font-size: 1.3rem;
