@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>APHERON - Admin Panel</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="admin-styles.css">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-screen">
+        <div class="login-container">
+            <div class="logo-small">
+                <div class="circle-small">
+                    <div class="light-slice-small"></div>
+                    <div class="triangle-a-small"></div>
+                </div>
+            </div>
+            <h2>Admin Access</h2>
+            <p class="login-subtitle">Enter password to continue</p>
+            <form id="login-form">
+                <input 
+                    type="password" 
+                    id="password-input" 
+                    class="password-input" 
+                    placeholder="Password"
+                    autocomplete="off"
+                >
+                <p id="error-message" class="error-message"></p>
+                <button type="submit" class="login-btn">
+                    <span>Unlock</span>
+                    <span class="unlock-icon">🔓</span>
+                </button>
+            </form>
+            <a href="index.html" class="back-link">← Back to home</a>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="admin-panel" class="admin-panel" style="display: none;">
+        <div class="admin-header">
+            <div class="admin-logo">
+                <div class="circle-small">
+                    <div class="light-slice-small"></div>
+                    <div class="triangle-a-small"></div>
+                </div>
+                <span class="admin-title">APHERON Admin</span>
+            </div>
+            <div class="admin-actions">
+                <a href="index.html" class="btn-secondary">View Site</a>
+                <button id="logout-btn" class="btn-logout">Logout</button>
+            </div>
+        </div>
+
+        <div class="admin-container">
+            <div class="admin-welcome">
+                <h1>Welcome back, Francesco</h1>
+                <p>Manage your projects and content</p>
+            </div>
+
+            <!-- Projects Management -->
+            <div class="admin-section">
+                <div class="section-header">
+                    <h2>My Projects</h2>
+                    <button class="btn-add">+ Add Project</button>
+                </div>
+
+                <div class="projects-grid">
+                    <div class="admin-project-card">
+                        <div class="project-status active">Active</div>
+                        <div class="project-icon italian-flag">🇮🇹</div>
+                        <h3>Italian Lessons Dublin</h3>
+                        <p>Platform for teaching Italian in Dublin</p>
+                        <div class="project-meta">
+                            <span class="meta-item">🔗 <a href="https://afanakavav.github.io/italian-lessons-dublin/" target="_blank">afanakavav.github.io/italian-lessons-dublin</a></span>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-icon" title="Edit">✏️</button>
+                            <button class="btn-icon" title="View">👁️</button>
+                            <button class="btn-icon danger" title="Delete">🗑️</button>
+                        </div>
+                    </div>
+
+                    <div class="admin-project-card">
+                        <div class="project-status active">Active</div>
+                        <div class="project-icon">💒</div>
+                        <h3>Wedding Platform</h3>
+                        <p>Complete platform for wedding management</p>
+                        <div class="project-meta">
+                            <span class="meta-item">🔗 <a href="https://afanakavav.github.io/matrimonio-andrea-giulia/" target="_blank">afanakavav.github.io/matrimonio-andrea-giulia</a></span>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-icon" title="Edit">✏️</button>
+                            <button class="btn-icon" title="View">👁️</button>
+                            <button class="btn-icon danger" title="Delete">🗑️</button>
+                        </div>
+                    </div>
+
+                    <div class="admin-project-card coming-soon">
+                        <div class="project-status coming-soon">Coming Soon</div>
+                        <div class="project-icon">🔮</div>
+                        <h3>AI Consulting</h3>
+                        <p>Strategic consulting and AI training</p>
+                        <div class="project-meta">
+                            <span class="meta-item">🔗 apheron.io/consulting</span>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-icon" title="Edit">✏️</button>
+                            <button class="btn-icon" title="Activate">✅</button>
+                            <button class="btn-icon danger" title="Delete">🗑️</button>
+                        </div>
+                    </div>
+
+                    <div class="admin-project-card coming-soon">
+                        <div class="project-status coming-soon">Coming Soon</div>
+                        <div class="project-icon">⚡</div>
+                        <h3>Portfolio</h3>
+                        <p>Collection of projects and skills</p>
+                        <div class="project-meta">
+                            <span class="meta-item">🔗 apheron.io/portfolio</span>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-icon" title="Edit">✏️</button>
+                            <button class="btn-icon" title="Activate">✅</button>
+                            <button class="btn-icon danger" title="Delete">🗑️</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="admin-section">
+                <h2>Quick Stats</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-info">
+                            <p class="stat-label">Active Projects</p>
+                            <p class="stat-value">2</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🚀</div>
+                        <div class="stat-info">
+                            <p class="stat-label">Coming Soon</p>
+                            <p class="stat-value">2</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">👁️</div>
+                        <div class="stat-info">
+                            <p class="stat-label">Total Views</p>
+                            <p class="stat-value">--</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="admin-footer">
+            <p>&copy; 2025 APHERON. Admin Panel v1.0</p>
+        </footer>
+    </div>
+
+    <script src="admin-auth.js"></script>
+</body>
+</html>
+
