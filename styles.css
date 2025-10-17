@@ -428,10 +428,11 @@ body::before {
 }
 
 .bio-text {
-    font-size: 1.1rem;
-    color: #757575;
+    font-size: 1.3rem;
+    color: var(--text-tertiary);
     line-height: 1.6;
     margin-bottom: 1.5rem;
+    font-weight: 500;
 }
 
 .bio-subtext {
@@ -540,32 +541,6 @@ body::before {
     font-size: 3rem;
     margin-bottom: 1rem;
     filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3));
-}
-
-.italian-flag {
-    font-size: 3.5rem !important;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 4rem;
-    position: relative;
-}
-
-.italian-flag::before {
-    content: '';
-    position: absolute;
-    width: 60px;
-    height: 40px;
-    background: linear-gradient(to right, #009246 33.33%, #FFFFFF 33.33%, #FFFFFF 66.66%, #CE2B37 66.66%);
-    border-radius: 4px;
-    border: 2px solid rgba(212, 175, 55, 0.3);
-    display: none; /* Hidden by default, show only if emoji fails */
-}
-
-/* Fallback: show CSS flag if emoji doesn't render */
-.italian-flag:empty::before {
-    display: block;
 }
 
 .project-card h3 {
@@ -888,7 +863,7 @@ body::before {
     }
     
     .bio-text {
-        font-size: 1rem;
+        font-size: 1.1rem;
     }
     
     .competence-badges {
@@ -969,7 +944,7 @@ body::before {
     }
     
     .bio-text {
-        font-size: 0.95rem;
+        font-size: 1.05rem;
     }
     
     .quote-section blockquote {
