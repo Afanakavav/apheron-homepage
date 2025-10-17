@@ -16,6 +16,12 @@
     <link rel="stylesheet" href="admin-styles.css">
 </head>
 <body>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay" style="display: none;">
+        <div class="loading-spinner"></div>
+        <p>Loading...</p>
+    </div>
+
     <!-- Login Screen -->
     <div id="login-screen" class="login-screen">
         <div class="login-container">
@@ -26,15 +32,24 @@
                 </div>
             </div>
             <h2>Admin Access</h2>
-            <p class="login-subtitle">Enter password to continue</p>
+            <p class="login-subtitle">Sign in with your credentials</p>
             <form id="login-form">
+                <input 
+                    type="email" 
+                    id="email-input" 
+                    class="email-input" 
+                    placeholder="Email"
+                    autocomplete="email"
+                    required
+                >
                 <div class="password-input-wrapper">
                     <input 
                         type="password" 
                         id="password-input" 
                         class="password-input" 
                         placeholder="Password"
-                        autocomplete="off"
+                        autocomplete="current-password"
+                        required
                     >
                     <button type="button" id="toggle-password" class="toggle-password-btn" aria-label="Toggle password visibility">
                         <span class="eye-icon">👁️</span>
@@ -42,7 +57,7 @@
                 </div>
                 <p id="error-message" class="error-message"></p>
                 <button type="submit" class="login-btn">
-                    <span>Unlock</span>
+                    <span>Sign In</span>
                     <span class="unlock-icon">🔓</span>
                 </button>
             </form>
@@ -176,7 +191,9 @@
         </footer>
     </div>
 
-    <script src="admin-auth.js"></script>
+    <!-- Firebase Scripts -->
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module" src="firebase-admin.js"></script>
 </body>
 </html>
 
