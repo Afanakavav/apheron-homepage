@@ -390,11 +390,14 @@ function initializeDownloadButton() {
     
     if (!downloadBtn) return;
     
-    // Show button only on mobile devices and not in standalone mode
-    if (!isMobileDevice() || isInStandaloneMode()) {
+    // Hide button only if already in standalone mode (already installed)
+    if (isInStandaloneMode()) {
         downloadBtn.style.display = 'none';
         return;
     }
+    
+    // Show button on all devices (desktop and mobile)
+    downloadBtn.style.display = 'inline-flex';
     
     downloadBtn.addEventListener('click', () => {
         if (isIOS()) {

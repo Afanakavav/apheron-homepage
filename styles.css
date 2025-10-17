@@ -652,44 +652,18 @@ body::before {
     text-decoration: none;
 }
 
-/* Download App Button */
-.download-app-btn {
-    background: transparent;
-    border: 1px solid var(--accent);
-    color: var(--accent);
-    padding: 0.6rem 1.2rem;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
+/* Footer Actions */
+.footer-actions {
     display: flex;
+    justify-content: center;
     align-items: center;
-    gap: 0.5rem;
-    margin-top: 1rem;
-    font-family: 'Manrope', sans-serif;
-}
-
-.download-app-btn:hover {
-    background: var(--accent);
-    color: var(--bg-primary);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
-}
-
-.download-icon {
-    font-size: 1rem;
-}
-
-/* Admin Link */
-.footer-admin {
-    text-align: center;
+    gap: 1rem;
     padding-top: 1.5rem;
     margin-top: 1.5rem;
     border-top: 1px solid rgba(117, 117, 117, 0.2);
 }
 
-.admin-link {
+.footer-action-btn {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -699,14 +673,15 @@ body::before {
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.3s ease;
-    opacity: 0.5;
+    opacity: 0.6;
     text-decoration: none;
     color: var(--text-secondary);
     font-size: 0.85rem;
     font-family: 'Manrope', sans-serif;
+    font-weight: 500;
 }
 
-.admin-link:hover {
+.footer-action-btn:hover {
     opacity: 1;
     border-color: var(--accent);
     color: var(--accent);
@@ -714,17 +689,32 @@ body::before {
     box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
 }
 
-.admin-icon {
+.btn-icon {
     font-size: 1rem;
     transition: all 0.3s ease;
 }
 
-.admin-link:hover .admin-icon {
+.footer-action-btn:hover .btn-icon {
     filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.6));
 }
 
-.admin-text {
+.btn-text {
     font-weight: 500;
+}
+
+/* Specific button styles */
+.download-btn:hover {
+    border-color: #4A90E2;
+    color: #4A90E2;
+}
+
+.download-btn:hover .btn-icon {
+    filter: drop-shadow(0 0 6px rgba(74, 144, 226, 0.6));
+}
+
+.admin-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
 }
 
 /* Instruction Modals */
@@ -959,14 +949,19 @@ body::before {
         font-size: 0.85rem;
     }
     
-    .footer-admin {
+    .footer-actions {
+        flex-direction: column;
         padding-top: 1rem;
         margin-top: 1rem;
+        gap: 0.8rem;
     }
     
-    .admin-link {
+    .footer-action-btn {
         font-size: 0.8rem;
         padding: 0.5rem 1rem;
+        width: 100%;
+        max-width: 250px;
+        justify-content: center;
     }
     
     .install-content {
@@ -985,12 +980,6 @@ body::before {
     
     .install-btn {
         padding: 0.6rem 1.2rem;
-        font-size: 0.9rem;
-    }
-    
-    .download-app-btn {
-        margin-top: 1.5rem;
-        padding: 0.7rem 1.4rem;
         font-size: 0.9rem;
     }
 }
