@@ -5,13 +5,11 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // Projects collection - only authenticated users can read/write
+    // Projects collection - only francesco.perone00@gmail.com can read/write
     match /projects/{projectId} {
-      // Allow read for authenticated users only
-      allow read: if request.auth != null;
-      
-      // Allow write (create, update, delete) for authenticated users only
-      allow create, update, delete: if request.auth != null;
+      // Allow read/write only for francesco.perone00@gmail.com
+      allow read, write: if request.auth != null && 
+                           request.auth.token.email == "francesco.perone00@gmail.com";
     }
     
     // Deny all other collections by default
@@ -34,7 +32,7 @@ TO APPLY THESE RULES:
 4. Replace the existing rules with the rules above
 5. Click "Publish"
 
-OPTIONAL: For more security, you can restrict to specific user emails:
-  allow read, write: if request.auth.token.email == "francesco.perone00@gmail.com";
+✅ CURRENTLY ACTIVE: Only francesco.perone00@gmail.com can access
+This provides maximum security - only your email can read/write projects.
 */
 
