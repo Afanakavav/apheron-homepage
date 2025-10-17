@@ -28,13 +28,18 @@
             <h2>Admin Access</h2>
             <p class="login-subtitle">Enter password to continue</p>
             <form id="login-form">
-                <input 
-                    type="password" 
-                    id="password-input" 
-                    class="password-input" 
-                    placeholder="Password"
-                    autocomplete="off"
-                >
+                <div class="password-input-wrapper">
+                    <input 
+                        type="password" 
+                        id="password-input" 
+                        class="password-input" 
+                        placeholder="Password"
+                        autocomplete="off"
+                    >
+                    <button type="button" id="toggle-password" class="toggle-password-btn" aria-label="Toggle password visibility">
+                        <span class="eye-icon">👁️</span>
+                    </button>
+                </div>
                 <p id="error-message" class="error-message"></p>
                 <button type="submit" class="login-btn">
                     <span>Unlock</span>

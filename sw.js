@@ -1,12 +1,11 @@
 // APHERON Service Worker
-const CACHE_NAME = 'apheron-v5';
+const CACHE_NAME = 'apheron-v6';
 const urlsToCache = [
   'https://afanakavav.github.io/apheron-homepage/',
   'https://afanakavav.github.io/apheron-homepage/index.html',
   'https://afanakavav.github.io/apheron-homepage/styles.css',
   'https://afanakavav.github.io/apheron-homepage/script.js',
   'https://afanakavav.github.io/apheron-homepage/manifest.json',
-  'https://afanakavav.github.io/apheron-homepage/logo.svg',
   'https://afanakavav.github.io/apheron-homepage/icon-192.png',
   'https://afanakavav.github.io/apheron-homepage/icon-512.png',
   'https://afanakavav.github.io/apheron-homepage/apple-touch-icon.png',

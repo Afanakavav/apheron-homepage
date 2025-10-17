@@ -3,6 +3,28 @@
 // Password hash (SHA-256 of "afanakavav")
 const CORRECT_PASSWORD = "afanakavav";
 
+// Toggle password visibility
+const togglePasswordBtn = document.getElementById('toggle-password');
+const passwordInput = document.getElementById('password-input');
+
+if (togglePasswordBtn && passwordInput) {
+    togglePasswordBtn.addEventListener('click', () => {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        
+        // Toggle button class for visual feedback
+        togglePasswordBtn.classList.toggle('password-visible');
+        
+        // Change icon (optional - could use different emoji)
+        const eyeIcon = togglePasswordBtn.querySelector('.eye-icon');
+        if (type === 'text') {
+            eyeIcon.textContent = '👁️‍🗨️'; // Eye with speech bubble when visible
+        } else {
+            eyeIcon.textContent = '👁️'; // Regular eye when hidden
+        }
+    });
+}
+
 // Check if user is already authenticated
 function checkAuth() {
     const isAuthenticated = sessionStorage.getItem('apheron_admin_auth') === 'true';
