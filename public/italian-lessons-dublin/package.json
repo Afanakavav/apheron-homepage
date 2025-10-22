@@ -1,0 +1,37 @@
+{
+  "name": "italian-lessons-dublin",
+  "version": "1.0.0",
+  "description": "🇮🇹 Interactive landing page for Italian lessons in Dublin with Francesco",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx live-server --port=5500 --open=local-test.html",
+    "test": "npx live-server --port=5500 --open=test.html",
+    "dev": "npx live-server --port=5500 --open=index.html",
+    "build": "echo 'No build step required for static site'",
+    "deploy": "echo 'Use GitHub Pages for deployment'"
+  },
+  "keywords": [
+    "italian",
+    "lessons",
+    "dublin",
+    "language",
+    "education",
+    "landing-page",
+    "interactive",
+    "quiz",
+    "booking"
+  ],
+  "author": "Francesco Perone",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TUO_USERNAME/italian-lessons-dublin.git"
+  },
+  "homepage": "https://TUO_USERNAME.github.io/italian-lessons-dublin",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

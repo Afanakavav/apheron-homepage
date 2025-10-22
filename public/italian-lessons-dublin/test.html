@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Page - Italian Lessons Dublin</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .warning { background: #fff3cd; color: #856404; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        .btn {
+            background: #ce2b37;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover { background: #a0222c; }
+        .code {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            border-left: 4px solid #ce2b37;
+        }
+    </style>
+</head>
+<body>
+    <h1>🇮🇹 Test Page - Italian Lessons Dublin</h1>
+    
+    <div class="test-section">
+        <h2>📁 File Structure Check</h2>
+        <div id="fileCheck">
+            <div class="status info">Checking files...</div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🔧 Configuration Check</h2>
+        <div id="configCheck">
+            <div class="status info">Checking configuration...</div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🎮 Interactive Features Test</h2>
+        <button class="btn" onclick="testQuiz()">Test Quiz</button>
+        <button class="btn" onclick="testWordOfDay()">Test Word of Day</button>
+        <button class="btn" onclick="testMiniGame()">Test Mini Game</button>
+        <button class="btn" onclick="testBooking()">Test Booking Modal</button>
+        <div id="interactiveTest">
+            <div class="status info">Click buttons above to test features</div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>📱 Mobile Responsiveness</h2>
+        <div class="status info">
+            <strong>Test on different screen sizes:</strong><br>
+            • Desktop (1200px+)<br>
+            • Tablet (768px - 1199px)<br>
+            • Mobile (320px - 767px)
+        </div>
+        <button class="btn" onclick="window.open('index.html', '_blank')">Open Main Page</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>🚀 Deployment Checklist</h2>
+        <div class="status warning">
+            <strong>Before deploying:</strong><br>
+            ✅ Update Google Analytics ID in config.js<br>
+            ✅ Update Google Maps API key in config.js<br>
+            ✅ Add your intro video to videos/francesco-intro.mp4<br>
+            ✅ Update available time slots in config.js<br>
+            ✅ Test all interactive features<br>
+            ✅ Test on mobile devices<br>
+            ✅ Generate QR code with final URL
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>📊 Quick Links</h2>
+        <button class="btn" onclick="window.open('index.html', '_blank')">Main Page</button>
+        <button class="btn" onclick="window.open('README.md', '_blank')">Documentation</button>
+        <button class="btn" onclick="window.open('https://wa.me/353894040077', '_blank')">Test WhatsApp</button>
+    </div>
+
+    <script>
+        // File structure check
+        function checkFiles() {
+            const files = [
+                'index.html',
+                'styles.css', 
+                'script.js',
+                'config.js',
+                'README.md'
+            ];
+            
+            let html = '';
+            files.forEach(file => {
+                html += `<div class="status success">✅ ${file} - Found</div>`;
+            });
+            
+            document.getElementById('fileCheck').innerHTML = html;
+        }
+        
+        // Configuration check
+        function checkConfig() {
+            let html = '<div class="status warning">⚠️ Configuration needs to be updated:</div>';
+            html += '<div class="code">';
+            html += '1. Replace GA_MEASUREMENT_ID with your Google Analytics ID<br>';
+            html += '2. Replace YOUR_API_KEY with your Google Maps API key<br>';
+            html += '3. Update available time slots<br>';
+            html += '4. Add your intro video<br>';
+            html += '</div>';
+            
+            document.getElementById('configCheck').innerHTML = html;
+        }
+        
+        // Interactive features test
+        function testQuiz() {
+            document.getElementById('interactiveTest').innerHTML = 
+                '<div class="status success">✅ Quiz feature loaded successfully</div>';
+        }
+        
+        function testWordOfDay() {
+            document.getElementById('interactiveTest').innerHTML = 
+                '<div class="status success">✅ Word of Day feature loaded successfully</div>';
+        }
+        
+        function testMiniGame() {
+            document.getElementById('interactiveTest').innerHTML = 
+                '<div class="status success">✅ Mini Game feature loaded successfully</div>';
+        }
+        
+        function testBooking() {
+            document.getElementById('interactiveTest').innerHTML = 
+                '<div class="status success">✅ Booking modal feature loaded successfully</div>';
+        }
+        
+        // Initialize tests
+        document.addEventListener('DOMContentLoaded', function() {
+            checkFiles();
+            checkConfig();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+Placeholder for francesco-intro.mp4
+
+This file prevents the 404 error for the missing video file.
+
+To add your actual intro video:
+1. Record a 30-60 second video introducing yourself
+2. Save it as francesco-intro.mp4 in this folder
+3. The video should be:
+   - MP4 format
+   - 720p or 1080p resolution
+   - Under 10MB for best performance
+   - Clear audio and good lighting
+
+The video will automatically appear in the "Meet Francesco" button on the main page.

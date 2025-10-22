@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🇮🇹 Ciao Dublin! - Learn Italian with Francesco</title>
+    <meta name="description" content="Learn Italian the fun way with Francesco, a native Italian teacher in Dublin. Personalized lessons for beginners, travelers, and professionals.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Configuration -->
+    <script src="config.js"></script>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZB1BKS5BVL"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-ZB1BKS5BVL');
+    </script>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="flag-animation">
+                    <div class="italian-flag">
+                        <svg width="60" height="40" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="20" height="40" fill="#009246"/>
+                            <rect x="20" width="20" height="40" fill="#FFFFFF"/>
+                            <rect x="40" width="20" height="40" fill="#CE2B37"/>
+                        </svg>
+                    </div>
+                    <h1 class="main-title">
+                        <span class="ciao">Ciao Dublin!</span>
+                        <span class="subtitle">Have fun learning Italian</span>
+                    </h1>
+                </div>
+                
+                <div class="teacher-intro">
+                    <p class="teacher-name">with Francesco</p>
+                    <div class="teacher-avatar">
+                        <img src="images/francesco-avatar.jpg" alt="Francesco - Italian Teacher" />
+                    </div>
+                    <p class="teacher-desc">Native Italian teacher living in Dublin</p>
+                </div>
+                
+                <div class="cta-buttons">
+                    <button class="btn btn-primary" onclick="openBookingModal()">
+                        <i class="fas fa-calendar-alt"></i>
+                        Book Your Lesson
+                    </button>
+                    <button class="btn btn-secondary" onclick="openWhatsApp()">
+                        <i class="fab fa-whatsapp"></i>
+                        WhatsApp Me
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Floating Italian Elements -->
+        <div class="floating-elements">
+            <div class="floating-icon coffee">☕</div>
+            <div class="floating-icon book">📚</div>
+            <div class="floating-icon smile">😊</div>
+            <div class="floating-icon vespa">🛵</div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2>Why Choose Francesco?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-comments"></i>
+                    <h3>Real Conversation</h3>
+                    <p>Learn through authentic Italian conversations, not just textbooks!</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-heart"></i>
+                    <h3>Culture & Laughter</h3>
+                    <p>Discover Italian culture while having fun and laughing together!</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-user-friends"></i>
+                    <h3>Personalized Lessons</h3>
+                    <p>Tailored for beginners, travelers, and professionals</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h3>Based in Dublin</h3>
+                    <p>Convenient location in Dublin city center</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Quiz Section -->
+    <section class="quiz-section">
+        <div class="container">
+            <h2>Test Your Italian! 🇮🇹</h2>
+            <div class="quiz-container">
+                <div class="quiz-question" id="quizQuestion">
+                    <h3>What does "Ciao" mean?</h3>
+                    <div class="quiz-options">
+                        <button class="quiz-option" onclick="checkAnswer(this, false)">Goodbye</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, true)">Hello/Goodbye</button>
+                        <button class="quiz-option" onclick="checkAnswer(this, false)">Thank you</button>
+                    </div>
+                </div>
+                <div class="quiz-result" id="quizResult" style="display: none;">
+                    <div class="result-content">
+                        <i class="fas fa-trophy"></i>
+                        <h3>Bravo!</h3>
+                        <p>You're ready to learn more Italian with Francesco!</p>
+                        <button class="btn btn-primary" onclick="openBookingModal()">Book Your First Lesson</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Italian Word of the Day -->
+    <section class="word-of-day">
+        <div class="container">
+            <h2>Parola del Giorno</h2>
+            <div class="word-card">
+                <div class="word-italian" id="italianWord">Ciao</div>
+                <div class="word-english" id="englishTranslation">Hello/Goodbye</div>
+                <div class="word-pronunciation" id="pronunciation">/ˈtʃa.o/</div>
+                <button class="btn btn-small" onclick="getNewWord()">New Word</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mini Game Section -->
+    <section class="mini-game">
+        <div class="container">
+            <h2>Guess the Italian Word! 🎮</h2>
+            <div class="game-container">
+                <div class="game-image" id="gameImage">
+                    <i class="fas fa-pizza-slice"></i>
+                </div>
+                <div class="game-options" id="gameOptions">
+                    <button class="game-option" onclick="checkGameAnswer(this, 'pizza', true)">Pizza</button>
+                    <button class="game-option" onclick="checkGameAnswer(this, 'pasta', false)">Pasta</button>
+                    <button class="game-option" onclick="checkGameAnswer(this, 'gelato', false)">Gelato</button>
+                </div>
+                <div class="game-result" id="gameResult" style="display: none;">
+                    <h3>Esatto! 🎉</h3>
+                    <p>Ready for more fun? Book a lesson with Francesco!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact">
+        <div class="container">
+            <h2>Get in Touch</h2>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <a href="mailto:francesco.perone00@gmail.com">francesco.perone00@gmail.com</a>
+                </div>
+                <div class="contact-item">
+                    <i class="fab fa-whatsapp"></i>
+                    <a href="https://wa.me/353894040077">+353 89 404 0077</a>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>One Lime Street, D02 N6C2, Dublin</span>
+                </div>
+            </div>
+            
+            <!-- Map -->
+            <div class="map-container">
+                <div id="map"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Special Offer -->
+    <section class="special-offer">
+        <div class="container">
+            <div class="offer-card">
+                <h2>🎉 Special Offer!</h2>
+                <p>First lesson FREE for new students!</p>
+                <div class="countdown" id="countdown">
+                    <div class="countdown-item">
+                        <span id="hours">23</span>
+                        <label>Hours</label>
+                    </div>
+                    <div class="countdown-item">
+                        <span id="minutes">59</span>
+                        <label>Minutes</label>
+                    </div>
+                    <div class="countdown-item">
+                        <span id="seconds">59</span>
+                        <label>Seconds</label>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="openBookingModal()">Claim Your Free Lesson</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Booking Modal -->
+    <div class="modal" id="bookingModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeBookingModal()">&times;</span>
+            <h2>Book Your Italian Lesson</h2>
+            
+            <div class="booking-form-container">
+                <h3>⏰ Request Your Preferred Time</h3>
+                <form class="custom-time-form" onsubmit="handleBookingRequest(event)">
+                    <div class="form-field">
+                        <label for="customDate">📅 Date</label>
+                        <input type="date" id="customDate" required placeholder="Select date">
+                    </div>
+                    <div class="form-field">
+                        <label for="customTime">🕐 Time</label>
+                        <input type="time" id="customTime" required placeholder="Select time">
+                    </div>
+                    <div class="form-field">
+                        <label for="customMessage">💬 Message</label>
+                        <textarea placeholder="Tell me about your Italian level and goals..." id="customMessage" rows="4"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send Request</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Video Modal -->
+    <div class="modal" id="videoModal">
+        <div class="modal-content video-content">
+            <span class="close" onclick="closeVideoModal()">&times;</span>
+            <h2>Meet Francesco!</h2>
+            <div class="video-container">
+                <video id="introVideo" controls>
+                    <source src="videos/francesco-intro.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAf322olVztRrAIGFwqvaF5kB8s6NlbNmE&loading=async&callback=initMap" async defer></script>
+    <script src="script.js"></script>
+</body>
+</html>

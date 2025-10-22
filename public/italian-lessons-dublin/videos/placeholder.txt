@@ -1,0 +1,20 @@
+Placeholder for francesco-intro.mp4
+
+To add your intro video:
+1. Record a 30-60 second video introducing yourself
+2. Save it as francesco-intro.mp4 in this folder
+3. The video should be:
+   - MP4 format
+   - 720p or 1080p resolution
+   - Under 10MB for best performance
+   - Clear audio and good lighting
+
+Example script for the video:
+"Ciao! I'm Francesco, your Italian teacher here in Dublin. 
+I love sharing my language and culture with students from all over the world. 
+Whether you're a beginner or want to improve your Italian, 
+I'm here to help you learn in a fun and engaging way. 
+Book your first lesson today - it's free for new students! 
+Arrivederci!"
+
+The video will automatically appear in the "Meet Francesco" button on the main page.

@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        "ritwickdey.liveserver",
+        "ms-vscode.vscode-json",
+        "bradlc.vscode-tailwindcss",
+        "esbenp.prettier-vscode",
+        "ms-vscode.vscode-typescript-next"
+    ]
+}
