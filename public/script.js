@@ -33,6 +33,14 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Effetto ripple
             createRippleEffect(e, this);
+            
+            // Google Analytics tracking
+            const projectTitle = this.querySelector('h3')?.textContent || 'Unknown Project';
+            const projectUrl = this.querySelector('a')?.href || '';
+            trackEvent('project_click', {
+                project_name: projectTitle,
+                project_url: projectUrl
+            });
         });
     });
     
@@ -43,6 +51,14 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', function(e) {
             createClickSound();
             createRippleEffect(e, this);
+            
+            // Google Analytics tracking
+            const buttonText = this.textContent.trim();
+            const buttonHref = this.href || '';
+            trackEvent('cta_click', {
+                button_text: buttonText,
+                button_url: buttonHref
+            });
         });
     });
     

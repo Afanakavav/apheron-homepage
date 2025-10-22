@@ -171,6 +171,13 @@ function showAdminPanel() {
         adminPanel.style.transition = 'opacity 0.5s ease';
         adminPanel.style.opacity = '1';
     }, 50);
+    
+    // Google Analytics tracking
+    if (typeof gtag !== 'undefined') {
+        gtag('event', 'admin_login_success', {
+            page: 'admin_panel'
+        });
+    }
 }
 
 // Load Projects from Firestore
@@ -240,14 +247,12 @@ function createProjectCard(project, projectId) {
     return card;
 }
 
-// Edit Project (Placeholder - to be implemented)
-function editProject(projectId, project) {
-    alert(`Edit Project functionality coming soon!\n\nProject: ${project.title}\nID: ${projectId}\n\nThis will open a modal to edit project details.`);
-}
-
 // Delete Project
 async function deleteProject(projectId, projectTitle) {
-    if (!confirm(`Are you sure you want to delete "${projectTitle}"?\n\nThis action cannot be undone.`)) {
+    // Create custom confirmation toast
+    const confirmed = confirm(`Are you sure you want to delete "${projectTitle}"?\n\nThis action cannot be undone.`);
+    
+    if (!confirmed) {
         return;
     }
     
@@ -255,11 +260,19 @@ async function deleteProject(projectId, projectTitle) {
     try {
         await deleteDoc(doc(db, 'projects', projectId));
         console.log('Project deleted:', projectId);
-        alert(`"${projectTitle}" has been deleted successfully.`);
+        showToast('Deleted!', `"${projectTitle}" has been deleted successfully.`, 'success');
+        
+        // Google Analytics tracking
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'project_deleted', {
+                project_title: projectTitle
+            });
+        }
+        
         loadProjects(); // Reload projects
     } catch (error) {
         console.error('Error deleting project:', error);
-        alert('Error deleting project. Please try again.');
+        showToast('Error', 'Failed to delete project. Please try again.', 'error');
         hideLoading();
     }
 }
@@ -275,10 +288,195 @@ function updateStats(totalProjects) {
     if (statValues[2]) statValues[2].textContent = '--'; // Views coming soon
 }
 
-// Add Project Button Handler
+// ===========================
+// PROJECT MODAL MANAGEMENT
+// ===========================
+
+let currentEditingProjectId = null;
+
+// Modal Elements
+const projectModal = document.getElementById('project-modal');
+const modalTitle = document.getElementById('modal-title');
+const modalCloseBtn = document.getElementById('modal-close-btn');
+const modalCancelBtn = document.getElementById('modal-cancel-btn');
+const projectForm = document.getElementById('project-form');
+const modalSubmitBtn = document.getElementById('modal-submit-btn');
+
+// Form Inputs
+const titleInput = document.getElementById('project-title');
+const descriptionInput = document.getElementById('project-description');
+const urlInput = document.getElementById('project-url');
+const iconInput = document.getElementById('project-icon');
+const iconClassInput = document.getElementById('project-icon-class');
+const statusInput = document.getElementById('project-status');
+const orderInput = document.getElementById('project-order');
+
+// Open Modal for Add Project
 document.querySelector('.btn-add')?.addEventListener('click', () => {
-    alert('Add Project functionality coming soon!\n\nThis will open a modal to create a new project with:\n- Title\n- Description\n- URL\n- Icon\n- Status (Active/Coming Soon)');
+    openModal('add');
 });
+
+// Open Modal for Edit Project
+function editProject(projectId, project) {
+    openModal('edit', projectId, project);
+}
+
+// Open Modal Function
+function openModal(mode, projectId = null, project = null) {
+    currentEditingProjectId = projectId;
+    
+    if (mode === 'add') {
+        modalTitle.textContent = 'Add New Project';
+        modalSubmitBtn.querySelector('.btn-text').textContent = 'Add Project';
+        modalSubmitBtn.querySelector('.btn-icon').textContent = '✨';
+        projectForm.reset();
+    } else if (mode === 'edit' && project) {
+        modalTitle.textContent = 'Edit Project';
+        modalSubmitBtn.querySelector('.btn-text').textContent = 'Save Changes';
+        modalSubmitBtn.querySelector('.btn-icon').textContent = '💾';
+        
+        // Populate form with existing data
+        titleInput.value = project.title || '';
+        descriptionInput.value = project.description || '';
+        urlInput.value = project.url || '';
+        iconInput.value = project.icon || '';
+        iconClassInput.value = project.iconClass || '';
+        statusInput.value = project.status || 'active';
+        orderInput.value = project.order || 1;
+    }
+    
+    projectModal.style.display = 'flex';
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+}
+
+// Close Modal Function
+function closeModal() {
+    projectModal.style.display = 'none';
+    document.body.style.overflow = ''; // Restore scrolling
+    projectForm.reset();
+    currentEditingProjectId = null;
+}
+
+// Close Modal Event Listeners
+modalCloseBtn.addEventListener('click', closeModal);
+modalCancelBtn.addEventListener('click', closeModal);
+
+// Close modal when clicking overlay
+projectModal.querySelector('.project-modal-overlay').addEventListener('click', closeModal);
+
+// Close modal with Escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && projectModal.style.display === 'flex') {
+        closeModal();
+    }
+});
+
+// Form Submit Handler
+projectForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // Get form values
+    const projectData = {
+        title: titleInput.value.trim(),
+        description: descriptionInput.value.trim(),
+        url: urlInput.value.trim(),
+        icon: iconInput.value.trim(),
+        iconClass: iconClassInput.value.trim() || '',
+        status: statusInput.value,
+        order: parseInt(orderInput.value) || 1
+    };
+    
+    // Validate URL
+    try {
+        new URL(projectData.url);
+    } catch (error) {
+        showToast('Invalid URL', 'Please enter a valid URL starting with http:// or https://', 'error');
+        urlInput.classList.add('error');
+        setTimeout(() => urlInput.classList.remove('error'), 500);
+        return;
+    }
+    
+    showLoading();
+    
+    try {
+        if (currentEditingProjectId) {
+            // Update existing project
+            await updateDoc(doc(db, 'projects', currentEditingProjectId), projectData);
+            showToast('Success!', `"${projectData.title}" has been updated successfully.`, 'success');
+            
+            // Google Analytics tracking
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'project_updated', {
+                    project_title: projectData.title,
+                    project_status: projectData.status
+                });
+            }
+        } else {
+            // Add new project
+            await addDoc(collection(db, 'projects'), projectData);
+            showToast('Success!', `"${projectData.title}" has been added successfully.`, 'success');
+            
+            // Google Analytics tracking
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'project_added', {
+                    project_title: projectData.title,
+                    project_status: projectData.status
+                });
+            }
+        }
+        
+        closeModal();
+        loadProjects(); // Reload projects
+        
+    } catch (error) {
+        console.error('Error saving project:', error);
+        showToast('Error', 'Failed to save project. Please try again.', 'error');
+        hideLoading();
+    }
+});
+
+// ===========================
+// TOAST NOTIFICATIONS
+// ===========================
+
+function showToast(title, message, type = 'info') {
+    const toastContainer = document.getElementById('toast-container');
+    
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    
+    const icons = {
+        success: '✅',
+        error: '❌',
+        info: 'ℹ️'
+    };
+    
+    toast.innerHTML = `
+        <div class="toast-icon">${icons[type]}</div>
+        <div class="toast-content">
+            <div class="toast-title">${title}</div>
+            <div class="toast-message">${message}</div>
+        </div>
+    `;
+    
+    toastContainer.appendChild(toast);
+    
+    // Auto remove after 4 seconds
+    setTimeout(() => {
+        toast.classList.add('toast-exit');
+        setTimeout(() => {
+            toast.remove();
+        }, 300);
+    }, 4000);
+    
+    // Remove on click
+    toast.addEventListener('click', () => {
+        toast.classList.add('toast-exit');
+        setTimeout(() => {
+            toast.remove();
+        }, 300);
+    });
+}
 
 // Add shake animation to styles if not exists
 const style = document.createElement('style');

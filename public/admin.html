@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GT92917S64"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-GT92917S64');
+    </script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
@@ -190,6 +199,118 @@
             <p>&copy; 2025 APHERON. Admin Panel v1.0</p>
         </footer>
     </div>
+
+    <!-- Project Modal -->
+    <div id="project-modal" class="project-modal" style="display: none;">
+        <div class="project-modal-overlay"></div>
+        <div class="project-modal-content">
+            <div class="project-modal-header">
+                <h2 id="modal-title">Add New Project</h2>
+                <button class="modal-close-btn" id="modal-close-btn">&times;</button>
+            </div>
+            
+            <form id="project-form" class="project-form">
+                <div class="form-group">
+                    <label for="project-title">Project Title *</label>
+                    <input 
+                        type="text" 
+                        id="project-title" 
+                        class="form-input" 
+                        placeholder="e.g., E-commerce Platform"
+                        required
+                        maxlength="100"
+                    >
+                    <span class="form-hint">Max 100 characters</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="project-description">Description *</label>
+                    <textarea 
+                        id="project-description" 
+                        class="form-input" 
+                        placeholder="Brief description of the project..."
+                        required
+                        maxlength="200"
+                        rows="3"
+                    ></textarea>
+                    <span class="form-hint">Max 200 characters</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="project-url">Project URL *</label>
+                    <input 
+                        type="url" 
+                        id="project-url" 
+                        class="form-input" 
+                        placeholder="https://example.com"
+                        required
+                    >
+                    <span class="form-hint">Must be a valid URL</span>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="project-icon">Icon (Emoji) *</label>
+                        <input 
+                            type="text" 
+                            id="project-icon" 
+                            class="form-input" 
+                            placeholder="🚀"
+                            required
+                            maxlength="2"
+                        >
+                        <span class="form-hint">Single emoji</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="project-icon-class">Icon Class (Optional)</label>
+                        <input 
+                            type="text" 
+                            id="project-icon-class" 
+                            class="form-input" 
+                            placeholder="e.g., italian-flag"
+                        >
+                        <span class="form-hint">Custom CSS class</span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="project-status">Status *</label>
+                        <select id="project-status" class="form-input" required>
+                            <option value="active">Active</option>
+                            <option value="coming-soon">Coming Soon</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="project-order">Order *</label>
+                        <input 
+                            type="number" 
+                            id="project-order" 
+                            class="form-input" 
+                            placeholder="1"
+                            required
+                            min="1"
+                            value="1"
+                        >
+                        <span class="form-hint">Display order</span>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" id="modal-cancel-btn">Cancel</button>
+                    <button type="submit" class="btn-submit" id="modal-submit-btn">
+                        <span class="btn-text">Add Project</span>
+                        <span class="btn-icon">✨</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast-container" class="toast-container"></div>
 
     <!-- Firebase Scripts -->
     <script type="module" src="firebase-config.js"></script>
