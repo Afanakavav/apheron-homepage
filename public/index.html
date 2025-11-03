@@ -43,9 +43,20 @@
     
     <!-- Additional URL Meta Tags -->
     <meta property="og:locale" content="en_US">
+    <meta property="og:locale:alternate" content="it_IT">
     <meta property="og:updated_time" content="2025-01-27T00:00:00Z">
     <meta name="url" content="https://afanakavav.github.io/apheron-homepage/">
     <meta name="identifier-URL" content="https://afanakavav.github.io/apheron-homepage/">
+    
+    <!-- Geographic Meta Tags for Local SEO -->
+    <meta name="geo.region" content="IT-52">
+    <meta name="geo.region" content="IE-D">
+    <meta name="geo.placename" content="Prato">
+    <meta name="geo.placename" content="Dublin">
+    <meta name="geo.position" content="43.8787;11.0969">
+    <meta name="geo.position" content="53.3498;-6.2603">
+    <meta name="ICBM" content="43.8787, 11.0969">
+    <meta name="ICBM" content="53.3498, -6.2603">
     
     <!-- WhatsApp Specific -->
     <meta property="og:see_also" content="https://afanakavav.github.io/apheron-homepage/">
@@ -96,21 +107,130 @@
     
     <!-- Schema Markup -->
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Francesco",
-        "jobTitle": "Digital Strategist",
-        "description": "Digital strategist for freelancers, startups & small businesses. Fast delivery, practical solutions, measurable results.",
-        "url": "https://afanakavav.github.io/apheron-homepage/",
-        "sameAs": [],
-        "knowsAbout": ["Web Development", "Digital Systems", "Fast Delivery", "Practical Solutions"],
-        "offers": {
-            "@type": "Service",
-            "name": "Digital Strategy Consulting",
-            "description": "Websites, apps & digital systems for freelancers, startups & small businesses"
+    [
+        {
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "name": "Francesco",
+            "jobTitle": "Digital Strategist",
+            "description": "Digital strategist for freelancers, startups & small businesses. Fast delivery, practical solutions, measurable results.",
+            "url": "https://afanakavav.github.io/apheron-homepage/",
+            "sameAs": [],
+            "knowsAbout": ["Web Development", "Digital Systems", "Fast Delivery", "Practical Solutions"],
+            "worksFor": {
+                "@type": "Organization",
+                "name": "APHERON"
+            },
+            "address": [
+                {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Prato",
+                    "addressRegion": "Toscana",
+                    "addressCountry": "IT"
+                },
+                {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Dublin",
+                    "addressRegion": "Leinster",
+                    "addressCountry": "IE"
+                }
+            ]
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            "@id": "https://apheron.io/#organization",
+            "name": "APHERON",
+            "legalName": "APHERON",
+            "description": "Digital Strategy & AI Consulting services for freelancers, startups and small businesses. Based in Prato, Italy and Dublin, Ireland.",
+            "url": "https://apheron.io",
+            "logo": "https://apheron.io/logo.png",
+            "image": "https://apheron.io/og-image.jpg",
+            "priceRange": "$$",
+            "telephone": "+353894040077",
+            "email": "info@apheron.io",
+            "foundingDate": "2024",
+            "address": [
+                {
+                    "@type": "PostalAddress",
+                    "streetAddress": "Prato",
+                    "addressLocality": "Prato",
+                    "addressRegion": "Toscana",
+                    "postalCode": "59100",
+                    "addressCountry": "IT"
+                },
+                {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Dublin",
+                    "addressRegion": "Leinster",
+                    "postalCode": "Dublin",
+                    "addressCountry": "IE"
+                }
+            ],
+            "areaServed": [
+                {
+                    "@type": "Country",
+                    "name": "Italy"
+                },
+                {
+                    "@type": "Country",
+                    "name": "Ireland"
+                },
+                {
+                    "@type": "City",
+                    "name": "Prato"
+                },
+                {
+                    "@type": "City",
+                    "name": "Dublin"
+                }
+            ],
+            "serviceArea": {
+                "@type": "GeoCircle",
+                "geoMidpoint": {
+                    "@type": "GeoCoordinates",
+                    "latitude": "43.8787",
+                    "longitude": "11.0969"
+                }
+            },
+            "hasOfferCatalog": {
+                "@type": "OfferCatalog",
+                "name": "Digital Strategy Services",
+                "itemListElement": [
+                    {
+                        "@type": "Offer",
+                        "itemOffered": {
+                            "@type": "Service",
+                            "name": "Web Development",
+                            "description": "Custom websites for freelancers, startups & small businesses"
+                        }
+                    },
+                    {
+                        "@type": "Offer",
+                        "itemOffered": {
+                            "@type": "Service",
+                            "name": "Digital Systems",
+                            "description": "Digital platforms and automations that generate clients"
+                        }
+                    },
+                    {
+                        "@type": "Offer",
+                        "itemOffered": {
+                            "@type": "Service",
+                            "name": "Digital Strategy Consulting",
+                            "description": "Free 20-minute strategy call to analyze your digital presence and create a roadmap"
+                        }
+                    }
+                ]
+            },
+            "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "5",
+                "bestRating": "5",
+                "worstRating": "1"
+            }
         }
-    }
+    ]
     </script>
 </head>
 <body>
