@@ -2,6 +2,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize all features
+    initializeLanguageToggle();
     initializeLoadingScreen();
     initializeFAQ();
     initializeAnalytics();
@@ -45,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Sound effects per i CTA
-    const ctaButtons = document.querySelectorAll('.cta-button');
+    const ctaButtons = document.querySelectorAll('.cta-button, .cta-button-new');
     
     ctaButtons.forEach(button => {
         button.addEventListener('click', function(e) {
@@ -57,7 +58,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const buttonHref = this.href || '';
             trackEvent('cta_click', {
                 button_text: buttonText,
-                button_url: buttonHref
+                button_url: buttonHref,
+                cta_type: 'strategy_call'
             });
         });
     });
@@ -210,6 +212,30 @@ style.textContent = `
 document.head.appendChild(style);
 
 // Advanced Features Implementation
+
+// Language Toggle
+function initializeLanguageToggle() {
+    const langToggles = document.querySelectorAll('.lang-toggle');
+    
+    langToggles.forEach(toggle => {
+        toggle.addEventListener('click', () => {
+            const lang = toggle.dataset.lang;
+            if (typeof window.setLanguage === 'function') {
+                window.setLanguage(lang);
+                // Track language change
+                trackEvent('language_changed', { language: lang });
+            }
+        });
+    });
+    
+    // Set initial active state
+    const currentLang = localStorage.getItem('apheron-lang') || 'en';
+    langToggles.forEach(toggle => {
+        if (toggle.dataset.lang === currentLang) {
+            toggle.classList.add('active');
+        }
+    });
+}
 
 // Loading Screen
 function initializeLoadingScreen() {

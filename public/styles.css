@@ -35,6 +35,56 @@ body {
     transition: all 0.3s ease;
 }
 
+/* Language Toggle */
+.language-toggle-container {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    z-index: 1000;
+    display: flex;
+    gap: 0.5rem;
+    background: rgba(10, 10, 10, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.3rem;
+}
+
+.lang-toggle {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    opacity: 0.5;
+}
+
+.lang-toggle:hover {
+    opacity: 0.8;
+    background: rgba(212, 175, 55, 0.1);
+}
+
+.lang-toggle.active {
+    opacity: 1;
+    background: rgba(212, 175, 55, 0.2);
+    border: 1px solid var(--accent);
+}
+
+@media (max-width: 768px) {
+    .language-toggle-container {
+        top: 1rem;
+        right: 1rem;
+        padding: 0.25rem;
+    }
+    
+    .lang-toggle {
+        font-size: 1.3rem;
+        padding: 0.3rem 0.5rem;
+    }
+}
+
 /* Loading Screen */
 .loading-screen {
     position: fixed;
@@ -260,6 +310,23 @@ body::before {
     color: #D4AF37;
     text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
     letter-spacing: 2px;
+    margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    color: var(--text-tertiary);
+    font-weight: 400;
+    line-height: 1.6;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .hero-subtitle {
+        font-size: 1rem;
+        padding: 0 1rem;
+    }
 }
 
 /* Bio Section */
@@ -267,6 +334,138 @@ body::before {
     text-align: center;
     margin-bottom: 4rem;
     animation: fadeInUp 1.5s ease-out 0.7s both;
+}
+
+/* Recent Work Section */
+.recent-work-section {
+    margin: 5rem 0;
+    animation: fadeInUp 1.5s ease-out 0.9s both;
+}
+
+.recent-work-section h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 2.5rem;
+    color: var(--text-primary);
+}
+
+.recent-work-list {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.recent-work-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.recent-work-item:hover {
+    border-color: var(--accent);
+    transform: translateX(5px);
+}
+
+.work-icon {
+    color: var(--accent);
+    font-size: 1.2rem;
+    font-weight: 600;
+    flex-shrink: 0;
+    margin-top: 0.2rem;
+}
+
+.recent-work-item p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+    font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+    .recent-work-section {
+        margin: 3rem 0;
+    }
+    
+    .recent-work-item {
+        padding: 1.2rem;
+    }
+    
+    .recent-work-item p {
+        font-size: 0.9rem;
+    }
+}
+
+/* CTA Section New */
+.cta-section-new {
+    margin: 5rem 0;
+    animation: fadeInUp 1.5s ease-out 1.3s both;
+}
+
+.cta-content {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: var(--bg-secondary);
+    border: 2px solid var(--accent);
+    border-radius: 16px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.cta-text {
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    font-weight: 500;
+    margin-bottom: 2rem;
+    font-family: 'Cinzel', serif;
+}
+
+.cta-button-new {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--bg-primary);
+    padding: 1rem 2.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.cta-button-new:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+    background: transparent;
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+@media (max-width: 768px) {
+    .cta-section-new {
+        margin: 3rem 0;
+    }
+    
+    .cta-content {
+        padding: 2rem 1.5rem;
+    }
+    
+    .cta-text {
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .cta-button-new {
+        padding: 0.8rem 2rem;
+        font-size: 1rem;
+    }
 }
 
 

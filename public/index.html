@@ -15,15 +15,15 @@
     <title>APHERON - Unlock Human Intelligence | Digital Strategy & AI Consulting</title>
     
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Francesco - Digital strategist transforming ideas into reality. AI-first approach, 5+ years transforming businesses from startups to enterprises. Book your free strategy call.">
-    <meta name="keywords" content="digital strategy, AI consulting, web development, digital transformation, Francesco, APHERON, artificial intelligence, business strategy">
+    <meta name="description" content="Francesco - Digital strategist for freelancers, startups & small businesses. Fast delivery, practical solutions, measurable results. Websites, apps & digital systems. Book a free 20-minute strategy call.">
+    <meta name="keywords" content="web development, digital systems, freelancer websites, startup websites, small business websites, Francesco, APHERON, fast delivery, practical solutions">
     <meta name="author" content="Francesco - APHERON">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://afanakavav.github.io/apheron-homepage/">
     
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="APHERON - Unlock Human Intelligence">
-    <meta property="og:description" content="Digital strategist transforming ideas into reality. AI-first approach, 5+ years transforming businesses from startups to enterprises.">
+    <meta property="og:description" content="Digital strategist for freelancers, startups & small businesses. Fast delivery, practical solutions, measurable results.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://afanakavav.github.io/apheron-homepage/">
     <meta property="og:image" content="https://afanakavav.github.io/apheron-homepage/og-image.jpg">
@@ -91,6 +91,9 @@
     
     <link rel="stylesheet" href="styles.css">
     
+    <!-- Translations -->
+    <script src="translations.js"></script>
+    
     <!-- Schema Markup -->
     <script type="application/ld+json">
     {
@@ -98,22 +101,29 @@
         "@type": "Person",
         "name": "Francesco",
         "jobTitle": "Digital Strategist",
-        "description": "Digital strategist transforming ideas into reality with AI-first approach",
+        "description": "Digital strategist for freelancers, startups & small businesses. Fast delivery, practical solutions, measurable results.",
         "url": "https://afanakavav.github.io/apheron-homepage/",
-        "sameAs": [
-            "https://linkedin.com/in/francesco",
-            "https://github.com/francesco"
-        ],
-        "knowsAbout": ["Digital Strategy", "AI Consulting", "Web Development", "Digital Transformation"],
+        "sameAs": [],
+        "knowsAbout": ["Web Development", "Digital Systems", "Fast Delivery", "Practical Solutions"],
         "offers": {
             "@type": "Service",
             "name": "Digital Strategy Consulting",
-            "description": "AI-first digital transformation for businesses from startups to enterprises"
+            "description": "Websites, apps & digital systems for freelancers, startups & small businesses"
         }
     }
     </script>
 </head>
 <body>
+    <!-- Language Toggle -->
+    <div class="language-toggle-container">
+        <button class="lang-toggle" data-lang="en" title="English">
+            🇬🇧
+        </button>
+        <button class="lang-toggle" data-lang="it" title="Italiano">
+            🇮🇹
+        </button>
+    </div>
+
     <!-- Install App Banner -->
     <div id="install-banner" class="install-banner">
         <div class="install-content">
@@ -148,76 +158,103 @@
 
         <!-- Tagline -->
         <div class="tagline">
-            <h1>Unlock Human Intelligence</h1>
+            <h1 id="tagline-h1">Unlock Human Intelligence</h1>
+            <p class="hero-subtitle" id="hero-subtitle">Websites, apps & digital systems for freelancers, startups & small businesses.</p>
         </div>
 
         <!-- About Me -->
         <div class="bio-section">
             <div class="bio-content">
-                <p class="bio-text">Digital strategist who transforms ideas into reality.</p>
+                <p class="bio-text" id="bio-text">Digital strategist who transforms ideas into reality.</p>
             </div>
-            
             
             <!-- Badge competenze -->
             <div class="competence-badges">
-                <span class="badge">AI Strategy</span>
                 <span class="badge">Web Development</span>
-                <span class="badge">Digital Transformation</span>
+                <span class="badge">Digital Systems</span>
+                <span class="badge">Fast Delivery</span>
             </div>
         </div>
 
 
+        <!-- Recent Work Section -->
+        <div class="recent-work-section">
+            <h2 id="recent-work-title">Recent Work</h2>
+            <div class="recent-work-list">
+                <div class="recent-work-item">
+                    <span class="work-icon">✓</span>
+                    <p id="recent-work-item1">Website redesign for a consulting business → +30% contact requests in 30 days</p>
+                </div>
+                <div class="recent-work-item">
+                    <span class="work-icon">✓</span>
+                    <p id="recent-work-item2">Booking platform prototype for a wellness professional</p>
+                </div>
+                <div class="recent-work-item">
+                    <span class="work-icon">✓</span>
+                    <p id="recent-work-item3">Brand + landing + automation setup for a creative project launch</p>
+                </div>
+            </div>
+        </div>
+
         <!-- Why Choose Me Section -->
         <div class="why-choose-section">
-            <h2>Why Choose Me</h2>
+            <h2 id="why-title">Why Choose Me</h2>
             <div class="why-grid">
                 <div class="why-item">
-                    <div class="why-icon">🎯</div>
-                    <h3>AI-First Approach</h3>
-                    <p>Every strategy is built with artificial intelligence at its core, ensuring future-proof solutions.</p>
+                    <div class="why-icon">🚀</div>
+                    <h3 id="why-item1-title">A New-Generation Digital Builder</h3>
+                    <p id="why-item1-text">Instead of years of legacy agency structure, I bring speed, modern tools, and hands-on execution. Clear scope, fast delivery, measurable results, without the agency overhead.</p>
                 </div>
                 <div class="why-item">
                     <div class="why-icon">⚡</div>
-                    <h3>Proven Results</h3>
-                    <p>5+ years transforming businesses from startups to enterprises with measurable outcomes.</p>
+                    <h3 id="why-item2-title">Real Results, Fast</h3>
+                    <p id="why-item2-text">Concrete projects for freelancers and small businesses. Websites, digital platforms and automations that generate clients and simplify work. Fast delivery, continuous support, measurable results.</p>
                 </div>
                 <div class="why-item">
                     <div class="why-icon">🔮</div>
-                    <h3>Strategic Vision</h3>
-                    <p>I don't just build websites, I architect digital ecosystems that grow with your business.</p>
+                    <h3 id="why-item3-title">Strategic Vision</h3>
+                    <p id="why-item3-text">I don't just build websites, I architect digital ecosystems that grow with your business.</p>
                 </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="cta-section-new">
+            <div class="cta-content">
+                <p class="cta-text" id="cta-text">Book a free 20-minute strategy call</p>
+                <a href="mailto:francesco.perone00@gmail.com?subject=Strategy Call Request" class="cta-button-new" id="cta-button">Book Now</a>
             </div>
         </div>
 
         <!-- FAQ Section -->
         <div class="faq-section">
-            <h2>Frequently Asked Questions</h2>
+            <h2 id="faq-title">Frequently Asked Questions</h2>
             <div class="faq-container">
                 <div class="faq-item">
                     <button class="faq-question" aria-expanded="false">
-                        <span>What makes your approach different?</span>
+                        <span id="faq1-question">What makes your approach different?</span>
                         <span class="faq-icon">+</span>
                     </button>
                     <div class="faq-answer">
-                        <p>I use an AI-first methodology that ensures every solution is built for the future. While others focus on current trends, I architect systems that evolve with technology.</p>
+                        <p id="faq1-answer">I use a modern, hands-on methodology that focuses on fast delivery and practical solutions. While others rely on complex agency structures, I bring direct execution, clear communication, and tools that actually work.</p>
                     </div>
                 </div>
                 <div class="faq-item">
                     <button class="faq-question" aria-expanded="false">
-                        <span>Do you work with startups or enterprises?</span>
+                        <span id="faq2-question">Do you work with startups or enterprises?</span>
                         <span class="faq-icon">+</span>
                     </button>
                     <div class="faq-answer">
-                        <p>Both! I've helped startups scale from 0 to 1M users and enterprises optimize their digital infrastructure. My approach adapts to your stage and goals.</p>
+                        <p id="faq2-answer">I partner mainly with entrepreneurs, freelancers, and small-to-mid businesses. I also support early-stage startups building and launching their first product. My focus is simple: deliver fast, design around real needs, and build solutions that scale as your business grows.</p>
                     </div>
                 </div>
                 <div class="faq-item">
                     <button class="faq-question" aria-expanded="false">
-                        <span>What's included in a strategy call?</span>
+                        <span id="faq3-question">What's included in a strategy call?</span>
                         <span class="faq-icon">+</span>
                     </button>
                     <div class="faq-answer">
-                        <p>A free 30-minute consultation where we analyze your current digital presence, identify opportunities, and create a roadmap for your AI-powered transformation.</p>
+                        <p id="faq3-answer">A free 20-minute consultation where we analyze your current digital presence, identify opportunities, and create a roadmap for your digital transformation. No sales pitch, just practical advice.</p>
                     </div>
                 </div>
             </div>
@@ -228,12 +265,12 @@
         <footer class="footer">
             <div class="footer-content">
                 <div class="footer-left">
-                    <p class="copyright">&copy; 2025 APHERON. All rights reserved.</p>
-                    <p class="tagline">Unlock human intelligence</p>
+                    <p class="copyright" id="copyright">&copy; 2025 APHERON. All rights reserved.</p>
+                    <p class="tagline" id="tagline-footer">Unlock human intelligence</p>
                 </div>
                 <div class="footer-right">
                     <p class="contact-info">
-                        For inquiries: 
+                        <span id="contact-label">For inquiries:</span> 
                         <a href="mailto:francesco.perone00@gmail.com" class="contact-link">francesco.perone00@gmail.com</a>
                         or 
                         <a href="tel:+353894040077" class="contact-link">+353 894040077</a>
@@ -243,11 +280,11 @@
             <div class="footer-actions">
                 <button id="download-app-btn" class="footer-action-btn download-btn">
                     <span class="btn-icon">📱</span>
-                    <span class="btn-text">Download App</span>
+                    <span class="btn-text" id="download-app">Download App</span>
                 </button>
                 <a href="admin.html" class="footer-action-btn admin-btn" title="Admin Access">
                     <span class="btn-icon">🔐</span>
-                    <span class="btn-text">Admin Access</span>
+                    <span class="btn-text" id="admin-access">Admin Access</span>
                 </a>
             </div>
         </footer>
