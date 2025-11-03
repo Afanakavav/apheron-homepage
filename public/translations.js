@@ -47,7 +47,7 @@ const translations = {
         downloadApp: "Download App",
         adminAccess: "Admin Access",
         googleBusinessText: "⭐ Rated on Google Business",
-        googleBusinessLink: "" // Ireland profile link - will be added when verified
+        googleBusinessLink: "https://share.google/aWbuBsik2O5HGjrzU"
     },
     it: {
         // Hero & Tagline
