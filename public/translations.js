@@ -38,6 +38,7 @@ const translations = {
         // CTA
         ctaText: "Book a free 20-minute strategy call",
         ctaButton: "Book Now",
+        whatsappMessage: "Hi Francesco, I'm interested in having a 20-minute strategy call. Best regards",
         
         // Footer
         copyright: "© 2025 APHERON. All rights reserved.",
@@ -84,6 +85,7 @@ const translations = {
         // CTA
         ctaText: "Prenota una chiamata strategica gratuita di 20 minuti",
         ctaButton: "Prenota Ora",
+        whatsappMessage: "Ciao Francesco, sono interessato a fare una chiamata strategica di 20 minuti. Un saluto",
         
         // Footer
         copyright: "© 2025 APHERON. Tutti i diritti riservati.",
@@ -182,6 +184,13 @@ function updateContent() {
             toggle.classList.remove('active');
         }
     });
+    
+    // Update WhatsApp link with translated message
+    const whatsappLink = document.querySelector('[data-whatsapp-link]');
+    if (whatsappLink && t.whatsappMessage) {
+        const encodedMessage = encodeURIComponent(t.whatsappMessage);
+        whatsappLink.href = `https://wa.me/353894040077?text=${encodedMessage}`;
+    }
 }
 
 // Initialize on page load
