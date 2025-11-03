@@ -47,7 +47,7 @@ const translations = {
         downloadApp: "Download App",
         adminAccess: "Admin Access",
         googleBusinessText: "⭐ Rated on Google Business",
-        googleBusinessLink: "https://share.google/aWbuBsik2O5HGjrzU"
+        googleBusinessLink: "https://share.google/NoV62Slr5oYRx4w6k"
     },
     it: {
         // Hero & Tagline
@@ -96,7 +96,7 @@ const translations = {
         downloadApp: "Scarica l'App",
         adminAccess: "Accesso Admin",
         googleBusinessText: "⭐ Valutato su Google Business",
-        googleBusinessLink: "https://share.google/20UB4gvnLSj6P1EqB"
+        googleBusinessLink: "https://share.google/Dfx20UlYHGt4ghM5R"
     }
 };
 
@@ -200,11 +200,15 @@ function updateContent() {
     // Update Google Business Profile link based on language
     const googleBusinessLink = document.querySelector('[data-google-business-link]');
     if (googleBusinessLink) {
-        // Always use the link from the current language translation
-        const linkForCurrentLang = t.googleBusinessLink;
+        // Force update with the correct link for current language
+        // Get link directly from translations object to ensure we use correct one
+        const currentTranslation = translations[currentLang];
+        const linkForCurrentLang = currentTranslation ? currentTranslation.googleBusinessLink : '';
         
-        if (linkForCurrentLang && linkForCurrentLang.trim() !== '') {
-            googleBusinessLink.href = linkForCurrentLang;
+        if (linkForCurrentLang && typeof linkForCurrentLang === 'string' && linkForCurrentLang.trim() !== '') {
+            // Force update the href attribute
+            googleBusinessLink.setAttribute('href', linkForCurrentLang.trim());
+            googleBusinessLink.href = linkForCurrentLang.trim();
             googleBusinessLink.style.display = 'inline-flex';
         } else {
             googleBusinessLink.href = '#';
