@@ -199,12 +199,15 @@ function updateContent() {
     
     // Update Google Business Profile link based on language
     const googleBusinessLink = document.querySelector('[data-google-business-link]');
-    if (googleBusinessLink && t.googleBusinessLink) {
-        googleBusinessLink.href = t.googleBusinessLink;
-        // Show link only if URL is provided
-        if (t.googleBusinessLink.trim() !== '') {
+    if (googleBusinessLink) {
+        // Always use the link from the current language translation
+        const linkForCurrentLang = t.googleBusinessLink;
+        
+        if (linkForCurrentLang && linkForCurrentLang.trim() !== '') {
+            googleBusinessLink.href = linkForCurrentLang;
             googleBusinessLink.style.display = 'inline-flex';
         } else {
+            googleBusinessLink.href = '#';
             googleBusinessLink.style.display = 'none';
         }
     }
@@ -212,12 +215,18 @@ function updateContent() {
 
 // Initialize on page load
 function initializeTranslations() {
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            window.setLanguage(currentLang);
-        });
-    } else {
+    const initLanguage = () => {
+        // Ensure we have a valid language
+        const savedLang = localStorage.getItem('apheron-lang');
+        const defaultLang = savedLang && translations[savedLang] ? savedLang : 'en';
+        currentLang = defaultLang;
         window.setLanguage(currentLang);
+    };
+    
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initLanguage);
+    } else {
+        initLanguage();
     }
 }
 
