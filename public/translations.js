@@ -47,7 +47,7 @@ const translations = {
         downloadApp: "Download App",
         adminAccess: "Admin Access",
         googleBusinessText: "⭐ Rated on Google Business",
-        googleBusinessLink: "" // Replace with your Ireland Google Business Profile link
+        googleBusinessLink: "" // Ireland profile link - will be added when verified
     },
     it: {
         // Hero & Tagline
@@ -96,7 +96,7 @@ const translations = {
         downloadApp: "Scarica l'App",
         adminAccess: "Accesso Admin",
         googleBusinessText: "⭐ Valutato su Google Business",
-        googleBusinessLink: "" // Replace with your Italy Google Business Profile link
+        googleBusinessLink: "https://www.google.com/search?q=APHERON&stick=H4sIAAAAAAAA_-NgU1I1qDA0NkpMM080TEqzSEpJTE2xMqgwSk1MMzU0SE4zNrE0NjAzXsTK7hjg4Rrk7wcAQawYWDMAAAA&hl=it&mat=CXU-MNHo1u49ElcBTVDHnpNN4Wccsnrr8lwIXO3Jc2dPUPRN1qkykS5BSup_WkuQJHoTfowgIrJ_8rhaeQ8xFDUWRX24gzlXbkeAI3xjvvcOQDR1A6cJdZICOO0uLM6KS-E&authuser=0"
     }
 };
 
