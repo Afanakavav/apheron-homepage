@@ -895,6 +895,11 @@ body::before {
     font-size: 0.95rem;
 }
 
+.contact-emails {
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
 .contact-phones {
     gap: 0.75rem;
 }
