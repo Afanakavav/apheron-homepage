@@ -45,7 +45,9 @@ const translations = {
         taglineFooter: "Unlock human intelligence",
         contactLabel: "For inquiries:",
         downloadApp: "Download App",
-        adminAccess: "Admin Access"
+        adminAccess: "Admin Access",
+        googleBusinessText: "⭐ Rated on Google Business",
+        googleBusinessLink: "" // Replace with your Ireland Google Business Profile link
     },
     it: {
         // Hero & Tagline
@@ -92,7 +94,9 @@ const translations = {
         taglineFooter: "Sblocca l'intelligenza umana",
         contactLabel: "Per informazioni:",
         downloadApp: "Scarica l'App",
-        adminAccess: "Accesso Admin"
+        adminAccess: "Accesso Admin",
+        googleBusinessText: "⭐ Valutato su Google Business",
+        googleBusinessLink: "" // Replace with your Italy Google Business Profile link
     }
 };
 
@@ -160,7 +164,8 @@ function updateContent() {
         'tagline-footer': t.taglineFooter,
         'contact-label': t.contactLabel,
         'download-app': t.downloadApp,
-        'admin-access': t.adminAccess
+        'admin-access': t.adminAccess,
+        'google-business-text': t.googleBusinessText
     };
     
     Object.entries(updates).forEach(([id, text]) => {
@@ -190,6 +195,18 @@ function updateContent() {
     if (whatsappLink && t.whatsappMessage) {
         const encodedMessage = encodeURIComponent(t.whatsappMessage);
         whatsappLink.href = `https://wa.me/353894040077?text=${encodedMessage}`;
+    }
+    
+    // Update Google Business Profile link based on language
+    const googleBusinessLink = document.querySelector('[data-google-business-link]');
+    if (googleBusinessLink && t.googleBusinessLink) {
+        googleBusinessLink.href = t.googleBusinessLink;
+        // Show link only if URL is provided
+        if (t.googleBusinessLink.trim() !== '') {
+            googleBusinessLink.style.display = 'inline-flex';
+        } else {
+            googleBusinessLink.style.display = 'none';
+        }
     }
 }
 

@@ -935,6 +935,32 @@ body::before {
     font-weight: 300;
 }
 
+.contact-google-business {
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.google-business-link {
+    color: #FFC107;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.google-business-link:hover {
+    color: #FFD54F;
+    transform: translateY(-1px);
+}
+
+.google-business-link:active {
+    transform: translateY(0);
+}
+
 /* Footer Actions */
 .footer-actions {
     display: flex;
