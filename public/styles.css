@@ -609,13 +609,14 @@ body::before {
 
 .faq-answer.active {
     padding: 1.5rem;
-    max-height: 200px;
+    max-height: 1000px;
 }
 
 .faq-answer p {
     color: var(--text-secondary);
     line-height: 1.6;
     margin: 0;
+    white-space: pre-line;
 }
 
 .bio-content h2 {

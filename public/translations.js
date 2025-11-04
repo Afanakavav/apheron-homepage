@@ -2,7 +2,7 @@
 const translations = {
     en: {
         // Hero & Tagline
-        tagline: "Unlock Human Intelligence",
+        tagline: "Apheron",
         heroSubtitle: "Websites, apps & digital systems for freelancers, startups & small businesses.",
         
         // About Me
@@ -14,9 +14,9 @@ const translations = {
         // Why Choose Me
         whyTitle: "Why Choose Me",
         whyItem1Title: "A New-Generation Digital Builder",
-        whyItem1Text: "Instead of years of legacy agency structure, I bring speed, modern tools, and hands-on execution. Clear scope, fast delivery, measurable results, without the agency overhead.",
-        whyItem2Title: "Real Results, Fast",
-        whyItem2Text: "Concrete projects for freelancers and small businesses. Websites, digital platforms and automations that generate clients and simplify work. Fast delivery, continuous support, measurable results.",
+        whyItem1Text: "Concrete projects for freelancers and small businesses: websites, digital platforms and AI agents that satisfy customers and simplify work.",
+        whyItem2Title: "Real Fast Result",
+        whyItem2Text: "I bring speed, modern tools and hands-on execution. Clear scope, fast delivery, measurable results.",
         whyItem3Title: "Strategic Vision",
         whyItem3Text: "I don't just build websites, I architect digital ecosystems that grow with your business.",
         
@@ -29,11 +29,11 @@ const translations = {
         // FAQ
         faqTitle: "Frequently Asked Questions",
         faq1Question: "What makes your approach different?",
-        faq1Answer: "I use a modern, hands-on methodology that focuses on fast delivery and practical solutions. While others rely on complex agency structures, I bring direct execution, clear communication, and tools that actually work.",
+        faq1Answer: "I focus on fast, practical execution, not long theory or endless planning.\n\nYou work directly with me: clear communication, modern tools and weekly progress.\n\nWe launch in 14 days, track every result and iterate fast.\n\nFormula I use:\n\nBuild <specific result> in <defined time> with <proven method>.",
         faq2Question: "Do you work with startups or enterprises?",
         faq2Answer: "I partner mainly with entrepreneurs, freelancers, and small-to-mid businesses. I also support early-stage startups building and launching their first product. My focus is simple: deliver fast, design around real needs, and build solutions that scale as your business grows.",
         faq3Question: "What's included in a strategy call?",
-        faq3Answer: "A free 20-minute consultation where we analyze your current digital presence, identify opportunities, and create a roadmap for your digital transformation. No sales pitch, just practical advice.",
+        faq3Answer: "A free 20-minute session to understand your needs and give you a clear action plan.\n\nWe evaluate your current digital setup, identify growth opportunities, and define priorities.\n\nNo sales pitch, just honest, practical guidance.\n\nIn 20 minutes, we cover:\n\n• Quick audit.\n\n• Growth opportunities.\n\n• ROI estimate and next steps.",
         
         // CTA
         ctaText: "Book a free 20-minute strategy call",
@@ -42,7 +42,7 @@ const translations = {
         
         // Footer
         copyright: "© 2025 APHERON. All rights reserved.",
-        taglineFooter: "Unlock human intelligence",
+        taglineFooter: "Apheron",
         contactLabel: "For inquiries:",
         downloadApp: "Download App",
         adminAccess: "Admin Access",
@@ -51,7 +51,7 @@ const translations = {
     },
     it: {
         // Hero & Tagline
-        tagline: "Sblocca l'Intelligenza Umana",
+        tagline: "Apheron",
         heroSubtitle: "Siti web, app e sistemi digitali per liberi professionisti, startup e piccole aziende.",
         
         // About Me
@@ -63,9 +63,9 @@ const translations = {
         // Why Choose Me
         whyTitle: "Perché Scegliere Me",
         whyItem1Title: "Costruttore Digitale di Nuova Generazione",
-        whyItem1Text: "Invece di anni di struttura legacy delle agenzie, porto velocità, strumenti moderni ed esecuzione pratica. Scope chiaro, consegna rapida, risultati misurabili, senza il sovraccarico dell'agenzia.",
-        whyItem2Title: "Risultati Reali, Velocemente",
-        whyItem2Text: "Progetti concreti per liberi professionisti e piccole aziende. Siti web, piattaforme digitali e automazioni che generano clienti e semplificano il lavoro. Consegna rapida, supporto continuo, risultati misurabili.",
+        whyItem1Text: "Progetti per liberi professionisti e PMI: siti internet, gestionali e agenti IA che semplificano il lavoro e soddisfano i clienti.",
+        whyItem2Title: "Real Fast Result",
+        whyItem2Text: "Porto velocità, strumenti moderni ed esecuzione pratica. Obiettivi chiari, consegna rapida, risultati misurabili.",
         whyItem3Title: "Visione Strategica",
         whyItem3Text: "Non costruisco solo siti web, progetto ecosistemi digitali che crescono con il tuo business.",
         
@@ -78,11 +78,11 @@ const translations = {
         // FAQ
         faqTitle: "Domande Frequenti",
         faq1Question: "Cosa rende il tuo approccio diverso?",
-        faq1Answer: "Uso una metodologia moderna e pratica che si concentra su consegne rapide e soluzioni concrete. Mentre altri si affidano a strutture di agenzia complesse, porto esecuzione diretta, comunicazione chiara e strumenti che funzionano davvero.",
+        faq1Answer: "Mi concentro sull'esecuzione rapida e concreta, niente teoria infinita o tempi lunghi.\n\nLavori direttamente con me: comunicazione chiara, strumenti moderni, risultati misurabili.\n\nIl mio metodo:\n\nCostruiamo <risultato concreto> in <tempo definito> con <approccio testato>.",
         faq2Question: "Lavori con startup o aziende?",
         faq2Answer: "Collaboro principalmente con imprenditori, liberi professionisti e piccole-medie aziende. Supporto anche startup in fase iniziale che stanno costruendo e lanciando il loro primo prodotto. Il mio focus è semplice: consegnare velocemente, progettare intorno a bisogni reali, e costruire soluzioni che scalano man mano che il tuo business cresce.",
         faq3Question: "Cosa include una chiamata strategica?",
-        faq3Answer: "Una consulenza gratuita di 20 minuti in cui analizziamo la tua presenza digitale attuale, identifichiamo opportunità e creiamo una roadmap per la tua trasformazione digitale. Niente vendita, solo consigli pratici.",
+        faq3Answer: "Una sessione gratuita di 20 minuti per capire le tue esigenze e definire un piano chiaro.\n\nAnalizziamo la tua presenza digitale, individuiamo opportunità di crescita e stabilizziamo le priorità.\n\nNessuna vendita aggressiva, solo consigli pratici e diretti.\n\nIn 20 minuti facciamo:\n\n• Analisi veloce.\n\n• Opportunità di crescita.\n\n• Stima ROI e prossimi passi.",
         
         // CTA
         ctaText: "Prenota una chiamata strategica gratuita di 20 minuti",
@@ -91,7 +91,7 @@ const translations = {
         
         // Footer
         copyright: "© 2025 APHERON. Tutti i diritti riservati.",
-        taglineFooter: "Sblocca l'intelligenza umana",
+        taglineFooter: "Apheron",
         contactLabel: "Per informazioni:",
         downloadApp: "Scarica l'App",
         adminAccess: "Accesso Admin",

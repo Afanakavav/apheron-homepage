@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Studio Professionale Biancalani - Dottori Commercialisti e Revisori Legali a Prato. Servizi di consulenza fiscale, societaria, contabilità e revisione legale dal 1987.">
+    <meta name="keywords" content="commercialista Prato, revisore legale Prato, consulenza fiscale Prato, consulenza societaria Prato, bilancio Prato">
+    <meta name="author" content="Studio Professionale Biancalani">
+    <title>Studio Professionale Biancalani - Dottori Commercialisti | Prato</title>
+    
+    <!-- Base URL for subdirectory -->
+    <base href="/studioprofessionalebiancalani/">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- Smooth Scroll -->
+    <script src="https://cdn.jsdelivr.net/gh/cferdinandi/smooth-scroll@15/dist/smooth-scroll.polyfills.min.js"></script>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-functions-compat.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="#home" class="nav-link">Home</a></li>
+                    <li><a href="#studio" class="nav-link">Lo Studio</a></li>
+                    <li><a href="#professionisti" class="nav-link">I Professionisti</a></li>
+                    <li><a href="#servizi" class="nav-link">Servizi</a></li>
+                    <li><a href="#acb-group" class="nav-link">ACB Group</a></li>
+                    <li><a href="#contatti" class="nav-link">Contatti</a></li>
+                    <li><a href="#dove-siamo" class="nav-link">Dove Siamo</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+            <div class="hero-text">
+                <h2 class="hero-main-title">Studio Professionale Biancalani</h2>
+                <h1 class="hero-title">Al Vostro Servizio dal 1987</h1>
+                <p class="hero-subtitle">Consulenza professionale di eccellenza in materia fiscale, societaria e contabile</p>
+                <div class="hero-buttons">
+                    <a href="#contatti" class="btn btn-primary">Richiedi un Appuntamento</a>
+                    <a href="#servizi" class="btn btn-secondary">I Nostri Servizi</a>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- Lo Studio Section -->
+    <section id="studio" class="section studio-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Lo Studio</h2>
+                <p class="section-subtitle">Eccellenza professionale dal 1987</p>
+            </div>
+            <div class="studio-content">
+                <div class="studio-text">
+                    <p>Lo Studio viene fondato a Prato nel <strong>1987</strong> da Paolo Biancalani. Attualmente i soci sono il <strong>Dott. Paolo Biancalani</strong> e il <strong>Dott. Andrea Biancalani</strong>, entrato a far parte della struttura nel 2013.</p>
+                    
+                    <p>Nel Dicembre del 2000 lo Studio Professionale Biancalani ha adottato un <strong>Sistema di Gestione per la Qualità</strong> conforme alla norma <strong>UNI EN ISO 9001:2000</strong>, questo per assicurare che tutti i processi siano gestiti e monitorati secondo i più elevati standard di qualità.</p>
+                    
+                    <p>La certificazione è stata rilasciata dall'Ente Certificatore <strong>DNV-GL</strong> (accreditato ACCREDIA) per i seguenti prodotti e servizi: progettazione ed erogazione di prestazioni professionali in materia di ragioneria, tecnica commerciale, economia aziendale, amministrazione, consulenza di direzione, diritto commerciale, diritto tributario, diritto fallimentare, controllo legale dei conti, revisione legale e ogni altra materia prevista dagli ordinamenti professionali dei Dottori Commercialisti.</p>
+                    
+                    <p>Ogni anno vengono effettuati gli aggiornamenti per la certificazione e nel 2017 lo Studio ha adeguato il proprio sistema di gestione alla nuova norma <strong>UNI EN ISO 9001:2015</strong>.</p>
+                </div>
+                <div class="studio-features">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <h3>Certificazione ISO 9001</h3>
+                        <p>Qualità certificata e monitorata secondo standard internazionali</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-network-wired"></i>
+                        </div>
+                        <h3>Partner ACB Group</h3>
+                        <p>Dal 2006 partner di ACBGroup, network nazionale di professionisti</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>Team Esperto</h3>
+                        <p>Un team di professionisti qualificati al vostro servizio</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- I Professionisti Section -->
+    <section id="professionisti" class="section professionisti-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">I Professionisti</h2>
+                <p class="section-subtitle">Il nostro team di esperti</p>
+            </div>
+            <div class="professionisti-grid" id="professionistiGrid">
+                <!-- Cards will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Servizi Section -->
+    <section id="servizi" class="section servizi-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Le Nostre Aree di Attività</h2>
+                <p class="section-subtitle">Consulenza e assistenza completa per privati e aziende</p>
+            </div>
+            <div class="servizi-grid" id="serviziGrid">
+                <!-- Service cards will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ACB Group Section -->
+    <section id="acb-group" class="section acb-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">ACB Group</h2>
+                <p class="section-subtitle">Partnership per eccellenza professionale</p>
+            </div>
+            <div class="acb-content">
+                <div class="acb-text">
+                    <div class="acb-logo-section">
+                        <div class="acb-logo">ACB GROUP</div>
+                    </div>
+                    <p>Dal 2006 lo Studio è partner di <strong>ACBGroup</strong>, network tra Studi indipendenti di Dottori Commercialisti e Legali, fondato nel 2000 da esponenti di spicco del mondo accademico come i professori <strong>Luigi Guatri</strong> e <strong>Victor Uckmar</strong>.</p>
+                    <p>ACBGroup propone un innovativo modello integrato di assistenza professionale teso a sviluppare aggregazione tra professionisti di qualità, distribuiti su tutto il territorio nazionale.</p>
+                    <p>Gli Studi Integrati devono rispondere a requisiti di onorabilità, verificabilità e riconosciuta esistenza di elevati livelli qualitativi e adeguati standard organizzativo-dimensionali. Partecipano <strong>1.250 professionisti</strong> da <strong>60 Studi Integrati</strong>, offrendo la loro esperienza e competenze specializzate per creare un modello di consulenza professionale integrata capace di assistere le imprese nel loro processo di crescita.</p>
+                    <h3>Le principali attività svolte da ACBGroup in collaborazione con lo Studio sono:</h3>
+                    <ul class="acb-activities">
+                        <li><i class="fas fa-check"></i> Business Consulting</li>
+                        <li><i class="fas fa-check"></i> Corporate Finance</li>
+                        <li><i class="fas fa-check"></i> Tax and Legal</li>
+                        <li><i class="fas fa-check"></i> Business Management</li>
+                        <li><i class="fas fa-check"></i> Processi di Internazionalizzazione</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary" id="downloadBrochure">Scarica Brochure ACB Group</a>
+                </div>
+                <div class="acb-gallery">
+                    <div class="gallery-grid" id="acbGallery">
+                        <!-- Gallery images will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contatti Section -->
+    <section id="contatti" class="section contatti-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Contatti</h2>
+                <p class="section-subtitle">Richiedi informazioni o prenota un appuntamento</p>
+            </div>
+            <div class="contatti-content">
+                <div class="contatti-info">
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <h3>Studio Professionale Biancalani</h3>
+                        <p><i class="fas fa-map-marker-alt"></i> Via Tiziano, 7<br>59100 Prato (PO) - Italia</p>
+                        <p><i class="fas fa-clock"></i> <strong>Orari:</strong><br>
+                        Lunedì - Venerdì<br>
+                        8:30 - 13:05<br>
+                        14:30 - 19:05</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <h3>Contatti</h3>
+                        <p><i class="fas fa-phone-alt"></i> Tel: <a href="tel:+39057428625">(+39) 0574 28625</a></p>
+                        <p><i class="fas fa-fax"></i> Fax: <a href="tel:+390574400815">(+39) 0574 400815</a></p>
+                        <p><i class="fas fa-envelope"></i> Email: <a href="mailto:studio@studiobiancalani.it">studio@studiobiancalani.it</a></p>
+                        <p><i class="fas fa-envelope-open-text"></i> PEC: <a href="mailto:studiobiancalani@arubapec.it">studiobiancalani@arubapec.it</a></p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-id-card"></i>
+                        </div>
+                        <h3>Dati Fiscali</h3>
+                        <p>P.IVA: 00327940979</p>
+                        <p>Cod. Fisc.: 03846070484</p>
+                        <p>Cod. Destinatario Fatturazione Elettronica: <strong>USAL8PV</strong></p>
+                    </div>
+                </div>
+                <div class="contatti-form-wrapper">
+                    <div class="form-tabs">
+                        <button class="tab-btn active" data-tab="new-client">Nuovo Cliente</button>
+                        <button class="tab-btn" data-tab="existing-client">Cliente Esistente</button>
+                    </div>
+                    <form id="appointmentForm" class="appointment-form">
+                        <input type="hidden" id="clientType" name="clientType" value="new">
+                        <div class="form-group">
+                            <label for="nome">Nome e Cognome *</label>
+                            <input type="text" id="nome" name="nome" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telefono">Telefono *</label>
+                            <input type="tel" id="telefono" name="telefono" required>
+                        </div>
+                        <div class="form-group" id="partitaIvaGroup" style="display: none;">
+                            <label for="partitaIva">Partita IVA</label>
+                            <input type="text" id="partitaIva" name="partitaIva">
+                        </div>
+                        <div class="form-group">
+                            <label for="tipologia">Tipologia di Richiesta *</label>
+                            <select id="tipologia" name="tipologia" required>
+                                <option value="">Seleziona...</option>
+                                <option value="consulenza-fiscale">Consulenza Fiscale</option>
+                                <option value="consulenza-societaria">Consulenza Societaria</option>
+                                <option value="bilancio-contabilita">Bilancio e Contabilità</option>
+                                <option value="consulenza-aziendale">Consulenza Aziendale</option>
+                                <option value="revisione-legale">Revisione Legale</option>
+                                <option value="altra">Altro</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="messaggio">Messaggio *</label>
+                            <textarea id="messaggio" name="messaggio" rows="5" required placeholder="Descrivi la tua richiesta o l'argomento per cui desideri un appuntamento..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="preferenzaContatto">Preferenza di Contatto</label>
+                            <div class="radio-group">
+                                <label><input type="radio" name="preferenzaContatto" value="email" checked> Email</label>
+                                <label><input type="radio" name="preferenzaContatto" value="telefono"> Telefono</label>
+                            </div>
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <label class="privacy-checkbox-label">
+                                <input type="checkbox" name="privacy" required class="privacy-checkbox">
+                                <span class="privacy-text">Accetto l'<a href="#privacy" target="_blank">informativa sulla privacy</a> *</span>
+                            </label>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Invia Richiesta</button>
+                    </form>
+                    <div id="formSuccess" class="form-message success" style="display: none;">
+                        <i class="fas fa-check-circle"></i>
+                        <p>Richiesta inviata con successo! Ti contatteremo al più presto.</p>
+                    </div>
+                    <div id="formError" class="form-message error" style="display: none;">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <p>Si è verificato un errore. Riprova più tardi o contattaci direttamente.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Individual Professional Contacts -->
+            <div class="professionisti-contatti">
+                <h3>Contatti Diretti Professionisti</h3>
+                <div class="prof-contatti-grid" id="profContattiGrid">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dove Siamo Section -->
+    <section id="dove-siamo" class="section location-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Dove Siamo</h2>
+                <p class="section-subtitle">Vieni a trovarci presso il nostro studio</p>
+            </div>
+            <div class="location-content">
+                <div class="location-info">
+                    <div class="location-card">
+                        <h3><i class="fas fa-map-marker-alt"></i> Indirizzo</h3>
+                        <p>Via Tiziano, 7<br>59100 Prato (PO)<br>Italia</p>
+                        <a href="https://maps.google.com/?q=Via+Tiziano+7+Prato" target="_blank" class="btn btn-secondary">
+                            <i class="fas fa-directions"></i> Indicazioni Stradali
+                        </a>
+                    </div>
+                    <div class="location-card">
+                        <h3><i class="fas fa-clock"></i> Orari di Apertura</h3>
+                        <p><strong>Lunedì - Venerdì</strong><br>
+                        8:30 - 13:05<br>
+                        14:30 - 19:05</p>
+                        <p><em>Su appuntamento anche al di fuori degli orari indicati</em></p>
+                    </div>
+                </div>
+                <div class="map-container">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2883.8937260833155!2d11.091370315502807!3d43.87796497911775!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x132a56f8b0c4e4c7%3A0x9c4c5a5a5a5a5a5a!2sVia%20Tiziano%2C%207%2C%2059100%20Prato%20PO!5e0!3m2!1sit!2sit!4v1234567890123!5m2!1sit!2sit" 
+                        width="100%" 
+                        height="450" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade"
+                        title="Mappa dello Studio Professionale Biancalani">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Studio Professionale Biancalani</h3>
+                    <p>Dottori Commercialisti e Revisori Legali<br>Prato dal 1987</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Link Utili</h4>
+                    <ul>
+                        <li><a href="#studio">Lo Studio</a></li>
+                        <li><a href="#professionisti">I Professionisti</a></li>
+                        <li><a href="#servizi">Servizi</a></li>
+                        <li><a href="#acb-group">ACB Group</a></li>
+                        <li><a href="#contatti">Contatti</a></li>
+                        <li><a href="#dove-siamo">Dove Siamo</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Links Istituzionali</h4>
+                    <ul class="institutional-links" id="institutionalLinks">
+                        <!-- Will be populated by JavaScript -->
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contatti</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Via Tiziano, 7<br>59100 Prato (PO)</p>
+                    <p><i class="fas fa-phone"></i> <a href="tel:+39057428625">(+39) 0574 28625</a></p>
+                    <p><i class="fas fa-envelope"></i> <a href="mailto:studio@studiobiancalani.it">studio@studiobiancalani.it</a></p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Studio Professionale Biancalani - P.IVA 00327940979 - Tel. (+39) 0574 28625</p>
+                <div class="footer-links">
+                    <a href="#privacy">Privacy Policy</a>
+                    <span>|</span>
+                    <a href="#cookie">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="back-to-top" aria-label="Torna su">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Scripts -->
+    <script src="js/firebase-config.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
+
