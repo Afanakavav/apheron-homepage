@@ -215,6 +215,17 @@ function updateContent() {
             googleBusinessLink.style.display = 'none';
         }
     }
+    
+    // Update button title attributes for tooltips
+    const downloadAppBtn = document.querySelector('[data-translate-title="downloadApp"]');
+    if (downloadAppBtn) {
+        downloadAppBtn.setAttribute('title', t.downloadApp);
+    }
+    
+    const adminAccessBtn = document.querySelector('[data-translate-title="adminAccess"]');
+    if (adminAccessBtn) {
+        adminAccessBtn.setAttribute('title', t.adminAccess);
+    }
 }
 
 // Initialize on page load
