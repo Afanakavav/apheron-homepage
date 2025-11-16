@@ -255,6 +255,10 @@
     background: var(--bg-primary);
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .admin-header {
@@ -330,6 +334,8 @@
     width: 100%;
     margin: 0 auto;
     padding: 3rem 2rem;
+    box-sizing: border-box;
+    overflow-x: hidden;
 }
 
 .admin-welcome {
@@ -355,6 +361,8 @@
     border-radius: 12px;
     padding: 2rem;
     margin-bottom: 2rem;
+    overflow-x: hidden;
+    box-sizing: border-box;
 }
 
 .section-header {
@@ -403,6 +411,9 @@
     padding: 1.5rem;
     position: relative;
     transition: all 0.3s ease;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .admin-project-card:hover {
@@ -636,6 +647,20 @@
 
     .projects-grid {
         grid-template-columns: 1fr;
+        gap: 1rem;
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .admin-project-card {
+        min-width: 0;
+        padding: 1.2rem;
+    }
+    
+    .admin-section {
+        padding: 1.5rem 1rem;
+        margin-left: 0;
+        margin-right: 0;
     }
 
     .login-container {
@@ -649,11 +674,25 @@
     }
 
     .admin-section {
-        padding: 1.5rem 1rem;
+        padding: 1.2rem 0.8rem;
+        margin-left: 0;
+        margin-right: 0;
     }
 
     .admin-section h2 {
         font-size: 1.4rem;
+    }
+    
+    .admin-project-card {
+        padding: 1rem 0.8rem;
+    }
+    
+    .projects-grid {
+        gap: 0.8rem;
+    }
+    
+    .admin-container {
+        padding: 1.5rem 0.8rem;
     }
 }
 
