@@ -166,6 +166,27 @@
                 </div>
             </div>
 
+            <!-- Reviews Management -->
+            <div class="admin-section">
+                <div class="section-header">
+                    <h2>Google Reviews</h2>
+                    <button class="btn-add" id="edit-reviews-btn">✏️ Edit Reviews</button>
+                </div>
+                <div id="reviews-display" class="reviews-display">
+                    <div class="review-card">
+                        <div class="review-icon">⭐</div>
+                        <div class="review-info">
+                            <p class="review-label">Average Rating</p>
+                            <p class="review-value" id="display-rating">--</p>
+                        </div>
+                        <div class="review-info">
+                            <p class="review-label">Total Reviews</p>
+                            <p class="review-value" id="display-count">--</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Quick Stats -->
             <div class="admin-section">
                 <h2>Quick Stats</h2>
@@ -303,6 +324,55 @@
                     <button type="submit" class="btn-submit" id="modal-submit-btn">
                         <span class="btn-text">Add Project</span>
                         <span class="btn-icon">✨</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Reviews Modal -->
+    <div id="reviews-modal" class="project-modal" style="display: none;">
+        <div class="project-modal-overlay"></div>
+        <div class="project-modal-content">
+            <div class="project-modal-header">
+                <h2 id="reviews-modal-title">Edit Google Reviews</h2>
+                <button class="modal-close-btn" id="reviews-modal-close-btn">&times;</button>
+            </div>
+            
+            <form id="reviews-form" class="project-form">
+                <div class="form-group">
+                    <label for="review-rating">Average Rating *</label>
+                    <input 
+                        type="number" 
+                        id="review-rating" 
+                        class="form-input" 
+                        placeholder="5.0"
+                        required
+                        min="1"
+                        max="5"
+                        step="0.1"
+                    >
+                    <span class="form-hint">Rating from 1.0 to 5.0 (e.g., 4.8)</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="review-count">Total Reviews *</label>
+                    <input 
+                        type="number" 
+                        id="review-count" 
+                        class="form-input" 
+                        placeholder="0"
+                        required
+                        min="0"
+                    >
+                    <span class="form-hint">Total number of reviews on Google Business Profile</span>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" id="reviews-modal-cancel-btn">Cancel</button>
+                    <button type="submit" class="btn-submit" id="reviews-modal-submit-btn">
+                        <span class="btn-text">Save Reviews</span>
+                        <span class="btn-icon">💾</span>
                     </button>
                 </div>
             </form>

@@ -12,6 +12,14 @@
     ],
     "rewrites": [
       {
+        "source": "/peronciolillo-home-assistant",
+        "destination": "/peronciolillo-home-assistant/index.html"
+      },
+      {
+        "source": "/peronciolillo-home-assistant/**",
+        "destination": "/peronciolillo-home-assistant/index.html"
+      },
+      {
         "source": "/studioprofessionalebiancalani",
         "destination": "/studioprofessionalebiancalani/index.html"
       },

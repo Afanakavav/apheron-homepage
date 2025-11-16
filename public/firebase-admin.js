@@ -12,7 +12,8 @@ import {
     deleteDoc,
     doc,
     query,
-    orderBy
+    orderBy,
+    setDoc
 } from './firebase-config.js';
 
 // DOM Elements
@@ -59,6 +60,7 @@ onAuthStateChanged(auth, (user) => {
         console.log('User signed in:', user.email);
         showAdminPanel();
         loadProjects();
+        loadReviews();
     } else {
         // User is signed out
         console.log('User signed out');
@@ -488,6 +490,165 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+// ===========================
+// REVIEWS MANAGEMENT
+// ===========================
+
+const REVIEWS_DOC_ID = 'reviews-data'; // Fixed document ID for reviews
+
+// Load Reviews from Firestore
+async function loadReviews() {
+    try {
+        const reviewsDoc = doc(db, 'reviews', REVIEWS_DOC_ID);
+        const reviewsSnapshot = await getDocs(collection(db, 'reviews'));
+        
+        let reviewsData = null;
+        reviewsSnapshot.forEach((doc) => {
+            if (doc.id === REVIEWS_DOC_ID) {
+                reviewsData = doc.data();
+            }
+        });
+        
+        // If no reviews data exists, create default
+        if (!reviewsData) {
+            reviewsData = {
+                ratingValue: "5",
+                reviewCount: "0"
+            };
+            await setDoc(doc(db, 'reviews', REVIEWS_DOC_ID), reviewsData);
+        }
+        
+        // Display reviews in admin panel
+        const displayRating = document.getElementById('display-rating');
+        const displayCount = document.getElementById('display-count');
+        
+        if (displayRating) displayRating.textContent = reviewsData.ratingValue || '--';
+        if (displayCount) displayCount.textContent = reviewsData.reviewCount || '--';
+        
+    } catch (error) {
+        console.error('Error loading reviews:', error);
+        // Set defaults on error
+        const displayRating = document.getElementById('display-rating');
+        const displayCount = document.getElementById('display-count');
+        if (displayRating) displayRating.textContent = '--';
+        if (displayCount) displayCount.textContent = '--';
+    }
+}
+
+// Reviews Modal Elements
+const editReviewsBtn = document.getElementById('edit-reviews-btn');
+const reviewsModal = document.getElementById('reviews-modal');
+const reviewsModalCloseBtn = document.getElementById('reviews-modal-close-btn');
+const reviewsModalCancelBtn = document.getElementById('reviews-modal-cancel-btn');
+const reviewsForm = document.getElementById('reviews-form');
+const reviewRatingInput = document.getElementById('review-rating');
+const reviewCountInput = document.getElementById('review-count');
+
+// Open Reviews Modal
+if (editReviewsBtn) {
+    editReviewsBtn.addEventListener('click', async () => {
+        try {
+            // Load current reviews data
+            const reviewsSnapshot = await getDocs(collection(db, 'reviews'));
+            let reviewsData = null;
+            reviewsSnapshot.forEach((doc) => {
+                if (doc.id === REVIEWS_DOC_ID) {
+                    reviewsData = doc.data();
+                }
+            });
+            
+            // Set form values
+            if (reviewsData) {
+                reviewRatingInput.value = reviewsData.ratingValue || '5';
+                reviewCountInput.value = reviewsData.reviewCount || '0';
+            } else {
+                reviewRatingInput.value = '5';
+                reviewCountInput.value = '0';
+            }
+            
+            reviewsModal.style.display = 'flex';
+        } catch (error) {
+            console.error('Error opening reviews modal:', error);
+            showToast('Error', 'Failed to load reviews data.', 'error');
+        }
+    });
+}
+
+// Close Reviews Modal
+function closeReviewsModal() {
+    reviewsModal.style.display = 'none';
+    reviewsForm.reset();
+}
+
+if (reviewsModalCloseBtn) {
+    reviewsModalCloseBtn.addEventListener('click', closeReviewsModal);
+}
+
+if (reviewsModalCancelBtn) {
+    reviewsModalCancelBtn.addEventListener('click', closeReviewsModal);
+}
+
+// Close modal on overlay click
+if (reviewsModal) {
+    const overlay = reviewsModal.querySelector('.project-modal-overlay');
+    if (overlay) {
+        overlay.addEventListener('click', closeReviewsModal);
+    }
+}
+
+// Save Reviews
+if (reviewsForm) {
+    reviewsForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const ratingValue = parseFloat(reviewRatingInput.value);
+        const reviewCount = parseInt(reviewCountInput.value);
+        
+        // Validation
+        if (isNaN(ratingValue) || ratingValue < 1 || ratingValue > 5) {
+            showToast('Error', 'Rating must be between 1.0 and 5.0', 'error');
+            return;
+        }
+        
+        if (isNaN(reviewCount) || reviewCount < 0) {
+            showToast('Error', 'Review count must be 0 or greater', 'error');
+            return;
+        }
+        
+        showLoading();
+        
+        try {
+            const reviewsData = {
+                ratingValue: ratingValue.toString(),
+                reviewCount: reviewCount.toString(),
+                updatedAt: new Date().toISOString()
+            };
+            
+            // Use setDoc with merge to create or update
+            await setDoc(doc(db, 'reviews', REVIEWS_DOC_ID), reviewsData, { merge: true });
+            
+            showToast('Success', 'Reviews updated successfully!', 'success');
+            
+            // Google Analytics tracking
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'reviews_updated', {
+                    rating_value: ratingValue,
+                    review_count: reviewCount
+                });
+            }
+            
+            closeReviewsModal();
+            loadReviews(); // Reload reviews display
+            
+        } catch (error) {
+            console.error('Error saving reviews:', error);
+            showToast('Error', 'Failed to save reviews. Please try again.', 'error');
+        } finally {
+            hideLoading();
+        }
+    });
+}
 
 console.log('Firebase Admin initialized');
 

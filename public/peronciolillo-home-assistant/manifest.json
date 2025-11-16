@@ -1,0 +1,49 @@
+{
+  "name": "Peronciolillo Home Assistant",
+  "short_name": "Home Assistant",
+  "description": "Shared home management platform for couples",
+  "start_url": "/peronciolillo-home-assistant/",
+  "display": "standalone",
+  "background_color": "#FFF9F3",
+  "theme_color": "#FFB86C",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/peronciolillo-home-assistant/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/peronciolillo-home-assistant/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["productivity", "lifestyle"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Aggiungi Spesa",
+      "short_name": "Spesa",
+      "description": "Aggiungi una nuova spesa rapidamente",
+      "url": "/peronciolillo-home-assistant/expenses",
+      "icons": [{ "src": "/peronciolillo-home-assistant/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Lista Spesa",
+      "short_name": "Lista",
+      "description": "Visualizza la lista della spesa",
+      "url": "/peronciolillo-home-assistant/shopping-list",
+      "icons": [{ "src": "/peronciolillo-home-assistant/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Task Casa",
+      "short_name": "Task",
+      "description": "Gestisci i task di casa",
+      "url": "/peronciolillo-home-assistant/tasks",
+      "icons": [{ "src": "/peronciolillo-home-assistant/icon-192x192.png", "sizes": "192x192" }]
+    }
+  ]
+}
