@@ -22,6 +22,32 @@ const firebaseConfig = window.FIREBASE_CONFIG || {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
+// Initialize Firebase App Check for API key protection
+// App Check protects your backend resources from abuse
+// Even if someone has your API key, they cannot access resources without a valid App Check token
+if (typeof window !== 'undefined') {
+  try {
+    // Get reCAPTCHA site key from window object (set by config.local.js or default)
+    const recaptchaSiteKey = window.RECAPTCHA_SITE_KEY || '6LffriksAAAAAKvSqVFkxt6ggpicybwvV_yVF3Jq';
+    
+    // Import App Check dynamically
+    import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check.js').then(({ initializeAppCheck, ReCaptchaV3Provider }) => {
+      // Initialize App Check with reCAPTCHA v3
+      const appCheck = initializeAppCheck(app, {
+        provider: new ReCaptchaV3Provider(recaptchaSiteKey),
+        isTokenAutoRefreshEnabled: true
+      });
+      
+      console.log('✅ Firebase App Check initialized');
+    }).catch((error) => {
+      console.warn('⚠️ Firebase App Check initialization failed:', error);
+      console.warn('   App will work without App Check, but API key protection is reduced');
+    });
+  } catch (error) {
+    console.warn('⚠️ Firebase App Check initialization failed:', error);
+  }
+}
+
 // Initialize Firebase services
 export const auth = getAuth(app);
 export const db = getFirestore(app);

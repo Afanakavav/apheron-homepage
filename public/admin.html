@@ -382,6 +382,12 @@
     <!-- Toast Notification -->
     <div id="toast-container" class="toast-container"></div>
 
+    <!-- reCAPTCHA v3 for Firebase App Check -->
+    <script src="https://www.google.com/recaptcha/api.js?render=6LffriksAAAAAKvSqVFkxt6ggpicybwvV_yVF3Jq" async defer></script>
+    
+    <!-- Load config.local.js FIRST (if exists) -->
+    <script src="/config.local.js" onerror="console.warn('config.local.js not found, using placeholder config')"></script>
+    
     <!-- Firebase Scripts -->
     <script type="module" src="firebase-config.js"></script>
     <script type="module" src="firebase-admin.js"></script>

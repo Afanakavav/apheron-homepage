@@ -9,6 +9,9 @@ const CONFIG = {
     // IMPORTANT: Never commit real API keys! Use environment variables or config file
     GOOGLE_MAPS_API_KEY: window.GOOGLE_MAPS_API_KEY || 'YOUR_GOOGLE_MAPS_API_KEY_HERE',
     
+    // reCAPTCHA v3 Site Key (for future use or other features)
+    RECAPTCHA_SITE_KEY: window.RECAPTCHA_SITE_KEY || '6LfsriksAAAAALLlVhRtn0LSgoUUTclkil26finE',
+    
     // Contact Information
     CONTACT: {
         email: 'francesco.perone00@gmail.com',

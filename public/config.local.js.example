@@ -1,0 +1,17 @@
+// Configuration file for Apheron Homepage
+// Copy this file to config.local.js and fill in your actual values
+// NEVER commit config.local.js to version control!
+
+// Firebase Configuration for Apheron Homepage
+window.FIREBASE_CONFIG = {
+  apiKey: 'your-actual-firebase-api-key-here',
+  authDomain: 'apheron-homepage.firebaseapp.com',
+  projectId: 'apheron-homepage',
+  storageBucket: 'apheron-homepage.firebasestorage.app',
+  messagingSenderId: '42831155917',
+  appId: '1:42831155917:web:be2c00df5d5af72dd78f84'
+};
+
+// reCAPTCHA v3 Site Key (for Firebase App Check)
+window.RECAPTCHA_SITE_KEY = '6LffriksAAAAAKvSqVFkxt6ggpicybwvV_yVF3Jq';
+

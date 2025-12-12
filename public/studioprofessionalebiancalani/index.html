@@ -25,9 +25,38 @@
     <!-- Smooth Scroll -->
     <script src="https://cdn.jsdelivr.net/gh/cferdinandi/smooth-scroll@15/dist/smooth-scroll.polyfills.min.js"></script>
     
+    <!-- reCAPTCHA v3 for Firebase App Check -->
+    <script src="https://www.google.com/recaptcha/api.js?render=6LffriksAAAAAKvSqVFkxt6ggpicybwvV_yVF3Jq" async defer></script>
+    
+    <!-- Load config.local.js FIRST (if exists) -->
+    <script src="/config.local.js" onerror="console.warn('config.local.js not found, using placeholder config')"></script>
+    
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-functions-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js"></script>
+    
+    <!-- Firebase App Check Initialization -->
+    <script>
+        // Initialize Firebase App Check after Firebase is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof firebase !== 'undefined' && firebase.apps.length > 0) {
+                try {
+                    const app = firebase.app();
+                    const recaptchaSiteKey = window.RECAPTCHA_SITE_KEY || '6LffriksAAAAAKvSqVFkxt6ggpicybwvV_yVF3Jq';
+                    
+                    // Initialize App Check with reCAPTCHA v3
+                    const appCheck = firebase.appCheck();
+                    appCheck.activate(recaptchaSiteKey, true); // true = isTokenAutoRefreshEnabled
+                    
+                    console.log('✅ Firebase App Check initialized');
+                } catch (error) {
+                    console.warn('⚠️ Firebase App Check initialization failed:', error);
+                    console.warn('   App will work without App Check, but API key protection is reduced');
+                }
+            }
+        });
+    </script>
 </head>
 <body>
     <!-- Navigation -->

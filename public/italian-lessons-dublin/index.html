@@ -256,12 +256,16 @@
         </div>
     </div>
 
+    <!-- Load config.local.js FIRST (if exists) -->
+    <script src="config.local.js" onerror="console.warn('config.local.js not found, using config.js')"></script>
+    
     <!-- Scripts -->
-    <!-- Google Maps API - Key loaded from config.js -->
+    <!-- Google Maps API - Key loaded from config.local.js or config.js -->
     <script>
-        // Load Google Maps API key from CONFIG (set in config.js)
-        // For production, ensure config.js has the actual API key or use config.local.js
-        const mapsApiKey = (window.CONFIG && window.CONFIG.GOOGLE_MAPS_API_KEY) || 'YOUR_GOOGLE_MAPS_API_KEY_HERE';
+        // Load Google Maps API key from config.local.js (priority) or CONFIG (from config.js)
+        const mapsApiKey = window.GOOGLE_MAPS_API_KEY || 
+                          (window.CONFIG && window.CONFIG.GOOGLE_MAPS_API_KEY) || 
+                          'YOUR_GOOGLE_MAPS_API_KEY_HERE';
         if (mapsApiKey !== 'YOUR_GOOGLE_MAPS_API_KEY_HERE') {
             const script = document.createElement('script');
             script.src = `https://maps.googleapis.com/maps/api/js?key=${mapsApiKey}&loading=async&callback=initMap`;

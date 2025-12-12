@@ -1,0 +1,39 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /leads/{leadId} {
+      // Funzione helper per validare email
+      function isValidEmail(email) {
+        return email.matches('.*@.*\\..*');
+      }
+      
+      // Funzione helper per validare telefono (almeno 8 cifre)
+      function isValidPhone(phone) {
+        return phone is string && phone.size() >= 8 && phone.size() <= 20;
+      }
+      
+      // Permetti creazione solo se i dati sono validi
+      allow create: if request.resource.data.keys().hasAll(['nome', 'email', 'messaggio', 'privacy', 'timestamp', 'status', 'source'])
+                    && request.resource.data.nome is string
+                    && request.resource.data.nome.size() > 0
+                    && request.resource.data.nome.size() <= 200
+                    && request.resource.data.email is string
+                    && isValidEmail(request.resource.data.email)
+                    && request.resource.data.email.size() <= 200
+                    && request.resource.data.messaggio is string
+                    && request.resource.data.messaggio.size() > 0
+                    && request.resource.data.messaggio.size() <= 5000
+                    && request.resource.data.privacy is bool
+                    && request.resource.data.privacy == true
+                    && request.resource.data.status is string
+                    && request.resource.data.status == 'new'
+                    && request.resource.data.source is string
+                    && request.resource.data.source == 'website_contact_form'
+                    && (!('telefono' in request.resource.data) || isValidPhone(request.resource.data.telefono));
+      
+      // Solo utenti autenticati possono leggere/modificare
+      allow read, update, delete: if request.auth != null;
+    }
+  }
+}
+

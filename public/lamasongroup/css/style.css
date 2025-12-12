@@ -15,8 +15,9 @@
     --primary-gold-accent: #F4D03F;
     
     /* Colori complementari */
-    --dark-bg: #1A1A1A;
-    --dark-gray: #2D2D2D;
+    --dark-bg: #0E0547;
+    --dark-gray: #1A0F6B;
+    --dark-blue-light: #2A1A8F;
     --medium-gray: #666;
     --light-gray: #E8E8E8;
     --white: #FFFFFF;
@@ -41,10 +42,11 @@
     --radius-lg: 16px;
     
     /* Shadows */
-    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
-    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.15);
+    --shadow-sm: 0 2px 4px rgba(14, 5, 71, 0.1);
+    --shadow-md: 0 4px 6px rgba(14, 5, 71, 0.15);
+    --shadow-lg: 0 10px 20px rgba(14, 5, 71, 0.2);
     --shadow-gold: 0 4px 15px rgba(212, 175, 55, 0.3);
+    --shadow-blue: 0 4px 15px rgba(14, 5, 71, 0.3);
 }
 
 html {
@@ -527,6 +529,15 @@ p {
     color: var(--medium-gray);
 }
 
+.category-intro {
+    max-width: 800px;
+    margin: 0 auto var(--spacing-lg);
+    text-align: center;
+    color: var(--medium-gray);
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
 .servizi-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -568,6 +579,27 @@ p {
 .servizio-card p {
     color: var(--medium-gray);
     line-height: 1.6;
+    margin-bottom: var(--spacing-sm);
+}
+
+.micro-cta {
+    margin-top: var(--spacing-md);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--light-gray);
+    font-style: italic;
+    color: var(--primary-gold);
+    font-weight: 500;
+}
+
+.micro-cta a {
+    color: var(--primary-gold);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.micro-cta a:hover {
+    color: var(--primary-gold-dark);
+    text-decoration: underline;
 }
 
 /* ====================================

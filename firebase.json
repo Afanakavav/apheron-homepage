@@ -12,12 +12,12 @@
     ],
     "rewrites": [
       {
-        "source": "/peronciolillo-home-assistant",
-        "destination": "/peronciolillo-home-assistant/index.html"
+        "source": "/home-assistant",
+        "destination": "/home-assistant/index.html"
       },
       {
-        "source": "/peronciolillo-home-assistant/**",
-        "destination": "/peronciolillo-home-assistant/index.html"
+        "source": "/home-assistant/**",
+        "destination": "/home-assistant/index.html"
       },
       {
         "source": "/studioprofessionalebiancalani",
@@ -26,6 +26,14 @@
       {
         "source": "/studioprofessionalebiancalani/**",
         "destination": "/studioprofessionalebiancalani/index.html"
+      },
+      {
+        "source": "/avvocato_carlotta_taiti",
+        "destination": "/studioavvocato/index.html"
+      },
+      {
+        "source": "/avvocato_carlotta_taiti/**",
+        "destination": "/studioavvocato/index.html"
       },
       {
         "source": "**",
@@ -43,11 +51,28 @@
         ]
       },
       {
-        "source": "**/*.@(js|css)",
+        "source": "**/*.@(js|mjs)",
         "headers": [
           {
+            "key": "Content-Type",
+            "value": "application/javascript; charset=utf-8"
+          },
+          {
             "key": "Cache-Control",
-            "value": "max-age=0, must-revalidate"
+            "value": "max-age=31536000, public"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(css)",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "text/css; charset=utf-8"
+          },
+          {
+            "key": "Cache-Control",
+            "value": "max-age=31536000, public"
           }
         ]
       },
@@ -61,5 +86,11 @@
         ]
       }
     ]
+  },
+  "functions": {
+    "source": "functions",
+    "runtime": "nodejs20"
   }
 }
+
+

@@ -72,5 +72,10 @@ public/config.local.js
 public/**/config.local.js
 **/config.local.js
 
+# Secret keys and sensitive files
+**/recaptcha-secret-key.txt
+**/*secret*.txt
+**/*secret*.key
+
 # dataconnect generated files
 .dataconnect

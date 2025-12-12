@@ -1,0 +1,18 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Regole per la collection "leads" (form di contatto)
+    match /leads/{leadId} {
+      // Permetti a chiunque di creare un nuovo lead (necessario per il form pubblico)
+      allow create: if true;
+      // Solo utenti autenticati possono leggere/modificare/cancellare
+      allow read, update, delete: if request.auth != null;
+    }
+    
+    // Blocca tutto il resto per sicurezza
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
