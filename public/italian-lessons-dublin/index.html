@@ -257,7 +257,19 @@
     </div>
 
     <!-- Scripts -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAf322olVztRrAIGFwqvaF5kB8s6NlbNmE&loading=async&callback=initMap" async defer></script>
+    <!-- Google Maps API - Key loaded from config.js -->
+    <script>
+        // Load Google Maps API key from CONFIG (set in config.js)
+        // For production, ensure config.js has the actual API key or use config.local.js
+        const mapsApiKey = (window.CONFIG && window.CONFIG.GOOGLE_MAPS_API_KEY) || 'YOUR_GOOGLE_MAPS_API_KEY_HERE';
+        if (mapsApiKey !== 'YOUR_GOOGLE_MAPS_API_KEY_HERE') {
+            const script = document.createElement('script');
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${mapsApiKey}&loading=async&callback=initMap`;
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+        }
+    </script>
     <script src="script.js"></script>
 </body>
 </html>

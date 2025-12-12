@@ -64,6 +64,13 @@ node_modules/
 
 # dotenv environment variables file
 .env
+.env.local
+.env.*.local
+
+# Configuration files with API keys (for static sites)
+public/config.local.js
+public/**/config.local.js
+**/config.local.js
 
 # dataconnect generated files
 .dataconnect

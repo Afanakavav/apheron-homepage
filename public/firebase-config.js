@@ -5,8 +5,13 @@ import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from
 import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyAKsALzEd6iDVgfxb4nylcfYaFQmCkzxN4",
+// IMPORTANT: This file should use environment variables or be generated from a template
+// For production, replace these values with actual Firebase config from environment
+// NEVER commit real API keys to the repository!
+
+// Load config from window object (set by build process or config file)
+const firebaseConfig = window.FIREBASE_CONFIG || {
+  apiKey: "YOUR_API_KEY_HERE",
   authDomain: "apheron-homepage.firebaseapp.com",
   projectId: "apheron-homepage",
   storageBucket: "apheron-homepage.firebasestorage.app",

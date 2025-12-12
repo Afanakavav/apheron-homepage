@@ -2,7 +2,7 @@
 // SOSTITUISCI CON I TUOI VALORI DI CONFIGURAZIONE FIREBASE
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAKsALzEd6iDVgfxb4nylcfYaFQmCkzxN4",
+    apiKey: window.FIREBASE_CONFIG?.apiKey || "YOUR_API_KEY_HERE",
     authDomain: "apheron-homepage.firebaseapp.com",
     projectId: "apheron-homepage",
     storageBucket: "apheron-homepage.appspot.com",
