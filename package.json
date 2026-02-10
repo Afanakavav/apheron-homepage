@@ -1,0 +1,17 @@
+{
+  "name": "apheron-homepage",
+  "private": true,
+  "description": "Firebase Hosting + Cloud Functions (apheron.io)",
+  "scripts": {
+    "lint": "npm run lint --prefix functions",
+    "format": "npm run lint --prefix functions -- --fix",
+    "typecheck": "echo \"No TypeScript in this project\"",
+    "test": "npm run test:e2e",
+    "test:e2e": "playwright test",
+    "build": "echo \"Static hosting - no build step\""
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0",
+    "serve": "^14.2.4"
+  }
+}

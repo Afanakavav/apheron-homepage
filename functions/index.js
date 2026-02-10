@@ -1,6 +1,6 @@
 /**
  * Firebase Cloud Functions for Studio Legale Taiti
- * 
+ *
  * Function: sendContactEmail - Invia email quando viene compilato il form di contatto
  */
 
@@ -16,6 +16,7 @@ if (!admin.apps.length) {
 /**
  * Configura il transporter Nodemailer
  * Le credenziali vengono caricate dalle variabili d'ambiente di Firebase
+ * @return {nodemailer.Transporter} Trasporter Nodemailer
  */
 function createTransporter() {
   // Carica le credenziali dalle variabili d'ambiente
@@ -37,10 +38,10 @@ function createTransporter() {
 
 /**
  * Firebase Function: sendContactEmail
- * 
+ *
  * Questa function viene chiamata dal client quando viene inviato il form di contatto.
  * Invia un'email di notifica all'avvocato.
- * 
+ *
  * @param {Object} data - Dati del form
  * @param {string} data.nome - Nome del cliente
  * @param {string} data.email - Email del cliente
@@ -54,27 +55,18 @@ function createTransporter() {
 exports.sendContactEmail = functions.region("europe-west3").https.onCall(async (data, context) => {
   // Validazione dei dati obbligatori
   if (!data.nome || !data.email || !data.messaggio) {
-    throw new functions.https.HttpsError(
-        "invalid-argument",
-        "I campi nome, email e messaggio sono obbligatori"
-    );
+    throwValidationError("I campi nome, email e messaggio sono obbligatori");
   }
 
   // Validazione formato email
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(data.email)) {
-    throw new functions.https.HttpsError(
-        "invalid-argument",
-        "Formato email non valido"
-    );
+    throwValidationError("Formato email non valido");
   }
 
   // Limita la lunghezza del messaggio per prevenire abusi
   if (data.messaggio.length > 5000) {
-    throw new functions.https.HttpsError(
-        "invalid-argument",
-        "Il messaggio è troppo lungo (massimo 5000 caratteri)"
-    );
+    throwValidationError("Il messaggio è troppo lungo (massimo 5000 caratteri)");
   }
 
   try {
@@ -83,7 +75,7 @@ exports.sendContactEmail = functions.region("europe-west3").https.onCall(async (
 
     // Prepara il contenuto dell'email
     const emailSubject = `Nuova richiesta consulenza - ${data.tipologia || "Generale"}`;
-    
+
     const emailHtml = `
       <!DOCTYPE html>
       <html>
@@ -185,17 +177,19 @@ Data e ora: ${new Date().toLocaleString("it-IT", {timeZone: "Europe/Rome"})}
     };
   } catch (error) {
     console.error("Errore nell'invio dell'email:", error);
-    
+
     // Non esporre dettagli dell'errore al client per sicurezza
     throw new functions.https.HttpsError(
         "internal",
-        "Errore nell'invio dell'email. Riprova più tardi."
+        "Errore nell'invio dell'email. Riprova più tardi.",
     );
   }
 });
 
 /**
  * Funzione helper per escapare HTML e prevenire XSS
+ * @param {string} text - Testo da escapare
+ * @return {string} Testo escapato
  */
 function escapeHtml(text) {
   if (!text) return "";
@@ -203,9 +197,18 @@ function escapeHtml(text) {
     "&": "&amp;",
     "<": "&lt;",
     ">": "&gt;",
-    '"': "&quot;",
+    "\"": "&quot;",
     "'": "&#039;",
   };
   return text.toString().replace(/[&<>"']/g, (m) => map[m]);
+}
+
+/**
+ * Lancia HttpsError invalid-argument per validazione fallita
+ * @param {string} message - Messaggio per il client
+ * @throws {functions.https.HttpsError}
+ */
+function throwValidationError(message) {
+  throw new functions.https.HttpsError("invalid-argument", message);
 }
 

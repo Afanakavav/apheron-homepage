@@ -6,6 +6,12 @@
     <title>🇮🇹 Ciao Dublin! - Learn Italian with Francesco</title>
     <meta name="description" content="Learn Italian the fun way with Francesco, a native Italian teacher in Dublin. Personalized lessons for beginners, travelers, and professionals.">
     
+    <!-- Preconnect to critical origins (reduces latency for fonts, icons, analytics) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://www.googletagmanager.com">
+    
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     
@@ -14,9 +20,6 @@
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="styles.css">
-    
-    <!-- Configuration -->
-    <script src="config.js"></script>
     
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZB1BKS5BVL"></script>
@@ -248,7 +251,7 @@
             <span class="close" onclick="closeVideoModal()">&times;</span>
             <h2>Meet Francesco!</h2>
             <div class="video-container">
-                <video id="introVideo" controls>
+                <video id="introVideo" controls preload="none">
                     <source src="videos/francesco-intro.mp4" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
@@ -256,10 +259,10 @@
         </div>
     </div>
 
-    <!-- Load config.local.js FIRST (if exists) -->
+    <!-- Configuration (body = non-blocking for initial paint) -->
+    <script src="config.js"></script>
     <script src="config.local.js" onerror="console.warn('config.local.js not found, using config.js')"></script>
     
-    <!-- Scripts -->
     <!-- Google Maps API - Key loaded from config.local.js or config.js -->
     <script>
         // Load Google Maps API key from config.local.js (priority) or CONFIG (from config.js)
@@ -274,6 +277,6 @@
             document.head.appendChild(script);
         }
     </script>
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </body>
 </html>

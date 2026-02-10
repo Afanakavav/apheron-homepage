@@ -40,7 +40,14 @@ const gameItems = [
 // Global Variables
 let currentWordIndex = 0;
 let currentGameIndex = 0;
-let selectedTimeSlot = null;
+
+// Analytics: single place for gtag events (uses CONFIG.EVENTS when available)
+function trackEvent(category, eventName, label) {
+    if (typeof gtag === 'undefined') return;
+    const name = (window.CONFIG && window.CONFIG.EVENTS && window.CONFIG.EVENTS[eventName])
+        ? window.CONFIG.EVENTS[eventName] : eventName;
+    gtag('event', name, { event_category: category, event_label: label });
+}
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', function() {
@@ -109,10 +116,7 @@ function checkAnswer(button, isCorrect) {
         document.getElementById('quizResult').style.display = 'block';
         
         // Track quiz completion
-        gtag('event', 'quiz_completed', {
-            'event_category': 'engagement',
-            'event_label': 'italian_quiz'
-        });
+        trackEvent('engagement', 'quiz_completed', 'italian_quiz');
     }, 1000);
 }
 
@@ -181,10 +185,7 @@ function checkGameAnswer(button, correctWord, isCorrect) {
             document.getElementById('gameResult').style.display = 'block';
             
             // Track game completion
-            gtag('event', 'game_completed', {
-                'event_category': 'engagement',
-                'event_label': 'italian_word_game'
-            });
+            trackEvent('engagement', 'game_completed', 'italian_word_game');
         }, 1000);
     }
 }
@@ -195,10 +196,7 @@ function openBookingModal() {
     document.body.style.overflow = 'hidden';
     
     // Track modal opening
-    gtag('event', 'booking_modal_opened', {
-        'event_category': 'conversion',
-        'event_label': 'lesson_booking'
-    });
+    trackEvent('conversion', 'booking_modal_opened', 'lesson_booking');
 }
 
 function closeBookingModal() {
@@ -230,15 +228,13 @@ function handleBookingRequest(e) {
     });
     
     const customMessage = `Ciao Francesco! I'd like to request a lesson on ${formattedDate} at ${time}.\n\n${message}`;
-    const whatsappUrl = `https://wa.me/353894040077?text=${encodeURIComponent(customMessage)}`;
+    const whatsapp = (window.CONFIG && window.CONFIG.CONTACT && window.CONFIG.CONTACT.whatsapp) || '353894040077';
+    const whatsappUrl = `https://wa.me/${whatsapp}?text=${encodeURIComponent(customMessage)}`;
     
     window.open(whatsappUrl, '_blank');
     
     // Track custom time request
-    gtag('event', 'custom_time_requested', {
-        'event_category': 'conversion',
-        'event_label': `${date} ${time}`
-    });
+    trackEvent('conversion', 'custom_time_requested', `${date} ${time}`);
     
     closeBookingModal();
     showNotification('Booking request sent! Check your WhatsApp for confirmation.', 'success');
@@ -247,21 +243,19 @@ function handleBookingRequest(e) {
 // WhatsApp Functions
 function openWhatsApp() {
     const message = "Ciao Francesco! I'm interested in learning Italian. Can you tell me more about your lessons?";
-    const whatsappUrl = `https://wa.me/353894040077?text=${encodeURIComponent(message)}`;
+    const whatsapp = (window.CONFIG && window.CONFIG.CONTACT && window.CONFIG.CONTACT.whatsapp) || '353894040077';
+    const whatsappUrl = `https://wa.me/${whatsapp}?text=${encodeURIComponent(message)}`;
     
     window.open(whatsappUrl, '_blank');
     
     // Track WhatsApp click
-    gtag('event', 'whatsapp_clicked', {
-        'event_category': 'contact',
-        'event_label': 'whatsapp_contact'
-    });
+    trackEvent('contact', 'whatsapp_clicked', 'whatsapp_contact');
 }
 
 // Countdown Timer
 function startCountdown() {
-    // Set countdown to 24 hours from now
-    const countdownDate = new Date().getTime() + (24 * 60 * 60 * 1000);
+    const hours = (window.CONFIG && window.CONFIG.OFFER && window.CONFIG.OFFER.countdownHours) || 24;
+    const countdownDate = new Date().getTime() + (hours * 60 * 60 * 1000);
     
     const timer = setInterval(function() {
         const now = new Date().getTime();
@@ -291,8 +285,8 @@ function initMap() {
             throw new Error('Google Maps API not loaded');
         }
         
-        // One Lime Street coordinates (Lime St & Hanover St E intersection)
-        const dublin = { lat: 53.3455, lng: -6.2435 };
+        // One Lime Street coordinates (from CONFIG or fallback)
+        const dublin = (window.CONFIG && window.CONFIG.MAP_CENTER) || { lat: 53.3455, lng: -6.2435 };
         
         const map = new google.maps.Map(document.getElementById('map'), {
             zoom: 13,
@@ -380,12 +374,7 @@ function openVideoModal() {
     }
     
     // Track video opening
-    if (typeof gtag !== 'undefined') {
-        gtag('event', 'video_opened', {
-            'event_category': 'engagement',
-            'event_label': 'intro_video'
-        });
-    }
+    trackEvent('engagement', 'video_opened', 'intro_video');
 }
 
 function closeVideoModal() {
