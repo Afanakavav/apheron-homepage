@@ -60,7 +60,7 @@ const TRANSLATIONS = {
     'ghost.meta': 'Chapter № 9 will appear here',
 
     'colophon.now.label': 'Now — July 2026:',
-    'colophon.now': ' living between Dublin and Prato, getting ready for the road trip across Albania.',
+    'colophon.now': ' settled in Dublin, getting ready for the road trip across Albania.',
     'colophon.made': 'This site is hand-written HTML and CSS. No frameworks, no tracking, no cookies. Type: Fraunces, Manrope, IBM Plex Mono. Hosted on Firebase.',
     'colophon.tagline': 'Apheron — a personal periodical'
   },
@@ -122,7 +122,7 @@ const TRANSLATIONS = {
     'ghost.meta': 'Il capitolo n. 9 si aggiunge qui',
 
     'colophon.now.label': 'Ora — luglio 2026:',
-    'colophon.now': ' vivo tra Dublino e Prato, preparo il viaggio on the road in Albania.',
+    'colophon.now': ' vivo a Dublino, preparo il viaggio on the road in Albania.',
     'colophon.made': 'Questo sito è HTML e CSS scritti a mano. Nessun framework, nessun tracciamento, nessun cookie. Caratteri: Fraunces, Manrope, IBM Plex Mono. Ospitato su Firebase.',
     'colophon.tagline': 'Apheron — periodico personale'
   }
