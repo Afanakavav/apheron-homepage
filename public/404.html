@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Errata corrige — Apheron</title>
+    <meta name="robots" content="noindex">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="stylesheet" href="/styles.css">
+    <script>
+      (function () {
+        var h = new Date().getHours();
+        var auto = (h >= 5 && h < 17) ? 'light' : 'dark';
+        var t = null;
+        try { t = localStorage.getItem('apheron-theme'); } catch (e) {}
+        document.documentElement.setAttribute('data-theme', t === 'light' || t === 'dark' ? t : auto);
+      })();
+    </script>
+</head>
+<body>
+<div class="foglio">
+  <main class="errata">
+    <p class="mono">404</p>
+    <h1>Errata corrige</h1>
+    <p>This page does not exist in this edition.<br>Questa pagina non esiste in questa edizione.</p>
+    <p><a href="/">Back to the index · Torna all’indice</a></p>
+  </main>
+</div>
+</body>
+</html>

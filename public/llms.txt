@@ -1,0 +1,15 @@
+# Apheron
+
+> Apheron (apheron.io) is Francesco Perone's personal periodical: a hand-made index
+> of the websites he has built, for himself and for others. English and Italian.
+> No frameworks, no tracking, no cookies.
+
+## Chapters
+
+- [Albania & Montenegro](https://apheron.io/albania-trip/): road-trip diary, August 2026
+- [Home Assistant](https://apheron.io/home-assistant): private couple's app (login required)
+- [Italian Lessons in Dublin](https://apheron.io/italian-lessons-dublin/): teaching project, 2025 (archive)
+- [Chiara Caruso, nanny](https://apheron.io/tata-chiara-caruso): commissioned site, Prato
+- [Studio Legale Taiti](https://apheron.io/avvocato_carlotta_taiti): commissioned site, Prato
+- [L.A. Mason Group](https://apheron.io/lamasongroup/): commissioned site, Florence
+- [Studio Biancalani](https://www.studiobiancalani.it/): commissioned site, now on its own domain

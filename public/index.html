@@ -1,440 +1,210 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GT92917S64"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-GT92917S64');
-    </script>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>APHERON - Digital Strategy & AI Consulting</title>
-    
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="Francesco - Digital strategist for freelancers, startups & small businesses. Fast delivery, practical solutions, measurable results. Websites, apps & digital systems. Book a free 20-minute strategy call.">
-    <meta name="keywords" content="web development, digital systems, freelancer websites, startup websites, small business websites, Francesco, APHERON, fast delivery, practical solutions">
-    <meta name="author" content="Francesco - APHERON">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://afanakavav.github.io/apheron-homepage/">
-    
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="APHERON - Digital Strategy & AI Consulting">
-    <meta property="og:description" content="Digital strategist for freelancers, startups & small businesses. Fast delivery, practical solutions, measurable results.">
+    <title>Apheron — Francesco Perone</title>
+    <meta name="description" content="Apheron is Francesco Perone's personal periodical: an index of the websites he has built, for himself and for others.">
+    <link rel="canonical" href="https://apheron.io/">
+
+    <meta property="og:title" content="Apheron — a personal periodical">
+    <meta property="og:description" content="An index of the things Francesco has built, for himself and for others.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://afanakavav.github.io/apheron-homepage/">
-    <meta property="og:image" content="https://apheron-homepage.web.app/icon-512.png">
-    <meta property="og:site_name" content="APHERON">
-    
-    
-    <!-- WhatsApp and Messaging Apps -->
-    <meta property="og:image:width" content="512">
-    <meta property="og:image:height" content="512">
-    <meta property="og:image:type" content="image/png">
-    <meta property="og:image:alt" content="APHERON Logo - Digital Strategy & AI Consulting">
-    
-    <!-- Force Cache Refresh -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-    
-    <!-- Additional URL Meta Tags -->
-    <meta property="og:locale" content="en_US">
+    <meta property="og:url" content="https://apheron.io/">
+    <meta property="og:image" content="https://apheron.io/icon-512.png">
+    <meta property="og:site_name" content="Apheron">
+    <meta property="og:locale" content="en_IE">
     <meta property="og:locale:alternate" content="it_IT">
-    <meta property="og:updated_time" content="2025-01-27T00:00:00Z">
-    <meta name="url" content="https://afanakavav.github.io/apheron-homepage/">
-    <meta name="identifier-URL" content="https://afanakavav.github.io/apheron-homepage/">
-    
-    <!-- Geographic Meta Tags for Local SEO -->
-    <meta name="geo.region" content="IT-52">
-    <meta name="geo.region" content="IE-D">
-    <meta name="geo.placename" content="Prato">
-    <meta name="geo.placename" content="Dublin">
-    <meta name="geo.position" content="43.8787;11.0969">
-    <meta name="geo.position" content="53.3498;-6.2603">
-    <meta name="ICBM" content="43.8787, 11.0969">
-    <meta name="ICBM" content="53.3498, -6.2603">
-    
-    <!-- WhatsApp Specific -->
-    <meta property="og:see_also" content="https://afanakavav.github.io/apheron-homepage/">
-    <meta name="whatsapp:url" content="https://afanakavav.github.io/apheron-homepage/">
-    
-    <!-- Performance Optimization -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="preload" href="styles.css" as="style">
-    <link rel="preload" href="script.js" as="script">
-    
-    <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#0A0A0A">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="APHERON">
-    
-    <!-- PWA Splash Screen -->
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-startup-image" href="splash-screen-iphone.png">
-    
-    <!-- Mobile Optimizations -->
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="APHERON">
-    
-    <!-- Manifest -->
-    <link rel="manifest" href="manifest.json?v=6">
-    
-    <!-- Favicon and Icons -->
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="57x57" href="apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
-    
-    <!-- Logo for Google Search Results -->
-    <link rel="logo" type="image/png" href="icon-512.png">
-    
-    <link rel="stylesheet" href="styles.css">
-    
-    <!-- Translations -->
-    <script src="translations.js"></script>
-    
-    <!-- Reviews Schema Updater -->
-    <script type="module" src="reviews-updater.js"></script>
-    
-    <!-- Schema Markup -->
+
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F7F3EA">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0C0C0B">
+
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" href="/icon-192.png" type="image/png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+    <link rel="preload" href="/fonts/fraunces-var-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/manrope-var-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/styles.css">
+
+    <script>
+      /* anti-FOUC: tema prima del primo paint (stessa logica di edizione.js) */
+      (function () {
+        var h = new Date().getHours();
+        var auto = (h >= 5 && h < 17) ? 'light' : 'dark';
+        var t = null;
+        try { t = localStorage.getItem('apheron-theme'); } catch (e) {}
+        document.documentElement.setAttribute('data-theme', t === 'light' || t === 'dark' ? t : auto);
+      })();
+    </script>
+
     <script type="application/ld+json">
-    [
+    {
+      "@context": "https://schema.org",
+      "@graph": [
         {
-            "@context": "https://schema.org",
-            "@type": "Person",
-            "name": "Francesco",
-            "jobTitle": "Digital Strategist",
-            "description": "Digital strategist for freelancers, startups & small businesses. Fast delivery, practical solutions, measurable results.",
-            "url": "https://afanakavav.github.io/apheron-homepage/",
-            "sameAs": [],
-            "knowsAbout": ["Web Development", "Digital Systems", "Fast Delivery", "Practical Solutions"],
-            "worksFor": {
-                "@type": "Organization",
-                "name": "APHERON",
-                "logo": "https://apheron-homepage.web.app/icon-512.png",
-                "url": "https://apheron-homepage.web.app"
-            },
-            "address": [
-                {
-                    "@type": "PostalAddress",
-                    "addressLocality": "Prato",
-                    "addressRegion": "Toscana",
-                    "addressCountry": "IT"
-                },
-                {
-                    "@type": "PostalAddress",
-                    "addressLocality": "Dublin",
-                    "addressRegion": "Leinster",
-                    "addressCountry": "IE"
-                }
-            ]
+          "@type": "Person",
+          "@id": "https://apheron.io/#francesco",
+          "name": "Francesco Perone",
+          "url": "https://apheron.io/"
         },
         {
-            "@context": "https://schema.org",
-            "@type": "LocalBusiness",
-            "@id": "https://apheron.io/#organization",
-            "name": "APHERON",
-            "legalName": "APHERON",
-            "description": "Digital Strategy & AI Consulting services for freelancers, startups and small businesses. Based in Prato, Italy and Dublin, Ireland.",
-            "url": "https://apheron-homepage.web.app",
-            "logo": "https://apheron-homepage.web.app/icon-512.png",
-            "image": "https://apheron-homepage.web.app/icon-512.png",
-            "priceRange": "$$",
-            "telephone": "+353894040077",
-            "email": "info@apheron.io",
-            "foundingDate": "2024",
-            "address": [
-                {
-                    "@type": "PostalAddress",
-                    "streetAddress": "Prato",
-                    "addressLocality": "Prato",
-                    "addressRegion": "Toscana",
-                    "postalCode": "59100",
-                    "addressCountry": "IT"
-                },
-                {
-                    "@type": "PostalAddress",
-                    "addressLocality": "Dublin",
-                    "addressRegion": "Leinster",
-                    "postalCode": "Dublin",
-                    "addressCountry": "IE"
-                }
-            ],
-            "areaServed": [
-                {
-                    "@type": "Country",
-                    "name": "Italy"
-                },
-                {
-                    "@type": "Country",
-                    "name": "Ireland"
-                },
-                {
-                    "@type": "City",
-                    "name": "Prato"
-                },
-                {
-                    "@type": "City",
-                    "name": "Dublin"
-                }
-            ],
-            "serviceArea": {
-                "@type": "GeoCircle",
-                "geoMidpoint": {
-                    "@type": "GeoCoordinates",
-                    "latitude": "43.8787",
-                    "longitude": "11.0969"
-                }
-            },
-            "hasOfferCatalog": {
-                "@type": "OfferCatalog",
-                "name": "Digital Strategy Services",
-                "itemListElement": [
-                    {
-                        "@type": "Offer",
-                        "itemOffered": {
-                            "@type": "Service",
-                            "name": "Web Development",
-                            "description": "Custom websites for freelancers, startups & small businesses"
-                        }
-                    },
-                    {
-                        "@type": "Offer",
-                        "itemOffered": {
-                            "@type": "Service",
-                            "name": "Digital Systems",
-                            "description": "Digital platforms and automations that generate clients"
-                        }
-                    },
-                    {
-                        "@type": "Offer",
-                        "itemOffered": {
-                            "@type": "Service",
-                            "name": "Digital Strategy Consulting",
-                            "description": "Free 20-minute strategy call to analyze your digital presence and create a roadmap"
-                        }
-                    }
-                ]
-            },
-            "aggregateRating": {
-                "@type": "AggregateRating",
-                "ratingValue": "5",
-                "bestRating": "5",
-                "worstRating": "1",
-                "reviewCount": "0"
-            }
+          "@type": "WebSite",
+          "url": "https://apheron.io/",
+          "name": "Apheron",
+          "alternateName": "Apheron — a personal periodical",
+          "inLanguage": ["en", "it"],
+          "author": { "@id": "https://apheron.io/#francesco" }
         }
-    ]
+      ]
+    }
     </script>
 </head>
 <body>
-    <!-- Language Toggle -->
-    <div class="language-toggle-container">
-        <button class="lang-toggle" data-lang="en" title="English">
-            🇬🇧
-        </button>
-        <button class="lang-toggle" data-lang="it" title="Italiano">
-            🇮🇹
-        </button>
+<div class="foglio">
+
+  <header>
+    <div class="gronda mono">
+      <div class="gronda__riga">
+        <span class="marchio">Apheron</span>
+        <span class="sep">·</span>
+        <span id="fascia" data-i18n="fascia.evening">Evening edition</span>
+        <span class="sep">·</span>
+        <span id="numero">Nº —</span>
+        <span class="sep">·</span>
+        <span>Dublin ↔ Prato</span>
+        <span class="sep">·</span>
+        <span id="data">—</span>
+      </div>
+      <div class="gronda__ctrl">
+        <span>
+          <button class="ctrl lingua" type="button" data-lang="en" aria-pressed="true">ENG</button>
+          <span class="sep">/</span>
+          <button class="ctrl lingua" type="button" data-lang="it" aria-pressed="false">ITA</button>
+        </span>
+        <button class="ctrl" id="tema" type="button" aria-label="Paper / Ink">☾ Ink</button>
+      </div>
     </div>
 
-    <!-- Install App Banner -->
-    <div id="install-banner" class="install-banner">
-        <div class="install-content">
-            <div class="install-icon">📱</div>
-            <div class="install-text">
-                <h4>Install APHERON App</h4>
-                <p>Get quick access to my portfolio and services</p>
-            </div>
-            <button id="install-btn" class="install-btn">Install</button>
-            <button id="dismiss-install" class="dismiss-btn">×</button>
-        </div>
+    <div class="testata">
+      <h1><span data-i18n="h1.a">An index of the things I’ve built, </span><em data-i18n="h1.b">for myself and for others.</em></h1>
+      <p class="bio"><strong>Francesco Perone</strong><span data-i18n="bio"> — websites made by hand, for myself and for the people I care about. This is the ever-current table of contents of everything that lives on apheron.io.</span></p>
     </div>
+  </header>
 
-    <!-- Loading State -->
-    <div id="loading-screen" class="loading-screen">
-        <div class="loading-logo">
-            <div class="loading-circle"></div>
-        </div>
-        <div class="loading-text">Loading...</div>
-    </div>
+  <main>
 
-    <div class="container">
-        <!-- Logo centrale -->
-        <div class="logo-container">
-            <div class="logo">
-                <div class="circle">
-                    <div class="light-slice"></div>
-                    <div class="triangle-a"></div>
-                </div>
-            </div>
-        </div>
+    <section class="sezione" aria-labelledby="s1">
+      <div class="sezione__testa mono">
+        <span class="occhiello" id="s1" data-i18n="sec1">In my own name</span>
+        <span class="conta" data-i18n="sec1.count">3 chapters</span>
+      </div>
+      <ol class="indice">
+        <li class="voce">
+          <a href="/albania-trip/">
+            <span class="voce__num">01</span>
+            <span class="voce__titolo" data-i18n="e1.title">Albania &amp; Montenegro</span>
+            <span class="voce__meta"><span class="mono stato-live" data-i18n="e1.live">In progress</span><span class="mono" data-i18n="e1.meta">Journey · August 2026</span><span class="voce__freccia">→</span></span>
+            <span class="voce__desc"><p data-i18n="e1.desc">The road-trip diary: day-by-day itinerary, map, shared expenses, and photos as they arrive.</p></span>
+          </a>
+        </li>
+        <li class="voce">
+          <a href="/home-assistant">
+            <span class="voce__num">02</span>
+            <span class="voce__titolo" data-i18n="e2.title">Home Assistant</span>
+            <span class="voce__meta"><span class="mono" data-i18n="e2.meta">Couple’s app · Login · 2025</span><span class="voce__freccia">→</span></span>
+            <span class="voce__desc"><p data-i18n="e2.desc">Our little household app: shared expenses, lists and reminders. Reserved for two very select users.</p></span>
+          </a>
+        </li>
+        <li class="voce">
+          <a href="/italian-lessons-dublin/">
+            <span class="voce__num">03</span>
+            <span class="voce__titolo" data-i18n="e3.title">Italian Lessons in Dublin</span>
+            <span class="voce__meta"><span class="mono stato-archivio" data-i18n="e3.tag">Archive</span><span class="mono" data-i18n="e3.meta">Teaching · 2025</span><span class="voce__freccia">→</span></span>
+            <span class="voce__desc"><p data-i18n="e3.desc">From when I taught Italian to the Irish: the project’s site, preserved as it was.</p></span>
+          </a>
+        </li>
+      </ol>
+    </section>
 
-        <!-- Tagline -->
-        <div class="tagline">
-            <h1 id="tagline-h1">Apheron</h1>
-            <p class="hero-subtitle" id="hero-subtitle">Websites, apps & digital systems for freelancers, startups & small businesses.</p>
-        </div>
+    <section class="sezione" aria-labelledby="s2">
+      <div class="sezione__testa mono">
+        <span class="occhiello" id="s2" data-i18n="sec2">Commissioned</span>
+        <span class="conta" data-i18n="sec2.count">4 chapters</span>
+      </div>
+      <ol class="indice">
+        <li class="voce">
+          <a href="/tata-chiara-caruso">
+            <span class="voce__num">04</span>
+            <span class="voce__titolo" data-i18n="e4.title">Chiara Caruso, nanny</span>
+            <span class="voce__meta"><span class="mono" data-i18n="e4.meta">Prato · 2025</span><span class="voce__freccia">→</span></span>
+            <span class="voce__desc"><p data-i18n="e4.desc">A calling-card site for a professional nanny: services, references, contacts.</p></span>
+          </a>
+        </li>
+        <li class="voce">
+          <a href="/avvocato_carlotta_taiti">
+            <span class="voce__num">05</span>
+            <span class="voce__titolo" data-i18n="e5.title">Studio Legale Taiti</span>
+            <span class="voce__meta"><span class="mono" data-i18n="e5.meta">Law firm · Prato · 2025</span><span class="voce__freccia">→</span></span>
+            <span class="voce__desc"><p data-i18n="e5.desc">An online presence for a law firm: practice areas and a contact form.</p></span>
+          </a>
+        </li>
+        <li class="voce">
+          <a href="/lamasongroup/">
+            <span class="voce__num">06</span>
+            <span class="voce__titolo" data-i18n="e6.title">L.A. Mason Group</span>
+            <span class="voce__meta"><span class="mono" data-i18n="e6.meta">Florence · 2024</span><span class="voce__freccia">→</span></span>
+            <span class="voce__desc"><p data-i18n="e6.desc">A showcase for a construction company: completed works and contacts.</p></span>
+          </a>
+        </li>
+        <li class="voce">
+          <a href="https://www.studiobiancalani.it/" rel="noopener">
+            <span class="voce__num">07</span>
+            <span class="voce__titolo"><span data-i18n="e7.title">Studio Biancalani</span> <span class="esterno">↗</span></span>
+            <span class="voce__meta"><span class="mono" data-i18n="e7.meta">studiobiancalani.it</span></span>
+            <span class="voce__desc"><p data-i18n="e7.desc">The firm’s site, grown big enough to have a home of its own: it now lives on its own domain.</p></span>
+          </a>
+        </li>
+      </ol>
+    </section>
 
-        <!-- About Me -->
-        <div class="bio-section">
-            <div class="bio-content">
-                <p class="bio-text" id="bio-text">Digital strategist who transforms ideas into reality.</p>
-            </div>
-            
-            <!-- Badge competenze -->
-            <div class="competence-badges">
-                <span class="badge">Web Development</span>
-                <span class="badge">Digital Systems</span>
-                <span class="badge">Fast Delivery</span>
-            </div>
-        </div>
+    <section class="sezione" aria-labelledby="s3">
+      <div class="sezione__testa mono">
+        <span class="occhiello" id="s3" data-i18n="sec3">Archive</span>
+        <span class="conta" data-i18n="sec3.count">1 chapter</span>
+      </div>
+      <ol class="indice">
+        <li class="voce voce--riservata">
+          <div class="voce__corpo">
+            <span class="voce__num">08</span>
+            <span class="voce__titolo" data-i18n="e8.title">Gift my English</span>
+            <span class="voce__meta"><span class="mono" data-i18n="e8.meta">Reserved edition</span><span class="asterisco">✳</span></span>
+            <span class="voce__desc"><p data-i18n="e8.desc">This chapter exists, but it is out of catalogue: its pages are private and only the editor may read them.</p></span>
+          </div>
+        </li>
+        <!-- ══ CAPITOLO SUCCESSIVO: copia il blocco qui sotto, togli 'voce--fantasma',
+             aggiungi href, numero, chiavi e testi in translations.js. Vedi RUNBOOK.md. ══ -->
+        <li class="voce voce--fantasma">
+          <div class="voce__corpo">
+            <span class="voce__num">··</span>
+            <span class="voce__titolo" data-i18n="ghost.title">Forthcoming ····</span>
+            <span class="voce__meta"><span class="mono" data-i18n="ghost.meta">Chapter № 9 will appear here</span></span>
+          </div>
+        </li>
+      </ol>
+    </section>
 
-        <!-- Why Choose Me Section -->
-        <div class="why-choose-section">
-            <h2 id="why-title">Why Choose Me</h2>
-            <div class="why-grid">
-                <div class="why-item">
-                    <div class="why-icon">🚀</div>
-                    <h3 id="why-item1-title">A New-Generation Digital Builder</h3>
-                    <p id="why-item1-text">Instead of years of legacy agency structure, I bring speed, modern tools, and hands-on execution. Clear scope, fast delivery, measurable results, without the agency overhead.</p>
-                </div>
-                <div class="why-item">
-                    <div class="why-icon">⚡</div>
-                    <h3 id="why-item2-title">Real Results, Fast</h3>
-                    <p id="why-item2-text">Concrete projects for freelancers and small businesses. Websites, digital platforms and automations that generate clients and simplify work. Fast delivery, continuous support, measurable results.</p>
-                </div>
-                <div class="why-item">
-                    <div class="why-icon">🔮</div>
-                    <h3 id="why-item3-title">Strategic Vision</h3>
-                    <p id="why-item3-text">I don't just build websites, I architect digital ecosystems that grow with your business.</p>
-                </div>
-            </div>
-        </div>
+  </main>
 
-        <!-- CTA Section -->
-        <div class="cta-section-new">
-            <div class="cta-content">
-                <p class="cta-text" id="cta-text">Book a free 20-minute strategy call</p>
-                <a href="https://wa.me/353894040077?text=" class="cta-button-new" id="cta-button" data-whatsapp-link>Book Now</a>
-            </div>
-        </div>
+  <footer class="colophon">
+    <p class="ora"><b data-i18n="colophon.now.label">Now — July 2026:</b><span data-i18n="colophon.now"> living between Dublin and Prato, getting ready for the road trip across Albania.</span></p>
+    <p data-i18n="colophon.made">This site is hand-written HTML and CSS. No frameworks, no tracking, no cookies. Type: Fraunces, Manrope, IBM Plex Mono. Hosted on Firebase.</p>
+    <p class="firma mono"><span>© 2026 Francesco Perone</span><span data-i18n="colophon.tagline">Apheron — a personal periodical</span></p>
+  </footer>
 
-        <!-- FAQ Section -->
-        <div class="faq-section">
-            <h2 id="faq-title">Frequently Asked Questions</h2>
-            <div class="faq-container">
-                <div class="faq-item">
-                    <button class="faq-question" aria-expanded="false">
-                        <span id="faq1-question">What makes your approach different?</span>
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p id="faq1-answer">I use a modern, hands-on methodology that focuses on fast delivery and practical solutions. While others rely on complex agency structures, I bring direct execution, clear communication, and tools that actually work.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-question" aria-expanded="false">
-                        <span id="faq2-question">Do you work with startups or enterprises?</span>
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p id="faq2-answer">I partner mainly with entrepreneurs, freelancers, and small-to-mid businesses. I also support early-stage startups building and launching their first product. My focus is simple: deliver fast, design around real needs, and build solutions that scale as your business grows.</p>
-                    </div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-question" aria-expanded="false">
-                        <span id="faq3-question">What's included in a strategy call?</span>
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p id="faq3-answer">A free 20-minute consultation where we analyze your current digital presence, identify opportunities, and create a roadmap for your digital transformation. No sales pitch, just practical advice.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+</div>
 
-        <!-- Recent Work Section -->
-        <div class="recent-work-section">
-            <h2 id="recent-work-title">Recent Work</h2>
-            <div class="recent-work-list">
-                <div class="recent-work-item">
-                    <span class="work-icon">✓</span>
-                    <p id="recent-work-item1">Website redesign for a consulting business → +30% contact requests in 30 days</p>
-                </div>
-                <div class="recent-work-item">
-                    <span class="work-icon">✓</span>
-                    <p id="recent-work-item2">Booking platform prototype for a wellness professional</p>
-                </div>
-                <div class="recent-work-item">
-                    <span class="work-icon">✓</span>
-                    <p id="recent-work-item3">Brand + landing + automation setup for a creative project launch</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Footer -->
-        <footer class="footer">
-            <div class="footer-content">
-                <div class="footer-left">
-                    <p class="copyright" id="copyright">&copy; 2025 APHERON. All rights reserved.</p>
-                    <p class="tagline" id="tagline-footer">Apheron</p>
-                </div>
-                <div class="footer-right">
-                    <div class="contact-info">
-                        <div class="contact-item">
-                            <span class="contact-label" id="contact-label">For inquiries:</span>
-                        </div>
-                        <div class="contact-item contact-emails">
-                            <a href="mailto:francesco@apheron.io" class="contact-link email-link">francesco@apheron.io</a>
-                            <span class="contact-separator">•</span>
-                            <a href="mailto:info@apheron.io" class="contact-link email-link">info@apheron.io</a>
-                        </div>
-                        <div class="contact-item contact-phones">
-                            <a href="tel:+393398985125" class="contact-link phone-link">
-                                <span class="phone-flag">🇮🇹</span>
-                                <span class="phone-number">+39 3398985125</span>
-                            </a>
-                            <span class="contact-separator">•</span>
-                            <a href="tel:+353894040077" class="contact-link phone-link">
-                                <span class="phone-flag">🇮🇪</span>
-                                <span class="phone-number">+353 894040077</span>
-                            </a>
-                        </div>
-                        <div class="contact-item contact-google-business">
-                            <a href="" id="google-business-link" class="contact-link google-business-link" target="_blank" rel="noopener noreferrer" data-google-business-link>
-                                <span id="google-business-text">⭐ Rated on Google Business</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="footer-actions">
-                <button id="download-app-btn" class="footer-action-btn download-btn" title="Download App" data-translate-title="downloadApp">
-                    <span class="btn-icon">📱</span>
-                </button>
-                <a href="admin.html" class="footer-action-btn admin-btn" title="Admin Access" data-translate-title="adminAccess">
-                    <span class="btn-icon">🔐</span>
-                </a>
-            </div>
-        </footer>
-    </div>
-    
-    <script src="script.js"></script>
+<script src="/translations.js" defer></script>
+<script src="/edizione.js" defer></script>
 </body>
 </html>
