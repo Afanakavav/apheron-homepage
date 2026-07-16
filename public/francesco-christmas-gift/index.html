@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Regalo di Natale 2025: Contribuisci al corso di inglese 1:1 per raggiungere la fluency a Dublino">
+    <title>Christmas 2025: Gift my English | Regalo Corso Inglese Dublino</title>
+    
+    <!-- Favicon & PWA Icons -->
+    <link rel="icon" type="image/png" href="assets/francesco-avatar.png">
+    <link rel="apple-touch-icon" href="assets/francesco-avatar.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Gift my English">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Christmas 2025: Gift my English">
+    <meta property="og:description" content="Regalo di Natale 2025: Contribuisci al corso di inglese 1:1 per raggiungere la fluency a Dublino">
+    <meta property="og:image" content="assets/francesco-avatar.png">
+    <meta property="og:type" content="website">
+    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- HERO SECTION -->
+    <section id="hero" class="hero">
+        <div class="hero-container">
+            <h1 class="hero-title">Christmas Gift</h1>
+            <div class="hero-image-circle">
+                <img src="assets/francesco-avatar.png" alt="Francesco" class="hero-photo-circle">
+            </div>
+            <div class="hero-content-centered">
+                <p class="hero-subtitle">Quest'anno, il tuo regalo è il mio futuro a Dublino 🇮🇪</p>
+                <p class="hero-microcopy">Obiettivo 2026: Comunicare con naturalezza, sicurezza e ironia. Non solo "sapere l'inglese", ma viverlo.</p>
+                <p class="hero-description">Sto investendo in un percorso 1:1 intensivo. Ogni contributo è un passo verso la mia voce reale in inglese.</p>
+                <button class="cta-primary" onclick="document.getElementById('packages').scrollIntoView({behavior: 'smooth'})">
+                    Partecipa al regalo
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROGRESS BAR -->
+    <section id="progress" class="progress-section">
+        <div class="container">
+            <h2 class="section-title">Raccolto finora</h2>
+            <div class="progress-bar-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text">
+                    <span id="raisedAmount">€0</span> / <span id="targetAmount">€1900</span>
+                </div>
+            </div>
+            <p class="trust-note">Aggiorno questa barra manualmente ad ogni regalo ricevuto.</p>
+        </div>
+    </section>
+
+    <!-- PACKAGES -->
+    <section id="packages" class="packages-section">
+        <div class="container">
+            <h2 class="section-title">Scegli il tuo contributo</h2>
+            <div class="packages-grid">
+                <div class="package-card" data-amount="47.50">
+                    <div class="package-badge badge-gentle">Pensiero Gentile</div>
+                    <h3>Mezza Lezione</h3>
+                    <p class="package-duration">30 minuti</p>
+                    <p class="package-price">€47.50</p>
+                    <button class="package-btn" onclick="selectPackage(47.50)">Scegli</button>
+                </div>
+                <div class="package-card package-featured" data-amount="95.00">
+                    <div class="package-badge badge-popular">Più Scelto - Esperienza Completa</div>
+                    <h3>1 Lezione</h3>
+                    <p class="package-duration">60 minuti</p>
+                    <p class="package-price">€95.00</p>
+                    <button class="package-btn" onclick="selectPackage(95.00)">Scegli</button>
+                </div>
+                <div class="package-card" data-amount="475.00">
+                    <div class="package-badge badge-impact">Impatto Reale</div>
+                    <h3>5 Lezioni</h3>
+                    <p class="package-duration">5 × 60 minuti</p>
+                    <p class="package-price">€475.00</p>
+                    <button class="package-btn" onclick="selectPackage(475.00)">Scegli</button>
+                </div>
+            </div>
+            <div class="free-amount-section">
+                <h3>Oppure scegli un importo libero</h3>
+                <div class="free-amount-container">
+                    <label for="freeAmount">Importo minimo: €5</label>
+                    <div class="amount-input-group">
+                        <input type="number" id="freeAmount" min="5" step="0.01" placeholder="0.00" oninput="updateFreeAmount()">
+                        <span class="currency">€</span>
+                    </div>
+                    <div class="preset-buttons">
+                        <button class="preset-btn" onclick="addPreset(10, event)">+10€</button>
+                        <button class="preset-btn" onclick="addPreset(20, event)">+20€</button>
+                        <button class="preset-btn" onclick="addPreset(50, event)">+50€</button>
+                    </div>
+                </div>
+            </div>
+            <div class="selected-total" id="selectedTotal">
+                <p>Totale selezionato: <span id="totalAmount">€0.00</span></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- DIGITAL GIFT CARD -->
+    <section id="gift-card" class="gift-card-section">
+        <div class="container">
+            <h2 class="section-title">Il tuo biglietto digitale</h2>
+            <div class="gift-card-container">
+                <div class="gift-card-preview" id="giftCardPreview">
+                    <div class="gift-card-header">
+                        <div class="gift-card-logo">🎁</div>
+                        <h3>Certificate of Support</h3>
+                    </div>
+                    <div class="gift-card-body">
+                        <p class="gift-card-label">Da:</p>
+                        <p class="gift-card-name" id="previewName">Il tuo nome</p>
+                        <p class="gift-card-label">Messaggio:</p>
+                        <p class="gift-card-message" id="previewMessage">Il tuo messaggio personale</p>
+                        <div class="gift-card-amount">
+                            <span class="gift-card-label">Contributo:</span>
+                            <span class="gift-card-value" id="previewAmount">€0.00</span>
+                        </div>
+                    </div>
+                    <div class="gift-card-footer">
+                        <p>Christmas 2025: Gift my English</p>
+                        <p>Dublino, Gennaio 2026</p>
+                    </div>
+                </div>
+                <div class="gift-card-form">
+                    <div class="form-group">
+                        <label for="donorName">Il tuo nome (o lascia vuoto per rimanere anonimo)</label>
+                        <input type="text" id="donorName" placeholder="Nome" oninput="updateGiftCardPreview()">
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="anonymousMode" onchange="updateGiftCardPreview()">
+                            Rimani anonimo
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="donorMessage">Messaggio personale (opzionale)</label>
+                        <textarea id="donorMessage" rows="4" placeholder="Scrivi un messaggio..." oninput="updateGiftCardPreview()"></textarea>
+                    </div>
+                    <div class="gift-card-actions">
+                        <button class="btn-secondary" onclick="openFullscreen()">Fullscreen</button>
+                        <button class="btn-primary" onclick="printGiftCard()">Scarica PDF</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- METRICS -->
+    <section id="metrics" class="metrics-section">
+        <div class="container">
+            <h2 class="section-title">Native Confidence</h2>
+            <p class="section-subtitle">Il percorso verso la fluency: c'è lavoro da fare</p>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <h3>Pronunciation & Rhythm</h3>
+                    <div class="metric-bar">
+                        <div class="metric-fill" style="width: 35%"></div>
+                    </div>
+                    <span class="metric-value">35%</span>
+                </div>
+                <div class="metric-card">
+                    <h3>Conversation Flow</h3>
+                    <div class="metric-bar">
+                        <div class="metric-fill" style="width: 25%"></div>
+                    </div>
+                    <span class="metric-value">25%</span>
+                </div>
+                <div class="metric-card">
+                    <h3>Real-World Confidence</h3>
+                    <div class="metric-bar">
+                        <div class="metric-fill" style="width: 40%"></div>
+                    </div>
+                    <span class="metric-value">40%</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- METHOD -->
+    <section id="method" class="method-section">
+        <div class="container">
+            <h2 class="section-title">Il Metodo</h2>
+            <div class="method-grid">
+                <div class="method-card">
+                    <div class="method-icon">🗣️</div>
+                    <h3>Speaking-first</h3>
+                    <p>Priorità alla conversazione reale, non solo grammatica teorica.</p>
+                </div>
+                <div class="method-card">
+                    <div class="method-icon">💼</div>
+                    <h3>Real-life vocabulary</h3>
+                    <p>Vocabolario pratico per lavoro e vita quotidiana a Dublino.</p>
+                </div>
+                <div class="method-card">
+                    <div class="method-icon">👤</div>
+                    <h3>1:1 Coaching</h3>
+                    <p>Attenzione personalizzata per massimizzare i progressi.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section id="how-it-works" class="how-it-works-section">
+        <div class="container">
+            <h2 class="section-title">Come funziona</h2>
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Scegli</h3>
+                    <p>Seleziona un pacchetto o inserisci un importo libero</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Invia</h3>
+                    <p>Effettua il bonifico o usa Revolut/PayPal</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Biglietto</h3>
+                    <p>Ricevi il tuo biglietto digitale personalizzato</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="faq-section">
+        <div class="container">
+            <h2 class="section-title">Domande frequenti</h2>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <h3 class="faq-question">Posso dare poco?</h3>
+                    <p class="faq-answer">Sì, anche mezza lezione fa la differenza. Ogni contributo conta nel percorso verso la fluency.</p>
+                </div>
+                <div class="faq-item">
+                    <h3 class="faq-question">Come viene utilizzato il contributo?</h3>
+                    <p class="faq-answer">Ogni euro va direttamente alle lezioni 1:1 con un insegnante madrelingua qualificato a Dublino.</p>
+                </div>
+                <div class="faq-item">
+                    <h3 class="faq-question">Quando inizierà il corso?</h3>
+                    <p class="faq-answer">Il corso inizierà a gennaio 2026, appena tornerò a Dublino.</p>
+                </div>
+                <div class="faq-item">
+                    <h3 class="faq-question">Posso rimanere anonimo?</h3>
+                    <p class="faq-answer">Assolutamente sì. Puoi lasciare il nome vuoto o selezionare l'opzione "Rimani anonimo".</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAYMENTS -->
+    <section id="payments" class="payments-section">
+        <div class="container">
+            <h2 class="section-title">Modalità di pagamento</h2>
+            <div class="payment-methods">
+                <div class="payment-method">
+                    <h3>Bonifico Bancario</h3>
+                    <div class="payment-info">
+                        <div class="info-row">
+                            <span class="info-label">IBAN:</span>
+                            <span class="info-value" id="ibanValue">IT00 X000 0000 0000 0000 0000 000</span>
+                            <button class="copy-btn" onclick="copyToClipboard('ibanValue', 'IBAN', event)">Copia IBAN</button>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Causale:</span>
+                            <span class="info-value" id="causaleValue">Regalo corso inglese – obiettivo fluency</span>
+                            <button class="copy-btn" onclick="copyToClipboard('causaleValue', 'Causale', event)">Copia Causale</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="payment-method">
+                    <h3>Revolut</h3>
+                    <div class="payment-info">
+                        <div class="info-row">
+                            <a href="https://revolut.me/francepide" class="revolut-link" id="revolutLink" target="_blank" rel="noopener noreferrer">
+                                Paga con Revolut
+                            </a>
+                        </div>
+                        <p class="payment-manual-title">Oppure trovami manualmente:</p>
+                        <div class="info-row">
+                            <span class="info-label">Nome Revolut:</span>
+                            <span class="info-value" id="revolutName">@francepide</span>
+                            <button class="copy-btn" onclick="copyToClipboard('revolutName', 'Nome Revolut', event)">Copia</button>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Nome completo:</span>
+                            <span class="info-value" id="revolutFullName">Francesco Perone</span>
+                            <button class="copy-btn" onclick="copyToClipboard('revolutFullName', 'Nome completo', event)">Copia</button>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Telefono:</span>
+                            <span class="info-value" id="revolutPhone">3398985125</span>
+                            <button class="copy-btn" onclick="copyToClipboard('revolutPhone', 'Telefono', event)">Copia</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="payment-method">
+                    <h3>PayPal</h3>
+                    <div class="payment-info">
+                        <div class="info-row">
+                            <a href="https://www.paypal.me/FrancescoPerone" class="paypal-link" id="paypalLink" target="_blank" rel="noopener noreferrer">Paga con PayPal</a>
+                        </div>
+                        <p class="payment-manual-title">Oppure trovami manualmente:</p>
+                        <div class="info-row">
+                            <span class="info-label">Nome:</span>
+                            <span class="info-value" id="paypalName">Francesco Perone</span>
+                            <button class="copy-btn" onclick="copyToClipboard('paypalName', 'Nome PayPal', event)">Copia</button>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Username:</span>
+                            <span class="info-value" id="paypalUsername">@Francesco Perone</span>
+                            <button class="copy-btn" onclick="copyToClipboard('paypalUsername', 'Username PayPal', event)">Copia</button>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Email:</span>
+                            <span class="info-value" id="paypalEmail">fra.perone@alice.it</span>
+                            <button class="copy-btn" onclick="copyToClipboard('paypalEmail', 'Email PayPal', event)">Copia</button>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Telefono:</span>
+                            <span class="info-value" id="paypalPhone">3398985125</span>
+                            <button class="copy-btn" onclick="copyToClipboard('paypalPhone', 'Telefono PayPal', event)">Copia</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <p>Christmas 2025: Gift my English</p>
+            <p>Grazie per il tuo supporto nel mio percorso verso la fluency a Dublino 🇮🇪</p>
+        </div>
+    </footer>
+
+    <!-- MOBILE STICKY BAR -->
+    <div class="mobile-sticky-bar" id="mobileStickyBar">
+        <div class="sticky-bar-content">
+            <span>Totale: <strong id="stickyTotal">€0.00</strong></span>
+            <button class="sticky-btn" onclick="document.getElementById('payments').scrollIntoView({behavior: 'smooth'})">
+                Procedi
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

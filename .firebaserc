@@ -1,5 +1,18 @@
 {
   "projects": {
     "default": "apheron-homepage"
-  }
+  },
+  "targets": {
+    "apheron-homepage": {
+      "hosting": {
+        "studio": [
+          "studioprofessionalebiancalani"
+        ],
+        "apheron-homepage": [
+          "apheron-homepage"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

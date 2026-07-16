@@ -1,0 +1,65 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Projects collection - only francesco.perone00@gmail.com can read/write
+    match /projects/{projectId} {
+      // Allow read/write only for francesco.perone00@gmail.com
+      allow read, write: if request.auth != null && 
+                           request.auth.token.email == "francesco.perone00@gmail.com";
+    }
+    
+    // Reviews collection - public read (for Schema.org updates), authenticated write only
+    match /reviews/{reviewId} {
+      // Allow public read (for reviews-updater.js script on main page)
+      allow read: if true;
+      // Allow write only for francesco.perone00@gmail.com
+      allow write: if request.auth != null && 
+                    request.auth.token.email == "francesco.perone00@gmail.com";
+    }
+    
+    // Albania & Montenegro trip preferences (page: /albania-trip)
+    // 4 travellers submit one document each (docId = first-name slug).
+    // Reads are open so the group can share the analysis dashboard;
+    // access is in practice limited by the page gate + App Check.
+    // Writes are validated and restricted to the four expected docs.
+    match /albaniaTripPreferences/{personId} {
+      function validResponse() {
+        return request.resource.data.keys().hasAll(['name', 'answers', 'updatedAt'])
+          && request.resource.data.name is string
+          && request.resource.data.name in ['Francesco', 'Martina', 'Silvia', 'Orrin']
+          && request.resource.data.answers is map
+          && request.resource.data.updatedAt is string;
+      }
+      allow read: if true;
+      allow create, update: if personId in ['francesco', 'martina', 'silvia', 'orrin']
+                             && validResponse();
+      // Only the site owner can remove a response.
+      allow delete: if request.auth != null &&
+                      request.auth.token.email == "francesco.perone00@gmail.com";
+    }
+
+    // Albania trip — itinerary votes (page: /albania-itinerary)
+    // Each traveller casts one editable vote (docId = first-name slug).
+    match /albaniaItineraryVotes/{personId} {
+      function validVote() {
+        return request.resource.data.keys().hasAll(['name', 'choice', 'updatedAt'])
+          && request.resource.data.name is string
+          && request.resource.data.name in ['Francesco', 'Martina', 'Silvia', 'Orrin']
+          && request.resource.data.choice is number
+          && request.resource.data.choice >= 1 && request.resource.data.choice <= 3
+          && request.resource.data.updatedAt is string;
+      }
+      allow read: if true;
+      allow create, update: if personId in ['francesco', 'martina', 'silvia', 'orrin']
+                             && validVote();
+      allow delete: if request.auth != null &&
+                      request.auth.token.email == "francesco.perone00@gmail.com";
+    }
+
+    // Deny all other collections by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,20 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /leads/{leadId} {
+      // Permetti creazione a chiunque (per il form di contatto)
+      // Validazione base: nome, email e messaggio devono essere presenti
+      allow create: if request.resource.data.keys().hasAll(['nome', 'email', 'messaggio'])
+                    && request.resource.data.nome is string
+                    && request.resource.data.nome.size() > 0
+                    && request.resource.data.email is string
+                    && request.resource.data.email.matches('.*@.*\\..*')
+                    && request.resource.data.messaggio is string
+                    && request.resource.data.messaggio.size() > 0;
+      
+      // Solo utenti autenticati possono leggere/modificare
+      allow read, update, delete: if request.auth != null;
+    }
+  }
+}
+

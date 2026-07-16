@@ -1,6 +1,8 @@
 {
-  "hosting": {
-    "public": "public",
+  "hosting": [
+    {
+      "target": "apheron-homepage",
+      "public": "public",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -8,7 +10,23 @@
       "**/*.sh",
       "**/*.bat",
       "**/populate-firestore.html",
-      "**/firestore-security-rules.txt"
+      "**/firestore-security-rules.txt",
+      "**/*secret*",
+      "**/*.rules",
+      "**/firestore-rules*.txt",
+      "**/*.md"
+    ],
+    "redirects": [
+      {
+        "source": "/studioprofessionalebiancalani",
+        "destination": "https://www.studiobiancalani.it/",
+        "type": 301
+      },
+      {
+        "source": "/studioprofessionalebiancalani/:path*",
+        "destination": "https://www.studiobiancalani.it/:path*",
+        "type": 301
+      }
     ],
     "rewrites": [
       {
@@ -20,14 +38,6 @@
         "destination": "/home-assistant/index.html"
       },
       {
-        "source": "/studioprofessionalebiancalani",
-        "destination": "/studioprofessionalebiancalani/index.html"
-      },
-      {
-        "source": "/studioprofessionalebiancalani/**",
-        "destination": "/studioprofessionalebiancalani/index.html"
-      },
-      {
         "source": "/avvocato_carlotta_taiti",
         "destination": "/studioavvocato/index.html"
       },
@@ -36,11 +46,44 @@
         "destination": "/studioavvocato/index.html"
       },
       {
+        "source": "/francesco-christmas-gift",
+        "destination": "/francesco-christmas-gift/index.html"
+      },
+      {
+        "source": "/francesco-christmas-gift/**",
+        "destination": "/francesco-christmas-gift/index.html"
+      },
+      {
+        "source": "/tata-chiara-caruso",
+        "destination": "/tata-chiara-caruso/index.html"
+      },
+      {
+        "source": "/tata-chiara-caruso/**",
+        "destination": "/tata-chiara-caruso/index.html"
+      },
+      {
+        "source": "/albania-trip",
+        "destination": "/albania-trip/index.html"
+      },
+      {
+        "source": "/albania-trip/**",
+        "destination": "/albania-trip/index.html"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
     ],
     "headers": [
+      {
+        "source": "/albania-trip/**/*.@(js|mjs|css)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=0, must-revalidate"
+          }
+        ]
+      },
       {
         "source": "**/*.@(jpg|jpeg|gif|png|webp|svg|ico)",
         "headers": [
@@ -86,10 +129,63 @@
         ]
       }
     ]
-  },
+    },
+    {
+      "target": "studio",
+      "public": "public/studioprofessionalebiancalani",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**",
+        "**/README.md",
+        "**/README.txt"
+      ],
+      "redirects": [
+        { "source": "/new", "destination": "/", "type": 301 },
+        { "source": "/new/**", "destination": "/", "type": 301 }
+      ],
+      "headers": [
+        {
+          "source": "**",
+          "headers": [
+            { "key": "X-Content-Type-Options", "value": "nosniff" },
+            { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+            { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+          ]
+        },
+        {
+          "source": "**/*.@(woff2|woff|ttf)",
+          "headers": [
+            { "key": "Cache-Control", "value": "max-age=31536000, immutable" }
+          ]
+        },
+        {
+          "source": "**/*.@(jpg|jpeg|png|webp|svg|ico|gif|pdf)",
+          "headers": [
+            { "key": "Cache-Control", "value": "max-age=604800" }
+          ]
+        },
+        {
+          "source": "**/*.@(html)",
+          "headers": [
+            { "key": "Cache-Control", "value": "max-age=0, must-revalidate" }
+          ]
+        },
+        {
+          "source": "/",
+          "headers": [
+            { "key": "Cache-Control", "value": "max-age=0, must-revalidate" }
+          ]
+        }
+      ]
+    }
+  ],
   "functions": {
     "source": "functions",
     "runtime": "nodejs20"
+  },
+  "firestore": {
+    "rules": "firestore.rules"
   }
 }
 

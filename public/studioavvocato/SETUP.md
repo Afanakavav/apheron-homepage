@@ -99,44 +99,66 @@ exports.sendContactEmail = functions.https.onCall(async (data, context) => {
 });
 ```
 
-**Opzione B - Nodemailer (Gmail/SMTP):**
+**Opzione B - Nodemailer (Gmail/SMTP) con Secret Manager:**
+
+Le credenziali email sono memorizzate in modo sicuro in Google Secret Manager (consigliato da Firebase).
+
+**1. Configurare i secret (una tantum):**
+```bash
+cd apheron-homepage
+firebase functions:secrets:set EMAIL_USER   # Inserire l'email Gmail quando richiesto
+firebase functions:secrets:set EMAIL_PASS   # Inserire la password app Gmail quando richiesto
+```
+
+**2. Codice della function:**
 ```javascript
-const functions = require('firebase-functions');
+const { onCall, HttpsError } = require('firebase-functions/v2/https');
+const { defineSecret } = require('firebase-functions/params');
 const nodemailer = require('nodemailer');
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: functions.config().email.user,
-    pass: functions.config().email.password
-  }
-});
+const emailUserSecret = defineSecret('EMAIL_USER');
+const emailPassSecret = defineSecret('EMAIL_PASS');
 
-exports.sendContactEmail = functions.https.onCall(async (data, context) => {
-  const mailOptions = {
-    from: 'carlottataiti@gmail.com',
-    to: 'carlottataiti@gmail.com',
-    subject: `Nuova richiesta consulenza - ${data.tipologia || 'Generale'}`,
-    html: `
-      <h2>Nuova richiesta di consulenza</h2>
-      <p><strong>Nome:</strong> ${data.nome}</p>
-      <p><strong>Email:</strong> ${data.email}</p>
-      <p><strong>Telefono:</strong> ${data.telefono}</p>
-      <p><strong>Tipologia:</strong> ${data.tipologia || 'Non specificata'}</p>
-      <p><strong>Messaggio:</strong></p>
-      <p>${data.messaggio}</p>
-    `
-  };
+exports.sendContactEmail = onCall(
+  { region: 'europe-west3', secrets: [emailUserSecret, emailPassSecret] },
+  async (request) => {
+    const data = request.data;
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: emailUserSecret.value(),
+        pass: emailPassSecret.value(),
+      },
+    });
 
-  try {
-    await transporter.sendMail(mailOptions);
-    return { success: true };
-  } catch (error) {
-    console.error('Email error:', error);
-    throw new functions.https.HttpsError('internal', 'Failed to send email');
+    const mailOptions = {
+      from: `"Studio Legale Taiti" <${emailUserSecret.value()}>`,
+      to: 'carlottataiti@gmail.com',
+      replyTo: data.email,
+      subject: `Nuova richiesta consulenza - ${data.tipologia || 'Generale'}`,
+      html: `
+        <h2>Nuova richiesta di consulenza</h2>
+        <p><strong>Nome:</strong> ${data.nome}</p>
+        <p><strong>Email:</strong> ${data.email}</p>
+        <p><strong>Telefono:</strong> ${data.telefono || '-'}</p>
+        <p><strong>Tipologia:</strong> ${data.tipologia || 'Non specificata'}</p>
+        <p><strong>Messaggio:</strong></p>
+        <p>${data.messaggio}</p>
+      `,
+    };
+
+    try {
+      await transporter.sendMail(mailOptions);
+      return { success: true };
+    } catch (error) {
+      console.error('Email error:', error);
+      throw new HttpsError('internal', 'Errore nell\'invio dell\'email');
+    }
   }
-});
+);
 ```
+
+**Nota:** Per test locale con l'emulatore, creare `functions/.secret.local` con le variabili (non committare).
 
 **Deploy della function:**
 ```bash

@@ -3,7 +3,7 @@
  * Handles contact form submissions, validation, and Firestore integration
  */
 
-import { getFirestore, getFunctions } from './firebase-config.js';
+import { getFirestore, getFunctions, getFirebaseApp } from './firebase-config.js';
 
 // ============================================
 // Form Initialization
@@ -281,20 +281,66 @@ async function sendEmailNotification(formData, leadId) {
 
     try {
         // Call Firebase Function to send email
-        // Replace 'sendContactEmail' with your actual function name
-        const sendEmail = functions.httpsCallable('sendContactEmail');
+        // The function is deployed in studio-legale-taiti project, europe-west3 region
+        const firebaseApp = getFirebaseApp();
+        if (!firebaseApp) {
+            throw new Error('Firebase app not initialized');
+        }
         
-        const result = await sendEmail({
-            leadId: leadId,
-            nome: formData.nome,
-            email: formData.email,
-            telefono: formData.telefono,
-            tipologia: formData.tipologia,
-            messaggio: formData.messaggio,
-            timestamp: formData.timestamp
+        const projectId = firebaseApp.options.projectId;
+        const region = 'europe-west3'; // Always use europe-west3
+        
+        // For compat version with custom region, we need to call the function directly
+        // using the full URL because httpsCallable defaults to us-central1
+        const functionUrl = `https://${region}-${projectId}.cloudfunctions.net/sendContactEmail`;
+        console.log('Calling function sendContactEmail at:', functionUrl);
+        
+        // Use the Firebase SDK's internal method to call the function with auth
+        // This requires getting an auth token first
+        let authToken = null;
+        if (firebase.auth && firebaseApp.auth) {
+            try {
+                const currentUser = firebaseApp.auth().currentUser;
+                if (currentUser) {
+                    authToken = await currentUser.getIdToken();
+                }
+            } catch (authError) {
+                console.warn('Could not get auth token (not authenticated):', authError);
+            }
+        }
+        
+        // Call the function using fetch with proper headers
+        const headers = {
+            'Content-Type': 'application/json',
+        };
+        
+        if (authToken) {
+            headers['Authorization'] = `Bearer ${authToken}`;
+        }
+        
+        const response = await fetch(functionUrl, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify({
+                data: {
+                    leadId: leadId,
+                    nome: formData.nome,
+                    email: formData.email,
+                    telefono: formData.telefono,
+                    tipologia: formData.tipologia,
+                    messaggio: formData.messaggio,
+                    timestamp: formData.timestamp
+                }
+            })
         });
-
-        console.log('Email notification sent:', result);
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP error! status: ${response.status}, body: ${errorText}`);
+        }
+        
+        const result = await response.json();
+        console.log('✅ Email notification sent successfully:', result);
         return result;
     } catch (error) {
         console.error('Error sending email notification:', error);

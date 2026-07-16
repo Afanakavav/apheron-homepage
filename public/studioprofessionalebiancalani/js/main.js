@@ -9,9 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initProfessionisti();
     initServizi();
     initACBGallery();
-    initContactForm();
     initInstitutionalLinks();
-    initProfessionistiContatti();
     initBackToTop();
 });
 
@@ -135,12 +133,37 @@ function initProfessionisti() {
     professionisti.forEach(prof => {
         const card = document.createElement('div');
         card.className = 'professionista-card';
+        
+        // Nome su due righe: cognome (prima), nome (seconda) - centrati
+        const nameBlock = `<div class="professionista-name-block">
+            <span class="professionista-surname">${prof.surname}</span>
+            <span class="professionista-givenname">${prof.givenName}</span>
+        </div>`;
+        // Ruolo su due righe - allineato a sinistra
+        const roleBlock = (prof.roleLine1 || prof.roleLine2) ? `<div class="professionista-role-block">
+            ${prof.roleLine1 ? `<span class="professionista-role-line1">${prof.roleLine1}</span>` : ''}
+            ${prof.roleLine2 ? `<span class="professionista-role-line2">${prof.roleLine2}</span>` : ''}
+        </div>` : '';
+        // Descrizione (giustificata via CSS) - solo se presente
+        const bioBlock = prof.bio ? `<p class="professionista-bio">${prof.bio.replace(/\n/g, '<br>')}</p>` : '';
+        // Contatti: terzultima = email studio, penultima = "PEC:", ultima = indirizzo PEC
+        let contactsHTML = '';
+        if (prof.email) {
+            contactsHTML += `<p class="professionista-contact"><i class="fas fa-envelope"></i> <a href="mailto:${prof.email}">${prof.email}</a></p>`;
+        }
+        if (prof.pec) {
+            contactsHTML += `<p class="professionista-contact"><i class="fas fa-envelope-open-text"></i> PEC:</p>`;
+            contactsHTML += `<p class="professionista-contact"><a href="mailto:${prof.pec}">${prof.pec}</a></p>`;
+        }
+        const contactsBlock = contactsHTML ? `<div class="professionista-contacts">${contactsHTML}</div>` : '';
+        
         card.innerHTML = `
             <img src="${prof.image}" alt="${prof.name}" class="professionista-image" onerror="this.src='images/placeholder-person.jpg'">
             <div class="professionista-info">
-                <h3 class="professionista-name">${prof.name}</h3>
-                <p class="professionista-role">${prof.role}</p>
-                <p class="professionista-bio">${prof.bio}</p>
+                ${nameBlock}
+                ${roleBlock}
+                ${bioBlock}
+                ${contactsBlock}
             </div>
         `;
         grid.appendChild(card);
@@ -158,12 +181,15 @@ function initServizi() {
     servizi.forEach(servizio => {
         const card = document.createElement('div');
         card.className = 'servizio-card';
+        const titleHTML = servizio.titleLine1 && servizio.titleLine2
+            ? `${servizio.titleLine1}<br>${servizio.titleLine2}`
+            : servizio.title;
         card.innerHTML = `
             <div class="servizio-icon">
                 <i class="${servizio.icon}"></i>
             </div>
             <div class="servizio-content">
-                <h3 class="servizio-title">${servizio.title}</h3>
+                <h3 class="servizio-title">${titleHTML}</h3>
                 <p class="servizio-description">${servizio.description}</p>
             </div>
         `;
@@ -189,153 +215,6 @@ function initACBGallery() {
         gallery.appendChild(galleryItem);
     });
     
-    // Download brochure handler
-    const downloadBtn = document.getElementById('downloadBrochure');
-    if (downloadBtn) {
-        downloadBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            alert('La brochure sarà disponibile a breve. Contattaci per riceverla via email.');
-            // In a real implementation, this would download a PDF
-            // window.open('pdf/acb-brochure.pdf', '_blank');
-        });
-    }
-}
-
-// ============================================
-// CONTACT FORM
-// ============================================
-
-function initContactForm() {
-    const form = document.getElementById('appointmentForm');
-    const tabButtons = document.querySelectorAll('.tab-btn');
-    const clientTypeInput = document.getElementById('clientType');
-    const partitaIvaGroup = document.getElementById('partitaIvaGroup');
-    
-    if (!form) return;
-    
-    // Tab switching
-    tabButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            tabButtons.forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            
-            const tabType = this.getAttribute('data-tab');
-            clientTypeInput.value = tabType === 'new-client' ? 'new' : 'existing';
-            
-            // Show/hide Partita IVA field for existing clients
-            if (tabType === 'existing-client') {
-                partitaIvaGroup.style.display = 'block';
-                partitaIvaGroup.querySelector('input').setAttribute('required', 'required');
-            } else {
-                partitaIvaGroup.style.display = 'none';
-                partitaIvaGroup.querySelector('input').removeAttribute('required');
-            }
-        });
-    });
-    
-    // Form submission
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const formData = {
-            nome: document.getElementById('nome').value,
-            email: document.getElementById('email').value,
-            telefono: document.getElementById('telefono').value,
-            partitaIva: document.getElementById('partitaIva').value || null,
-            tipologia: document.getElementById('tipologia').value,
-            messaggio: document.getElementById('messaggio').value,
-            preferenzaContatto: document.querySelector('input[name="preferenzaContatto"]:checked').value,
-            clientType: clientTypeInput.value
-        };
-        
-        // Show loading state
-        const submitBtn = form.querySelector('button[type="submit"]');
-        const originalText = submitBtn.textContent;
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Invio in corso...';
-        
-        // Send email via EmailJS
-        sendFormData(formData)
-            .then(() => {
-                showFormSuccess();
-                form.reset();
-                submitBtn.disabled = false;
-                submitBtn.textContent = originalText;
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                submitBtn.disabled = false;
-                submitBtn.textContent = originalText;
-            });
-    });
-}
-
-function showFormSuccess() {
-    const successMsg = document.getElementById('formSuccess');
-    const errorMsg = document.getElementById('formError');
-    
-    errorMsg.style.display = 'none';
-    successMsg.style.display = 'flex';
-    
-    // Scroll to success message
-    successMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    
-    // Hide after 5 seconds
-    setTimeout(() => {
-        successMsg.style.display = 'none';
-    }, 5000);
-}
-
-function showFormError() {
-    const successMsg = document.getElementById('formSuccess');
-    const errorMsg = document.getElementById('formError');
-    
-    successMsg.style.display = 'none';
-    errorMsg.style.display = 'flex';
-    
-    // Scroll to error message
-    errorMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-
-// Send form data via Firebase Cloud Functions
-async function sendFormData(formData) {
-    try {
-        // URL della Cloud Function deployata (regione Europa)
-        const functionUrl = 'https://europe-west1-apheron-homepage.cloudfunctions.net/sendAppointmentRequest';
-        
-        // Prepara i dati da inviare
-        const requestData = {
-            nome: formData.nome,
-            email: formData.email,
-            telefono: formData.telefono,
-            partitaIva: formData.partitaIva || null,
-            tipologia: formData.tipologia,
-            messaggio: formData.messaggio,
-            preferenzaContatto: formData.preferenzaContatto,
-            clientType: formData.clientType,
-        };
-
-        // Chiama la Cloud Function via HTTP POST
-        const response = await fetch(functionUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(requestData),
-        });
-
-        const result = await response.json();
-        
-        if (response.ok && result.success) {
-            return { success: true };
-        } else {
-            throw new Error(result.error || 'Email non inviata');
-        }
-    } catch (error) {
-        console.error('Error submitting form:', error);
-        showFormError();
-        throw error;
-    }
 }
 
 // ============================================
@@ -357,33 +236,6 @@ function initInstitutionalLinks() {
 // PROFESSIONISTI CONTATTI
 // ============================================
 
-function initProfessionistiContatti() {
-    const grid = document.getElementById('profContattiGrid');
-    if (!grid) return;
-    
-    professionisti.forEach(prof => {
-        const card = document.createElement('div');
-        card.className = 'prof-contatto-card';
-        
-        let linksHTML = '';
-        if (prof.email) {
-            linksHTML += `<a href="mailto:${prof.email}"><i class="fas fa-envelope"></i> ${prof.email}</a>`;
-        }
-        if (prof.pec) {
-            linksHTML += `<a href="mailto:${prof.pec}"><i class="fas fa-envelope-open-text"></i> PEC: ${prof.pec}</a>`;
-        }
-        
-        card.innerHTML = `
-            <div class="prof-contatto-name">${prof.name}</div>
-            <div class="prof-contatto-role">${prof.role}</div>
-            <div class="prof-contatto-links">
-                ${linksHTML}
-            </div>
-        `;
-        
-        grid.appendChild(card);
-    });
-}
 
 // ============================================
 // BACK TO TOP BUTTON
@@ -408,29 +260,3 @@ function initBackToTop() {
         });
     });
 }
-
-// ============================================
-// UTILITY FUNCTIONS
-// ============================================
-
-// Email validation
-function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
-
-// Phone validation
-function isValidPhone(phone) {
-    const phoneRegex = /^[\d\s\+\-\(\)]+$/;
-    return phoneRegex.test(phone) && phone.replace(/\D/g, '').length >= 10;
-}
-
-// Format phone number
-function formatPhoneNumber(phone) {
-    const cleaned = phone.replace(/\D/g, '');
-    if (cleaned.startsWith('39')) {
-        return `+${cleaned.substring(0, 2)} ${cleaned.substring(2, 4)} ${cleaned.substring(4, 7)} ${cleaned.substring(7)}`;
-    }
-    return phone;
-}
-

@@ -6,13 +6,13 @@ Questa cartella contiene tutte le immagini utilizzate nel sito web.
 
 ```
 images/
-├── professionisti/          # Foto dei professionisti
-│   ├── paolo-biancalani.jpg
-│   ├── andrea-biancalani.jpg
-│   ├── massimo-conte.jpg
-│   ├── francesco-biancalani.jpg
-│   ├── roberto-tosa.jpg
-│   └── elisa-mardegan.jpg
+├── professionisti/          # Foto dei professionisti (formato PNG)
+│   ├── andrea-biancalani.png
+│   ├── francesco-biancalani.png
+│   ├── paolo-biancalani.png
+│   ├── massimo-conte.png
+│   ├── roberto-tosa.png
+│   └── (alberto-lamanna: da inserire in futuro)
 ├── acb/                    # Immagini convention ACB Group
 │   ├── convention-verona-2016.jpg
 │   ├── incontro-genova-2015.jpg
@@ -72,6 +72,17 @@ images/
 - Se un'immagine non è disponibile, il sito mostrerà automaticamente un placeholder
 - Le immagini vengono caricate in modo lazy (solo quando visibili)
 - Tutte le immagini devono essere ottimizzate per il web
+
+## 📥 Inserimento foto professionisti (5 PNG)
+
+Copia le 5 foto in formato PNG nella cartella `images/professionisti/` con questi nomi esatti:
+- `andrea-biancalani.png`
+- `francesco-biancalani.png`
+- `paolo-biancalani.png`
+- `massimo-conte.png`
+- `roberto-tosa.png`
+
+(La sesta scheda è Alberto Lamanna: la foto va inserita in futuro.)
 
 ## 🔄 Sostituzione Immagini
 

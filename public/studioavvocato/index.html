@@ -39,9 +39,8 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Google reCAPTCHA v3 for Firebase App Check -->
-    <!-- Note: Using Apheron Homepage site key - update if different for Studio Legale Taiti -->
-    <script src="https://www.google.com/recaptcha/api.js?render=6LffriksAAAAAKvSqVFkxt6ggpicybwvV_yVF3Jq" async defer></script>
+    <!-- Google reCAPTCHA v3 -->
+    <script src="https://www.google.com/recaptcha/api.js?render=6LcWjScsAAAAACAXAETtkhF8gmaUZwT0PLk972Vl" async defer></script>
     
     <!-- Styles -->
     <link rel="stylesheet" href="/studioavvocato/styles.css">
@@ -903,29 +902,31 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-functions-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js"></script>
+    <!-- Firebase App Check SDK (Optional - Commented out if not needed) -->
+    <!-- <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js"></script> -->
     
-    <!-- Firebase App Check Initialization -->
+    <!-- Firebase App Check Initialization (Optional - Disabled if causing issues) -->
+    <!-- 
     <script>
         // Initialize Firebase App Check after Firebase is loaded
         document.addEventListener('DOMContentLoaded', function() {
             if (typeof firebase !== 'undefined' && firebase.apps.length > 0) {
                 try {
                     const app = firebase.app();
-                    const recaptchaSiteKey = window.RECAPTCHA_SITE_KEY || '6LffriksAAAAAKvSqVFkxt6ggpicybwvV_yVF3Jq';
+                    const recaptchaSiteKey = '6LcWjScsAAAAACAXAETtkhF8gmaUZwT0PLk972Vl';
                     
                     // Initialize App Check with reCAPTCHA v3
                     const appCheck = firebase.appCheck();
-                    appCheck.activate(recaptchaSiteKey, true); // true = isTokenAutoRefreshEnabled
+                    appCheck.activate(recaptchaSiteKey, true);
                     
                     console.log('✅ Firebase App Check initialized');
                 } catch (error) {
                     console.warn('⚠️ Firebase App Check initialization failed:', error);
-                    console.warn('   App will work without App Check, but API key protection is reduced');
                 }
             }
         });
     </script>
+    -->
     
     <!-- Scripts -->
     <script type="module" src="/studioavvocato/script.js"></script>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Albania &amp; Montenegro Summer Trip 2026 — Preferences</title>
+  <meta name="description" content="Private preferences form for our Albania & Montenegro summer trip, 1–16 August 2026." />
+  <link rel="stylesheet" href="styles.css?v=2" />
+</head>
+<body>
+
+  <!-- ============ GATE ============ -->
+  <div class="gate" id="gate">
+    <div class="gate-card">
+      <div class="flag">🇦🇱 🏖️ 🇲🇪</div>
+      <h1>Albania &amp; Montenegro 2026</h1>
+      <p>Private trip planning — please sign in.</p>
+      <form class="gate-form" id="gate-form" autocomplete="off">
+        <div>
+          <label for="gate-user">Username</label>
+          <input type="text" id="gate-user" name="gate-user" autocapitalize="none" spellcheck="false" />
+        </div>
+        <div>
+          <label for="gate-pass">Password</label>
+          <input type="password" id="gate-pass" name="gate-pass" />
+        </div>
+        <div class="gate-error" id="gate-error"></div>
+        <button type="submit" class="btn-primary">Enter</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============ APP ============ -->
+  <main class="app" id="app" hidden>
+    <header class="hero">
+      <div class="eyebrow">1–16 August 2026 · 4 travellers</div>
+      <h1>Albania &amp; Montenegro Summer Trip</h1>
+      <p>Tell us what <em>you</em> would genuinely enjoy — relax, sea, light adventure, food, driving rhythm, heat, accommodation and Montenegro. Your answers shape the two itineraries we'll build.</p>
+    </header>
+
+    <nav class="tabs">
+      <button class="tab active" id="tab-form" type="button">📝 Questions</button>
+      <button class="tab" id="tab-results" type="button">📊 Results <span class="count" id="results-count" hidden>0/4</span></button>
+      <button class="tab" id="tab-itinerary" type="button">🧭 Itineraries</button>
+    </nav>
+    <div class="topbar"><button class="link-btn" id="logout-btn" type="button">Sign out</button></div>
+
+    <!-- FORM VIEW -->
+    <section id="form-view"></section>
+
+    <!-- RESULTS VIEW -->
+    <section id="results-view" hidden></section>
+
+    <!-- ITINERARY VIEW -->
+    <section id="itinerary-view" hidden></section>
+
+    <p class="foot">Private page · apheron.io · built for Francesco, Martina, Silvia &amp; Orrin</p>
+  </main>
+
+  <!-- reCAPTCHA for Firebase App Check (same key as the rest of the site) -->
+  <script src="https://www.google.com/recaptcha/api.js?render=6LffriksAAAAAKvSqVFkxt6ggpicybwvV_yVF3Jq" async defer></script>
+  <!-- Inject real Firebase keys (not committed) BEFORE the modules -->
+  <script src="/config.local.js" onerror="console.warn('config.local.js not found — using placeholder Firebase config')"></script>
+  <!-- App logic -->
+  <script type="module" src="app.js?v=2"></script>
+</body>
+</html>
