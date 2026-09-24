@@ -6,11 +6,20 @@ Procedure operative per il direttore. Tempi reali: 2–10 minuti l'una.
 1. Copia la cartella del nuovo sito in `public/<nome>/` (con il suo `index.html`).
 2. In `firebase.json` (target `apheron-homepage`) aggiungi le due rewrite:
    `{"source": "/<nome>", "destination": "/<nome>/index.html"}` e idem con `/<nome>/**`.
-3. In `public/index.html` copia il blocco della voce fantasma (`voce--fantasma`, in fondo
-   all'Archivio), togli la classe `voce--fantasma`, metti `href`, numero e chiavi `eN.*`.
+   Se il sito ha JS/CSS che cambieranno, aggiungi anche una regola no-cache **in fondo**
+   alla lista `headers` (vedi quella di `fun-friday`): se due regole combaciano vince
+   l'ultima, e quelle generiche da un anno per `**/*.js` e `**/*.css` stanno prima.
+3. In `public/index.html` copia una voce normale (es. la 01: `<a href>`, `voce__desc` >
+   `voce__inner` > `p` + `voce__foto`), mettila nella sezione giusta, metti `href` e chiavi
+   `eN.*`. I numeri visibili (`voce__num`) seguono l'ordine della pagina: se la inserisci in
+   mezzo, fai scalare quelli dopo (le chiavi `eN` restano uguali). Aggiorna il numero della
+   voce fantasma.
 4. In `public/translations.js` aggiungi le chiavi `eN.title/meta/desc` in EN e IT
-   (e aggiorna i contatori `secX.count`).
-5. `firebase deploy --only hosting:apheron-homepage`
+   (e aggiorna i contatori `secX.count` e `ghost.meta`). Poi alza il `?v=` di
+   `translations.js` in `index.html`, così chi ha la copia vecchia in cache prende la nuova.
+5. Anteprima: screenshot 960×600 in `public/anteprime/<nome>.jpg` (sotto ~60 KB; il
+   bicromo lo fa il CSS). Le immagini hanno un anno di cache: per cambiarla usa un nome nuovo.
+6. `firebase deploy --only hosting:apheron-homepage`
 
 ## Rendere PRIVATO un sito (stato «Edizione riservata»)
 Protezione vera (dopo la Fase 4 Cloudflare):
@@ -32,6 +41,11 @@ sensibili il singolo sito va spostato su Cloudflare Pages (nome progetto casuale
 ## Aggiornare la riga «Now» del colophon (3–4 volte l'anno)
 In `public/translations.js`: chiavi `colophon.now.label` e `colophon.now` (EN e IT).
 Aggiorna anche la data nel label. Poi deploy.
+
+## Wheel of Facts (FUN Friday) — `/fun-friday`
+Checklist del giorno e prove in locale: `public/fun-friday/README.md`.
+I fun fact dei colleghi stanno SOLO nel localStorage del browser (Export/Import JSON in
+Control → Settings & data): mai nel codice né nel repo (i backup sono in `.gitignore`).
 
 ## Cose da NON toccare
 - `public/config.local.js` e `public/firebase-config.js`: **albania-trip li importa dalla
