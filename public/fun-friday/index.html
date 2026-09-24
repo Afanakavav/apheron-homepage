@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>@view-transition { navigation: auto; }</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Wheel of Facts · FUN Friday</title>
+  <meta name="description" content="A live guessing game for a team's FUN Friday: spin the wheel, then guess a colleague's fun fact as it is revealed one letter at a time." />
+  <meta name="theme-color" content="#032D60" />
+  <link rel="preload" href="/fonts/manrope-var-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="/fun-friday/styles.css?v=1" />
+  <link rel="stylesheet" href="/fun-friday/board.css?v=1" />
+</head>
+<body>
+
+  <!-- ============ LAUNCHER (no hash) ============ -->
+  <main class="launcher" id="launcher" hidden>
+    <header class="launcher-hero">
+      <div class="launcher-wheel" aria-hidden="true"><span class="launcher-wheel-disc"></span><span class="launcher-wheel-pointer"></span></div>
+      <p class="eyebrow">FUN Friday · team game</p>
+      <h1>Wheel of Facts</h1>
+      <p class="lede">Spin the wheel, pick a colleague, and guess their fun fact while it is revealed one letter at a time.</p>
+    </header>
+
+    <section class="launcher-cards">
+      <article class="launch-card">
+        <h2>Control</h2>
+        <p>For the host only, on the laptop. Every command lives here.</p>
+        <button class="btn btn-primary btn-lg" type="button" data-open="control">Open Control</button>
+      </article>
+      <article class="launch-card">
+        <h2>Board</h2>
+        <p>The screen you present in Meet. It opens in a new tab: drag it to the second monitor.</p>
+        <button class="btn btn-primary btn-lg" type="button" data-open="board">Open Board</button>
+      </article>
+    </section>
+
+    <section class="launcher-steps">
+      <h2>Before the call</h2>
+      <ol>
+        <li>Open <strong>Control</strong> here and <strong>Board</strong> in a new tab of the same Chrome, on the same address.</li>
+        <li>Drag the Board tab to the second monitor and click it once: sound and full screen switch on.</li>
+        <li>In Meet choose <strong>Present → A tab</strong>, pick “BOARD — Wheel of Facts” and keep <strong>“Also share tab audio”</strong> on.</li>
+        <li>Put Meet next to Control on the laptop (a covered window runs slowly), keep the laptop plugged in and wear headphones.</li>
+      </ol>
+      <p class="launcher-demo">Want to try it first? <button class="link-btn" type="button" data-open="demo">Open the demo</button> (invented players and facts, kept apart from the real game).</p>
+    </section>
+
+    <p class="foot">Nothing leaves this browser: no server, no login, no tracking. Back up with Export in Control. · <a href="/">apheron.io</a></p>
+  </main>
+
+  <!-- ============ CONTROL (#control) ============ -->
+  <main class="control" id="control" hidden></main>
+
+  <!-- ============ BOARD (#board) ============ -->
+  <main class="board" id="board" hidden></main>
+
+  <noscript><p class="noscript">Wheel of Facts needs JavaScript.</p></noscript>
+  <script type="module" src="/fun-friday/app.js?v=1"></script>
+</body>
+</html>

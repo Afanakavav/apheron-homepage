@@ -14,7 +14,10 @@
       "**/*secret*",
       "**/*.rules",
       "**/firestore-rules*.txt",
-      "**/*.md"
+      "**/*.md",
+      "**/fun-friday*backup*.json",
+      "fun-friday/**/*.json",
+      "fun-friday/**/*.txt"
     ],
     "redirects": [
       {
@@ -68,6 +71,14 @@
       {
         "source": "/albania-trip/**",
         "destination": "/albania-trip/index.html"
+      },
+      {
+        "source": "/fun-friday",
+        "destination": "/fun-friday/index.html"
+      },
+      {
+        "source": "/fun-friday/**",
+        "destination": "/fun-friday/index.html"
       },
       {
         "source": "/italian-lessons-dublin",
@@ -152,6 +163,15 @@
       },
       {
         "source": "/styles.css",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=0, must-revalidate"
+          }
+        ]
+      },
+      {
+        "regex": "^/fun-friday(/.*)?$",
         "headers": [
           {
             "key": "Cache-Control",

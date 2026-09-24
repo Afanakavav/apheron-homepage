@@ -77,6 +77,9 @@ public/config.local.js
 public/**/config.local.js
 **/config.local.js
 
+# Wheel of Facts backups contain colleagues' fun facts: never commit them
+**/fun-friday*backup*.json
+
 # Secret keys and sensitive files
 **/recaptcha-secret-key.txt
 **/*secret*.txt

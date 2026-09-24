@@ -19,10 +19,19 @@ module.exports = defineConfig({
     trace: "on-first-retry",
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
-  webServer: {
-    command: "npx serve public/italian-lessons-dublin -l 5000",
-    url: "http://localhost:5000",
-    reuseExistingServer: !process.env.CI,
-    timeout: 120000,
-  },
+  webServer: [
+    {
+      command: "npx serve public/italian-lessons-dublin -l 5000",
+      url: "http://localhost:5000",
+      reuseExistingServer: !process.env.CI,
+      timeout: 120000,
+    },
+    {
+      // Wheel of Facts needs the whole public/ folder (it loads /fonts/ from the hub).
+      command: "npx serve public -l 5001",
+      url: "http://localhost:5001/fun-friday/",
+      reuseExistingServer: !process.env.CI,
+      timeout: 120000,
+    },
+  ],
 });
