@@ -80,33 +80,6 @@
     ],
     "headers": [
       {
-        "source": "/albania-trip/**/*.@(js|mjs|css)",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "max-age=0, must-revalidate"
-          }
-        ]
-      },
-      {
-        "source": "/@(edizione|translations|sw).js",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "max-age=0, must-revalidate"
-          }
-        ]
-      },
-      {
-        "source": "/styles.css",
-        "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "max-age=0, must-revalidate"
-          }
-        ]
-      },
-      {
         "source": "**/*.woff2",
         "headers": [
           {
@@ -152,6 +125,33 @@
       },
       {
         "source": "**/*.@(html)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=0, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "/albania-trip/**/*.@(js|mjs|css)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=0, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "/@(edizione|translations|sw).js",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=0, must-revalidate"
+          }
+        ]
+      },
+      {
+        "source": "/styles.css",
         "headers": [
           {
             "key": "Cache-Control",
