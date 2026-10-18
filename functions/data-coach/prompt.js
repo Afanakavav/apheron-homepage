@@ -168,7 +168,98 @@ function parseFastResult(message) {
   };
 }
 
+/** Istruzioni aggiuntive della via lenta ("Approfondisci"): sforzo alto, capitoli dei manuali, citazioni. */
+const DEEP_INSTRUCTIONS = [
+  "DEEP REVIEW MODE. A fast answer to this same question was already given and is reported in the user message.",
+  "You now have the full manual chapter(s) of the relevant exam section in <chapter> blocks. Re-examine the question",
+  "from scratch: verify every option against the chapter, the compendium and the registry; then either confirm the",
+  "fast answer or change it. Cite your evidence as [SG p.N] for Study Guide pages (page markers like",
+  "<!-- Study Guide p.N --> appear in the chapters), [Notes] for the study notes, [Compendium] and [S3-Q12] for",
+  "registry questions. explanation_it: 3 to 6 sentences in Italian, product terms in English, with the citations",
+  "inline, saying why each wrong option is wrong. agrees_with_fast is true only when your answers equal the fast ones.",
+].join("\n");
+
+const DEEP_SCHEMA = {
+  type: "object",
+  properties: {
+    required_count: {type: "integer"},
+    answers: {type: "array", items: {type: "string"}},
+    explanation_it: {type: "string"},
+    confidence: {type: "string", enum: ["alta", "media", "bassa"]},
+    citations: {type: "array", items: {type: "string"}, description: "Sources used, e.g. SG p.40, S1-Q15"},
+    agrees_with_fast: {type: "boolean"},
+    section: {type: "string", enum: SECTION_SLUGS},
+  },
+  required: ["required_count", "answers", "explanation_it", "confidence", "citations", "agrees_with_fast", "section"],
+  additionalProperties: false,
+};
+
+const DEEP_MAX_TOKENS = 24000;
+
+/**
+ * Parametri per la via lenta: contesto completo piu' i capitoli dei manuali della sezione, sforzo alto.
+ * I capitoli stanno in un blocco di sistema senza cache (cambiano per sezione), dopo il breakpoint del contesto fisso.
+ * @param {object} args
+ * @param {object} args.kb base di conoscenza
+ * @param {Array} args.chapters testi dei capitoli pertinenti (uno o due)
+ * @param {object} args.image foto compressa
+ * @param {object} args.fast risultato della via rapida (answers, reasoningIt, confidence)
+ * @param {string} [args.effort] livello di sforzo, predefinito high
+ * @param {string} [args.model] modello
+ * @return {object} parametri della richiesta
+ */
+function buildDeepRequest({kb, chapters, image, fast, effort = "high", model = MODEL}) {
+  if (!image || !image.base64 || !image.mediaType) throw new Error("Immagine mancante");
+  const system = buildSystemBlocks(kb, "full");
+  system.push({type: "text", text: DEEP_INSTRUCTIONS});
+  for (const ch of chapters || []) system.push({type: "text", text: `<chapter>\n${String(ch).trim()}\n</chapter>`});
+  const fastText = fast ? `Fast answer: ${(fast.answers || []).join(", ") || "none"} (confidence ${fast.confidence || "?"}). ` +
+    `Fast reasoning: ${fast.reasoningIt || ""}` : "No fast answer available.";
+  return {
+    model,
+    max_tokens: DEEP_MAX_TOKENS,
+    thinking: {type: "adaptive"},
+    output_config: {effort, format: {type: "json_schema", schema: DEEP_SCHEMA}},
+    system,
+    messages: [{
+      role: "user",
+      content: [
+        {type: "image", source: {type: "base64", media_type: image.mediaType, data: image.base64}},
+        {type: "text", text: `${USER_TASK}\n${fastText}`},
+      ],
+    }],
+  };
+}
+
+/**
+ * Normalizza la risposta strutturata della via lenta.
+ * @param {object} message risposta di client.messages.create
+ * @return {object} risultato normalizzato
+ */
+function parseDeepResult(message) {
+  if (message.stop_reason === "refusal") throw new Error("Risposta rifiutata dal modello");
+  if (message.stop_reason === "max_tokens") throw new Error("Risposta troncata: max_tokens raggiunto");
+  const text = (message.content || []).filter((b) => b.type === "text").map((b) => b.text).join("");
+  let obj;
+  try {
+    obj = JSON.parse(text);
+  } catch (e) {
+    throw new Error(`Risposta non in JSON valido: ${text.slice(0, 200)}`);
+  }
+  const answers = [...new Set((obj.answers || []).map((a) => String(a).trim().toUpperCase()).filter(Boolean))].sort();
+  return {
+    requiredCount: Number(obj.required_count) || answers.length || 1,
+    answers,
+    explanationIt: String(obj.explanation_it || ""),
+    confidence: ["alta", "media", "bassa"].includes(obj.confidence) ? obj.confidence : "bassa",
+    citations: Array.isArray(obj.citations) ? obj.citations.map(String) : [],
+    agreesWithFast: Boolean(obj.agrees_with_fast),
+    section: SECTION_SLUGS.includes(obj.section) ? obj.section : null,
+  };
+}
+
 module.exports = {
   MODEL, FALLBACK_MODEL, SECTION_SLUGS, VARIANTS, INSTRUCTIONS, USER_TASK, FAST_SCHEMA, MAX_TOKENS,
-  buildSystemBlocks, buildFastRequest, parseFastResult,
+  DEEP_INSTRUCTIONS, DEEP_SCHEMA, DEEP_MAX_TOKENS,
+  buildSystemBlocks, buildFastRequest, parseFastResult, buildDeepRequest, parseDeepResult,
 };
