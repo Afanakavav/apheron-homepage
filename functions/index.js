@@ -8,17 +8,17 @@
  * Config: Secret Manager (EMAIL_USER, EMAIL_PASS) - migrato da .env
  */
 
-const { onRequest, onCall, HttpsError } = require("firebase-functions/v2/https");
-const { defineSecret } = require("firebase-functions/params");
-const admin = require("firebase-admin");
+const {onRequest, onCall, HttpsError} = require("firebase-functions/v2/https");
+const {defineSecret} = require("firebase-functions/params");
+const {initializeApp, getApps} = require("firebase-admin/app");
 const nodemailer = require("nodemailer");
 
 const emailUserSecret = defineSecret("EMAIL_USER");
 const emailPassSecret = defineSecret("EMAIL_PASS");
 
-// Inizializza Firebase Admin (se non già inizializzato)
-if (!admin.apps.length) {
-  admin.initializeApp();
+// Inizializza Firebase Admin se non già inizializzato (API modulare: firebase-admin 14 non espone più admin.apps)
+if (!getApps().length) {
+  initializeApp();
 }
 
 /**
@@ -33,7 +33,7 @@ function createTransporter(emailUser, emailPassword) {
   }
   return nodemailer.createTransport({
     service: "gmail",
-    auth: { user: emailUser, pass: emailPassword },
+    auth: {user: emailUser, pass: emailPassword},
   });
 }
 
@@ -45,37 +45,37 @@ function createTransporter(emailUser, emailPassword) {
  * Credenziali da Secret Manager (EMAIL_USER, EMAIL_PASS).
  */
 exports.sendContactEmail = onCall(
-  {
-    region: "europe-west3",
-    secrets: [emailUserSecret, emailPassSecret],
-  },
-  async (request) => {
-    const data = request.data;
+    {
+      region: "europe-west3",
+      secrets: [emailUserSecret, emailPassSecret],
+    },
+    async (request) => {
+      const data = request.data;
 
-    // Validazione dei dati obbligatori
-    if (!data.nome || !data.email || !data.messaggio) {
-      throw new HttpsError("invalid-argument", "I campi nome, email e messaggio sono obbligatori");
-    }
+      // Validazione dei dati obbligatori
+      if (!data.nome || !data.email || !data.messaggio) {
+        throw new HttpsError("invalid-argument", "I campi nome, email e messaggio sono obbligatori");
+      }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(data.email)) {
-      throw new HttpsError("invalid-argument", "Formato email non valido");
-    }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(data.email)) {
+        throw new HttpsError("invalid-argument", "Formato email non valido");
+      }
 
-    if (data.messaggio.length > 5000) {
-      throw new HttpsError("invalid-argument", "Il messaggio è troppo lungo (massimo 5000 caratteri)");
-    }
+      if (data.messaggio.length > 5000) {
+        throw new HttpsError("invalid-argument", "Il messaggio è troppo lungo (massimo 5000 caratteri)");
+      }
 
-    try {
-      const transporter = createTransporter(
-        emailUserSecret.value(),
-        emailPassSecret.value()
-      );
+      try {
+        const transporter = createTransporter(
+            emailUserSecret.value(),
+            emailPassSecret.value(),
+        );
 
-      // Prepara il contenuto dell'email
-      const emailSubject = `Nuova richiesta consulenza - ${data.tipologia || "Generale"}`;
+        // Prepara il contenuto dell'email
+        const emailSubject = `Nuova richiesta consulenza - ${data.tipologia || "Generale"}`;
 
-      const emailHtml = `
+        const emailHtml = `
       <!DOCTYPE html>
       <html>
         <head>
@@ -138,7 +138,7 @@ exports.sendContactEmail = onCall(
       </html>
       `;
 
-      const emailText = `
+        const emailText = `
 Nuova richiesta di consulenza ricevuta dal sito web.
 
 Nome: ${data.nome}
@@ -154,29 +154,29 @@ ${data.leadId ? `ID Lead (Firestore): ${data.leadId}` : ""}
 Data e ora: ${new Date().toLocaleString("it-IT", {timeZone: "Europe/Rome"})}
       `;
 
-      // Configura l'email
-      const mailOptions = {
-        from: `"Studio Legale Taiti" <${emailUserSecret.value()}>`,
-        to: "francesco.perone00@gmail.com",
-        replyTo: data.email,
-        subject: emailSubject,
-        text: emailText,
-        html: emailHtml,
-      };
+        // Configura l'email
+        const mailOptions = {
+          from: `"Studio Legale Taiti" <${emailUserSecret.value()}>`,
+          to: "francesco.perone00@gmail.com",
+          replyTo: data.email,
+          subject: emailSubject,
+          text: emailText,
+          html: emailHtml,
+        };
 
-      const info = await transporter.sendMail(mailOptions);
-      console.log("Email inviata con successo:", info.messageId);
+        const info = await transporter.sendMail(mailOptions);
+        console.log("Email inviata con successo:", info.messageId);
 
-      return {
-        success: true,
-        messageId: info.messageId,
-        message: "Email inviata con successo",
-      };
-    } catch (error) {
-      console.error("Errore nell'invio dell'email:", error);
-      throw new HttpsError("internal", "Errore nell'invio dell'email. Riprova più tardi.");
-    }
-  }
+        return {
+          success: true,
+          messageId: info.messageId,
+          message: "Email inviata con successo",
+        };
+      } catch (error) {
+        console.error("Errore nell'invio dell'email:", error);
+        throw new HttpsError("internal", "Errore nell'invio dell'email. Riprova più tardi.");
+      }
+    },
 );
 
 /**
@@ -201,13 +201,12 @@ function escapeHtml(text) {
  * Regione: europe-west1, CORS per apheron.io
  */
 exports.sendAppointmentRequest = onRequest({
-  runtime: "nodejs20",
   region: "europe-west1",
   cors: true,
   secrets: [emailUserSecret, emailPassSecret],
 }, (req, res) => {
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
+    return res.status(405).json({error: "Method not allowed"});
   }
 
   const {
@@ -315,7 +314,7 @@ www.apheron.io/studioprofessionalebiancalani
   const emailPass = emailPassSecret.value();
   if (!emailUser || !emailPass) {
     console.error("EMAIL_USER e EMAIL_PASS devono essere configurati in Secret Manager");
-    return res.status(500).json({ error: "Configurazione email mancante" });
+    return res.status(500).json({error: "Configurazione email mancante"});
   }
 
   const transporter = createTransporter(emailUser, emailPass);
@@ -329,15 +328,15 @@ www.apheron.io/studioprofessionalebiancalani
   };
 
   transporter.sendMail(mailOptions)
-    .then(() => {
-      console.log("Email inviata con successo a francesco.perone00@gmail.com");
-      return res.status(200).json({ success: true, message: "Email inviata con successo" });
-    })
-    .catch((error) => {
-      console.error("Errore nell'invio email:", error);
-      return res.status(500).json({
-        error: "Errore nell'invio dell'email",
-        details: error.message,
+      .then(() => {
+        console.log("Email inviata con successo a francesco.perone00@gmail.com");
+        return res.status(200).json({success: true, message: "Email inviata con successo"});
+      })
+      .catch((error) => {
+        console.error("Errore nell'invio email:", error);
+        return res.status(500).json({
+          error: "Errore nell'invio dell'email",
+          details: error.message,
+        });
       });
-    });
 });
