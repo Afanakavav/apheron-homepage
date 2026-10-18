@@ -90,9 +90,9 @@ const MAX_TOKENS = {low: 4000, medium: 6000, high: 12000, xhigh: 16000, max: 160
 
 /**
  * Blocchi di sistema, dal più stabile al meno stabile, con un solo breakpoint di cache sull'ultimo blocco.
- * @param {{compendium?: string, glossary?: string, registry?: string, version?: string}} kb base di conoscenza
- * @param {string} [variant] "full" | "no-compendium" | "model-only"
- * @return {Array<object>} blocchi di testo per il campo system
+ * @param {object} kb base di conoscenza: campi opzionali compendium, glossary, registry (testi) e version
+ * @param {string} variant "full", "no-compendium" oppure "model-only"
+ * @return {Array} blocchi di testo per il campo system
  */
 function buildSystemBlocks(kb, variant = "full") {
   if (!VARIANTS.includes(variant)) throw new Error(`Variante sconosciuta: ${variant}`);
