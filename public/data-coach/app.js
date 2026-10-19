@@ -1,7 +1,7 @@
 // Data Coach — collante fra la pagina, Firebase (auth, Firestore) e le funzioni callable.
 // Le viste sono in index.html; il rendering della risposta è in ui.js; la foto si comprime in image.js.
 
-import { auth, db, signInWithEmailAndPassword, signOut, onAuthStateChanged, doc, updateDoc } from "/firebase-config.js";
+import { auth, db, signInWithEmailAndPassword, signOut, onAuthStateChanged, doc, updateDoc } from "/firebase-config.js?v=2"; // ?v: il file condiviso ha cache di un anno
 import { getApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-functions.js";
 // Stesso URL di /firebase-config.js: stessa istanza del modulo Firestore, quindi lo stesso db.
