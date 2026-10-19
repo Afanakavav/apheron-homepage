@@ -228,6 +228,9 @@ function buildDeepRequest({kb, chapters, image, fast, effort = "high", model = M
   const system = buildSystemBlocks(kb, "full");
   system.push({type: "text", text: DEEP_INSTRUCTIONS});
   for (const ch of chapters || []) system.push({type: "text", text: `<chapter>\n${String(ch).trim()}\n</chapter>`});
+  // Secondo breakpoint di cache sull'ultimo capitolo: i capitoli di una sezione sono stabili e pesano decine di
+  // migliaia di token, cosi' piu' approfondimenti ravvicinati sulla stessa sezione li rileggono dalla cache.
+  if (chapters && chapters.length) system[system.length - 1].cache_control = {type: "ephemeral"};
   const fastText = fast ? `Fast answer: ${(fast.answers || []).join(", ") || "none"} (confidence ${fast.confidence || "?"}). ` +
     `Fast reasoning: ${fast.reasoningIt || ""}` : "No fast answer available.";
   return {
