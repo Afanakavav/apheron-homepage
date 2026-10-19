@@ -4,8 +4,8 @@
 import { auth, db, signInWithEmailAndPassword, signOut, onAuthStateChanged, doc, updateDoc } from "/firebase-config.js";
 import { getApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-functions.js";
-import { compressImage } from "./image.js?v=1";
-import * as ui from "./ui.js?v=1";
+import { compressImage } from "./image.js?v=2";
+import * as ui from "./ui.js?v=2";
 
 const SETTINGS_KEY = "data-coach:settings";
 const functions = getFunctions(getApp(), "europe-west1");

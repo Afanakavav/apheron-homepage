@@ -112,6 +112,7 @@ export function renderResult(r) {
 
   const meta = el("div", "meta");
   if (r.registryExact) meta.append(el("span", "badge", "Nel registro"));
+  if (r.registryConflict) meta.append(el("span", "badge badge-warn", "Registro in disaccordo"));
   if (r.section) meta.append(el("span", "chip", sectionLabel(r.section)));
   const timing = timingChip(r.latencyMs, r.model, r.fellBack);
   if (timing) meta.append(timing);
