@@ -57,6 +57,18 @@ service cloud.firestore {
                       request.auth.token.email == "francesco.perone00@gmail.com";
     }
 
+    // Data Coach (page: /data-coach) - registro delle risposte (foto nel bucket privato, testo qui).
+    // Solo il proprietario legge e scrive; nessuna cancellazione dal client.
+    match /dataCoachLog/{id} {
+      allow read: if request.auth != null &&
+                     request.auth.token.email == "francesco.perone00@gmail.com";
+      // La pagina puo' solo segnare una risposta come dubbia; tutto il resto lo scrivono le funzioni.
+      allow update: if request.auth != null &&
+                       request.auth.token.email == "francesco.perone00@gmail.com" &&
+                       request.resource.data.diff(resource.data).affectedKeys().hasOnly(["dubbia"]);
+      allow create, delete: if false;
+    }
+
     // Deny all other collections by default
     match /{document=**} {
       allow read, write: if false;

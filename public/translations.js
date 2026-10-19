@@ -16,7 +16,7 @@ const TRANSLATIONS = {
     'bio': ' — websites made by hand, for myself and for the people I care about. This is the ever-current table of contents of everything that lives on apheron.io.',
 
     'sec1': 'In my own name',
-    'sec1.count': '4 chapters',
+    'sec1.count': '5 chapters',
     'sec2': 'Commissioned',
     'sec2.count': '4 chapters',
     'sec3': 'Archive',
@@ -61,8 +61,12 @@ const TRANSLATIONS = {
     'e9.meta': 'Team game · 2026',
     'e9.desc': 'A guessing game for my team’s FUN Friday: a spinning wheel, twenty colleagues, three fun facts each, revealed one letter at a time.',
 
+    'e10.title': 'Data Coach',
+    'e10.meta': 'Reserved edition',
+    'e10.desc': 'A private coach for the Salesforce Data 360 Consultant certification.',
+
     'ghost.title': 'Forthcoming ····',
-    'ghost.meta': 'Chapter № 10 will appear here',
+    'ghost.meta': 'Chapter № 11 will appear here',
 
     'colophon.now.label': 'Now — July 2026:',
     'colophon.now': ' settled in Dublin, getting ready for the road trip across Albania.',
@@ -83,7 +87,7 @@ const TRANSLATIONS = {
     'bio': ' — siti fatti a mano, per me e per le persone a cui voglio bene. Questo è il sommario, sempre aggiornato, di tutto quello che vive su apheron.io.',
 
     'sec1': 'In proprio',
-    'sec1.count': '4 capitoli',
+    'sec1.count': '5 capitoli',
     'sec2': 'Su commissione',
     'sec2.count': '4 capitoli',
     'sec3': 'Archivio',
@@ -128,8 +132,12 @@ const TRANSLATIONS = {
     'e9.meta': 'Gioco di squadra · 2026',
     'e9.desc': 'Un gioco a indovinelli per il FUN Friday del mio team: una ruota che gira, venti colleghi, tre curiosità a testa, svelate una lettera alla volta.',
 
+    'e10.title': 'Data Coach',
+    'e10.meta': 'Edizione riservata',
+    'e10.desc': 'Un coach privato per la certificazione Salesforce Data 360 Consultant.',
+
     'ghost.title': 'Di prossima pubblicazione ····',
-    'ghost.meta': 'Il capitolo n. 10 si aggiunge qui',
+    'ghost.meta': 'Il capitolo n. 11 si aggiunge qui',
 
     'colophon.now.label': 'Ora — luglio 2026:',
     'colophon.now': ' vivo a Dublino, preparo il viaggio on the road in Albania.',

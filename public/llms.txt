@@ -10,6 +10,7 @@
 - [Home Assistant](https://apheron.io/home-assistant): private couple's app (login required)
 - [Italian Lessons in Dublin](https://apheron.io/italian-lessons-dublin/): teaching project, 2025 (archive)
 - [Wheel of Facts](https://apheron.io/fun-friday/): FUN Friday team guessing game, 2026
+- [Data Coach](https://apheron.io/data-coach/): private study coach for the Salesforce Data 360 Consultant certification (login required)
 - [Chiara Caruso, nanny](https://apheron.io/tata-chiara-caruso): commissioned site, Prato
 - [Studio Legale Taiti](https://apheron.io/avvocato_carlotta_taiti): commissioned site, Prato
 - [L.A. Mason Group](https://apheron.io/lamasongroup/): commissioned site, Florence

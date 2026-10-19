@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Data Coach</title>
+  <meta name="description" content="Strumento privato di allenamento: fotografa una domanda e ricevi la risposta con la spiegazione." />
+  <meta name="theme-color" content="#032D60" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Data Coach" />
+  <meta name="format-detection" content="telephone=no" />
+  <link rel="manifest" href="/data-coach/manifest.json" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/data-coach/icon-192.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/data-coach/apple-touch-icon.png" />
+  <link rel="preload" href="/fonts/manrope-var-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="/data-coach/styles.css?v=1" />
+</head>
+<body data-view="login">
+  <div class="splash" id="splash" aria-hidden="true"><span class="splash-badge">DC</span></div>
+
+  <!-- ============ LOGIN ============ -->
+  <main class="login" id="login">
+    <section class="login-card">
+      <p class="eyebrow">Data Coach</p>
+      <h1>Accedi</h1>
+      <p class="lede">Area privata: entra con il tuo account.</p>
+      <form class="login-form" id="login-form" novalidate>
+        <label for="login-email">Email</label>
+        <input id="login-email" name="email" type="email" inputmode="email" autocomplete="username" autocapitalize="none" spellcheck="false" required />
+        <label for="login-password">Password</label>
+        <input id="login-password" name="password" type="password" autocomplete="current-password" required />
+        <p class="form-error" id="login-error" role="alert"></p>
+        <button class="btn btn-primary btn-xl" type="submit" id="login-submit">Entra</button>
+      </form>
+    </section>
+  </main>
+
+  <!-- ============ COACH ============ -->
+  <main class="coach" id="coach" hidden>
+    <header class="topbar">
+      <span class="brand">Data Coach</span>
+      <span class="status" id="status" data-state="starting" role="status">avvio…</span>
+      <button class="icon-btn" type="button" id="settings-open" aria-label="Impostazioni">
+        <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+    </header>
+
+    <section class="stage" id="stage">
+      <div class="capture" id="capture">
+        <div class="capture-art" aria-hidden="true">
+          <svg viewBox="0 0 96 96" width="96" height="96" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="10" y="22" width="76" height="56" rx="10"/><path d="M34 22l5-8h18l5 8"/><path d="M52 36l-12 18h11l-3 14 14-20H51z" fill="currentColor" stroke="none"/></svg>
+        </div>
+        <button class="btn btn-primary btn-xl btn-camera" type="button" id="btn-camera">Fotografa la domanda</button>
+        <button class="btn btn-xl" type="button" id="btn-gallery">Scegli dalla galleria</button>
+        <p class="hint" id="capture-hint">Inquadra tutta la domanda con le opzioni, in verticale e senza ombre.</p>
+      </div>
+      <div class="work" id="work" hidden>
+        <img class="thumb" id="thumb" alt="Foto della domanda" />
+        <div class="result-root" id="result-root"></div>
+      </div>
+    </section>
+
+    <input class="vh" type="file" id="file-camera" accept="image/*" capture="environment" tabindex="-1" aria-hidden="true" />
+    <input class="vh" type="file" id="file-gallery" accept="image/*" tabindex="-1" aria-hidden="true" />
+  </main>
+
+  <!-- ============ IMPOSTAZIONI ============ -->
+  <dialog class="settings" id="settings" aria-labelledby="settings-title">
+    <form method="dialog" class="settings-body">
+      <h2 id="settings-title">Impostazioni</h2>
+      <div class="field">
+        <label for="set-effort">Sforzo della risposta rapida</label>
+        <select id="set-effort">
+          <option value="low">low · più veloce</option>
+          <option value="medium" selected>medium · consigliato</option>
+          <option value="high">high · più accurato</option>
+        </select>
+      </div>
+      <label class="field switch" for="set-autodeep">
+        <span>Approfondisci automatico<small>Quando la confidenza è bassa</small></span>
+        <input type="checkbox" id="set-autodeep" checked />
+      </label>
+      <p class="settings-user" id="settings-user"></p>
+      <div class="settings-actions">
+        <button class="btn btn-primary" type="submit">Chiudi</button>
+        <button class="btn btn-danger" type="button" id="btn-signout">Esci</button>
+      </div>
+    </form>
+  </dialog>
+
+  <noscript><p class="noscript">Data Coach ha bisogno di JavaScript.</p></noscript>
+  <script src="/config.local.js" onerror="console.warn('config.local.js non trovato: uso la configurazione segnaposto')"></script>
+  <script type="module" src="/data-coach/app.js?v=1"></script>
+</body>
+</html>

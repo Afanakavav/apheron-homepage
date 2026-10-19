@@ -340,3 +340,37 @@ www.apheron.io/studioprofessionalebiancalani
         });
       });
 });
+
+/**
+ * Data Coach (apheron.io/data-coach/): tre callable in europe-west1, utente singolo, chiave Anthropic dal Secret
+ * Manager. Logica in data-coach/coach.js; nessun dato d'esame in questo repository.
+ * enforceAppCheck resta false finche' App Check non viene imposto (fase 4).
+ */
+const dataCoach = require("./data-coach/coach");
+
+exports.dataCoachPing = onCall(
+    {region: "europe-west1", memory: "512MiB", timeoutSeconds: 60, enforceAppCheck: false},
+    dataCoach.ping,
+);
+
+exports.dataCoachAnswer = onCall(
+    {
+      region: "europe-west1",
+      memory: "512MiB",
+      timeoutSeconds: 60,
+      enforceAppCheck: false,
+      secrets: [dataCoach.anthropicKey],
+    },
+    dataCoach.answer,
+);
+
+exports.dataCoachDeep = onCall(
+    {
+      region: "europe-west1",
+      memory: "512MiB",
+      timeoutSeconds: 300,
+      enforceAppCheck: false,
+      secrets: [dataCoach.anthropicKey],
+    },
+    dataCoach.deep,
+);

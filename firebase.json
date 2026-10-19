@@ -81,6 +81,14 @@
         "destination": "/fun-friday/index.html"
       },
       {
+        "source": "/data-coach",
+        "destination": "/data-coach/index.html"
+      },
+      {
+        "source": "/data-coach/**",
+        "destination": "/data-coach/index.html"
+      },
+      {
         "source": "/italian-lessons-dublin",
         "destination": "/italian-lessons-dublin/index.html"
       },
@@ -176,6 +184,15 @@
           {
             "key": "Cache-Control",
             "value": "max-age=0, must-revalidate"
+          }
+        ]
+      },
+      {
+        "regex": "^/data-coach(/.*)?$",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, no-store, must-revalidate"
           }
         ]
       }
