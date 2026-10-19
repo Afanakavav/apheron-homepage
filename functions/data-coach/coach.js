@@ -323,11 +323,16 @@ async function ping(request) {
   return {ok: true, kbVersion: kb.version, warm, loadMs};
 }
 
+/** PNG 1x1 bianco: immagine minuscola per la richiesta di riscaldamento. */
+const WARM_IMAGE_BASE64 = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+ip1sAAAAASUVORK5CYII=";
+/** Uscita massima della richiesta di riscaldamento: ci interessa solo il prefill che scrive la cache. */
+const WARM_MAX_TOKENS = 16;
+
 /**
  * Riscaldamento della via rapida: carica la base di conoscenza su QUESTA istanza e scrive (o rinfresca) la cache
- * del prompt con una richiesta a max_tokens 0, come indica lo skill claude-api (sezione "Pre-warming"): il modello
- * esegue solo il prefill, nessun token di uscita. Stessi blocchi di sistema, stesso thinking e stesso sforzo della
- * richiesta vera, cosi' la prima foto trova la cache calda.
+ * del prompt. Misurato in produzione: una richiesta a max_tokens 0 senza output_config.format NON scalda la cache
+ * della richiesta vera, perche' lo schema dell'uscita strutturata entra nel prefisso. Quindi il riscaldamento usa
+ * esattamente la richiesta vera (stesso sforzo, stesso schema) con un'immagine 1x1 e un'uscita di pochi token.
  * @param {{uid: string, email: string}} user utente ammesso
  * @param {object} data request.data ({warm: true, effort})
  * @return {Promise<object>} stato del riscaldamento
@@ -338,14 +343,17 @@ async function warm(user, data) {
   const t0 = Date.now();
   let usage = null;
   try {
-    const message = await getClient().messages.create({
+    const params = prompt.buildFastRequest({
+      kb: {compendium: kb.compendium, glossary: kb.glossary, registry: kb.registry, version: kb.version},
+      image: {mediaType: "image/png", base64: WARM_IMAGE_BASE64},
+      effort,
+      variant: "full",
       model: prompt.MODEL,
-      max_tokens: 0,
-      thinking: {type: "adaptive"},
-      output_config: {effort},
-      system: prompt.buildSystemBlocks({compendium: kb.compendium, glossary: kb.glossary, registry: kb.registry}, "full"),
-      messages: [{role: "user", content: "warmup"}],
-    }, {timeout: FAST_TIMEOUT_MS[effort], maxRetries: FAST_MAX_RETRIES});
+    });
+    params.max_tokens = WARM_MAX_TOKENS;
+    const message = await getClient().messages.create(params, {
+      timeout: FAST_TIMEOUT_MS[effort], maxRetries: FAST_MAX_RETRIES,
+    });
     usage = usageOf(message);
   } catch (err) {
     logger.warn("dataCoachAnswer: pre-riscaldamento della cache non riuscito", describeError(err));
