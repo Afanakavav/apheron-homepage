@@ -374,3 +374,8 @@ exports.dataCoachDeep = onCall(
     },
     dataCoach.deep,
 );
+
+exports.dataCoachPhoto = onCall(
+    {region: "europe-west1", memory: "256MiB", timeoutSeconds: 30, enforceAppCheck: false},
+    dataCoach.photo,
+);

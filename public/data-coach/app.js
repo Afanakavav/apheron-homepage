@@ -4,8 +4,10 @@
 import { auth, db, signInWithEmailAndPassword, signOut, onAuthStateChanged, doc, updateDoc } from "/firebase-config.js";
 import { getApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-functions.js";
-import { compressImage } from "./image.js?v=2";
-import * as ui from "./ui.js?v=2";
+// Stesso URL di /firebase-config.js: stessa istanza del modulo Firestore, quindi lo stesso db.
+import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { compressImage } from "./image.js?v=3";
+import * as ui from "./ui.js?v=3";
 
 const SETTINGS_KEY = "data-coach:settings";
 const functions = getFunctions(getApp(), "europe-west1");
@@ -15,6 +17,7 @@ const callAnswer = httpsCallable(functions, "dataCoachAnswer", { timeout: 70000 
 const WARM_MIN_GAP_MS = 4 * 60 * 1000;
 let lastWarmAt = 0;
 const callDeep = httpsCallable(functions, "dataCoachDeep", { timeout: 310000 });
+const callPhoto = httpsCallable(functions, "dataCoachPhoto", { timeout: 35000 });
 
 const $ = (id) => document.getElementById(id);
 const state = { user: null, fast: null, busy: false, thumbUrl: null, settings: loadSettings() };
@@ -135,6 +138,8 @@ function resetStage() {
   $("result-root").replaceChildren();
   $("work").hidden = true;
   $("capture").hidden = false;
+  $("dubbie").hidden = true;
+  $("stage").hidden = false;
 }
 
 function showWork(file) {
@@ -230,4 +235,69 @@ $("btn-signout").addEventListener("click", async () => {
   settings.close();
   resetStage();
   try { await signOut(auth); } catch (e) { /* onAuthStateChanged aggiorna comunque la vista */ }
+});
+
+// ---------- domande dubbie ----------
+
+function showDubbie(open) {
+  $("stage").hidden = open;
+  $("dubbie").hidden = !open;
+  window.scrollTo(0, 0);
+}
+
+async function loadDubbie() {
+  const list = $("dubbie-list");
+  list.replaceChildren(ui.renderBusy("Carico le domande dubbie…"));
+  const stop = tick(list.querySelector(".busy-seconds"));
+  try {
+    // Solo il filtro su "dubbia": l'ordinamento si fa qui, cosi' non serve un indice composito.
+    const snap = await getDocs(query(collection(db, "dataCoachLog"), where("dubbia", "==", true)));
+    const items = snap.docs.map((d) => ({ id: d.id, ...d.data() }))
+        .sort((a, b) => ((b.createdAt && b.createdAt.toMillis ? b.createdAt.toMillis() : 0) -
+          (a.createdAt && a.createdAt.toMillis ? a.createdAt.toMillis() : 0)));
+    list.replaceChildren(ui.renderDubbieList(items));
+  } catch (err) {
+    list.replaceChildren(ui.renderError(ui.errorMessage(err), { detail: detailOf(err) }));
+  } finally {
+    stop();
+  }
+}
+
+async function showPhoto(item, btn) {
+  const slot = item.querySelector(".dubbia-photo");
+  btn.disabled = true;
+  btn.textContent = "Carico la foto…";
+  try {
+    const { data } = await callPhoto({ logId: item.dataset.logId });
+    const img = document.createElement("img");
+    img.alt = "Foto della domanda";
+    img.src = `data:${data.mediaType};base64,${data.base64}`;
+    slot.replaceChildren(img);
+    btn.hidden = true;
+  } catch (err) {
+    btn.disabled = false;
+    btn.textContent = "Mostra foto";
+    slot.replaceChildren(ui.renderError(ui.errorMessage(err)));
+  }
+}
+
+async function undubbia(item, btn) {
+  btn.disabled = true;
+  try {
+    await updateDoc(doc(db, "dataCoachLog", item.dataset.logId), { dubbia: false });
+    item.remove();
+  } catch (err) {
+    btn.disabled = false;
+    btn.textContent = "Riprova";
+  }
+}
+
+$("dubbie-open").addEventListener("click", () => { showDubbie(true); loadDubbie(); });
+$("dubbie-close").addEventListener("click", () => showDubbie(false));
+$("dubbie-list").addEventListener("click", (e) => {
+  const btn = e.target.closest("[data-action]");
+  const item = e.target.closest(".dubbia-item");
+  if (!btn || !item) return;
+  if (btn.dataset.action === "photo") showPhoto(item, btn);
+  else if (btn.dataset.action === "undubbia") undubbia(item, btn);
 });

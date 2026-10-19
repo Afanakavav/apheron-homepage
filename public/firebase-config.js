@@ -31,10 +31,12 @@ if (typeof window !== 'undefined') {
     const recaptchaSiteKey = window.RECAPTCHA_SITE_KEY || '6LffriksAAAAAKvSqVFkxt6ggpicybwvV_yVF3Jq';
     
     // Import App Check dynamically
-    import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check.js').then(({ initializeAppCheck, ReCaptchaV3Provider }) => {
-      // Initialize App Check with reCAPTCHA v3
+    // La chiave del sito e' registrata in App Check come reCAPTCHA Enterprise (domini apheron.io e localhost):
+    // con il provider v3 lo scambio del token rispondeva 400. Corretto il 2026-10-19.
+    import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check.js').then(({ initializeAppCheck, ReCaptchaEnterpriseProvider }) => {
+      // Initialize App Check with reCAPTCHA Enterprise
       const appCheck = initializeAppCheck(app, {
-        provider: new ReCaptchaV3Provider(recaptchaSiteKey),
+        provider: new ReCaptchaEnterpriseProvider(recaptchaSiteKey),
         isTokenAutoRefreshEnabled: true
       });
       

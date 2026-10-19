@@ -99,4 +99,36 @@ test.describe("Data Coach", () => {
       auth: "Email o password non corretti",
     });
   });
+
+  test("ui.js rende la lista delle domande dubbie", async ({ page }) => {
+    await page.goto(BASE);
+    await expect(page.locator("#dubbie-open")).toHaveCount(1);
+    await expect(page.locator("#dubbie")).toBeHidden();
+    await page.evaluate(async () => {
+      const ui = await import("/data-coach/ui.js");
+      const root = document.createElement("div");
+      root.id = "dubbie-test";
+      document.body.append(root);
+      root.append(ui.renderDubbieList([
+        { id: "log-1", createdAt: "2026-10-19T13:10:20Z", questionStem: "Domanda dubbia di prova", answers: ["A"],
+          confidence: "alta", reasoningIt: "Motivo rapido.", section: "ingestion", registryConflict: true,
+          deep: { answers: ["C"], explanationIt: "Motivo dell'approfondimento.", confidence: "alta", citations: ["Help"] } },
+        { id: "log-2", questionStem: "Seconda", answers: ["B", "D"], confidence: "bassa", deep: null },
+      ]));
+      const empty = document.createElement("div");
+      empty.id = "dubbie-empty";
+      document.body.append(empty);
+      empty.append(ui.renderDubbieList([]));
+    });
+    const root = page.locator("#dubbie-test");
+    await expect(root.locator(".dubbia-item")).toHaveCount(2);
+    await expect(root).toContainText("2 domande dubbie");
+    await expect(root.locator(".dubbia-item").first()).toContainText("Domanda dubbia di prova");
+    await expect(root.locator(".dubbia-item").first().locator(".deep-head")).toHaveText("Cambia in C");
+    await expect(root.locator(".dubbia-item").first().locator(".badge-warn")).toHaveText("Registro in disaccordo");
+    await expect(root.locator(".dubbia-item").nth(1).locator(".letters")).toHaveText("B · D");
+    await expect(root.getByRole("button", { name: "Mostra foto" })).toHaveCount(2);
+    await expect(root.getByRole("button", { name: "Non più dubbia" })).toHaveCount(2);
+    await expect(page.locator("#dubbie-empty")).toContainText("Nessuna domanda segnata come dubbia.");
+  });
 });

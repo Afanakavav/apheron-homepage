@@ -183,3 +183,64 @@ export function renderError(message, { detail = "", retry = false } = {}) {
   }
   return frag;
 }
+
+// ---------- lista delle domande dubbie ----------
+
+/** Data e ora brevi in italiano da un Timestamp Firestore, una Date o una stringa ISO. */
+export function formatWhen(value) {
+  let d = null;
+  if (value && typeof value.toDate === "function") d = value.toDate();
+  else if (value instanceof Date) d = value;
+  else if (typeof value === "string" || typeof value === "number") d = new Date(value);
+  if (!d || Number.isNaN(d.getTime())) return "";
+  return d.toLocaleString("it-IT", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
+}
+
+/**
+ * Una domanda segnata come dubbia: risposta rapida, eventuale approfondimento e azioni (foto, non più dubbia).
+ * item = { id, createdAt, questionStem, answers, requiredCount, confidence, reasoningIt, section, registryConflict,
+ *          deep: {answers, explanationIt, confidence, citations} | null }
+ */
+export function renderDubbiaItem(item) {
+  const root = el("article", "result dubbia-item");
+  root.dataset.logId = item.id || "";
+
+  const top = el("div", "meta");
+  const when = formatWhen(item.createdAt);
+  if (when) top.append(el("span", "chip", when));
+  if (item.section) top.append(el("span", "chip", sectionLabel(item.section)));
+  if (item.registryConflict) top.append(el("span", "badge badge-warn", "Registro in disaccordo"));
+  root.append(top);
+
+  if (item.questionStem) root.append(el("p", "dubbia-stem", item.questionStem));
+
+  const head = el("div", "result-head");
+  const fast = el("div", "dubbia-answer");
+  fast.append(el("span", "deep-label", "Risposta rapida"), el("span", "letters letters-small", formatLetters(item.answers) || "—"));
+  head.append(fast, renderPill(item.confidence));
+  root.append(head);
+  if (item.reasoningIt) root.append(el("p", "reasoning", item.reasoningIt));
+
+  if (item.deep && Array.isArray(item.deep.answers)) {
+    root.append(renderDeep(item.deep, { answers: item.answers || [] }));
+  }
+
+  const photo = el("div", "dubbia-photo");
+  root.append(photo);
+  const actions = el("div", "actions");
+  actions.append(button("btn", "photo", "Mostra foto"), button("btn", "undubbia", "Non più dubbia"));
+  root.append(actions);
+  return root;
+}
+
+/** Elenco completo, dal più recente; con nessun elemento mostra un messaggio vuoto. */
+export function renderDubbieList(items) {
+  const frag = document.createDocumentFragment();
+  if (!items || !items.length) {
+    frag.append(el("p", "hint", "Nessuna domanda segnata come dubbia."));
+    return frag;
+  }
+  frag.append(el("p", "hint", items.length === 1 ? "1 domanda dubbia" : `${items.length} domande dubbie`));
+  for (const it of items) frag.append(renderDubbiaItem(it));
+  return frag;
+}

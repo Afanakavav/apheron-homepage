@@ -335,9 +335,10 @@ const WARM_MAX_TOKENS = 16;
  * esattamente la richiesta vera (stesso sforzo, stesso schema) con un'immagine 1x1 e un'uscita di pochi token.
  * @param {{uid: string, email: string}} user utente ammesso
  * @param {object} data request.data ({warm: true, effort})
+ * @param {string} appCheck stato del token App Check ("valid" o "missing"), solo per i log
  * @return {Promise<object>} stato del riscaldamento
  */
-async function warm(user, data) {
+async function warm(user, data, appCheck) {
   const effort = EFFORTS.includes(data.effort) ? data.effort : DEFAULT_EFFORT;
   const {kb, warm: kbWarm, loadMs} = await kbOrThrow("dataCoachAnswer");
   const t0 = Date.now();
@@ -359,7 +360,9 @@ async function warm(user, data) {
     logger.warn("dataCoachAnswer: pre-riscaldamento della cache non riuscito", describeError(err));
   }
   const prewarmMs = Date.now() - t0;
-  logger.info("dataCoachAnswer: warm", {uid: user.uid, kbVersion: kb.version, kbWarm, loadMs, prewarmMs, usage});
+  logger.info("dataCoachAnswer: warm", {
+    uid: user.uid, kbVersion: kb.version, kbWarm, loadMs, prewarmMs, usage, appCheck,
+  });
   return {
     ok: true, warm: true, kbVersion: kb.version, kbWarm, loadMs, prewarmMs,
     cacheWrite: usage ? usage.cacheWrite : null, cacheRead: usage ? usage.cacheRead : null,
@@ -374,7 +377,7 @@ async function warm(user, data) {
 async function answer(request) {
   const user = requireUser(request);
   const data = request.data && typeof request.data === "object" ? request.data : {};
-  if (data.warm === true) return warm(user, data);
+  if (data.warm === true) return warm(user, data, appCheckState(request));
   const input = parseAnswerData(data);
   const {kb} = await kbOrThrow("dataCoachAnswer");
 
@@ -429,6 +432,7 @@ async function answer(request) {
     email: user.email,
     createdAt: FieldValue.serverTimestamp(),
     status: "ok",
+    appCheck: appCheckState(request),
     photoHash,
     photoPath: savedPhotoPath,
     mediaType: input.mediaType,
@@ -461,6 +465,7 @@ async function answer(request) {
   logger.info("dataCoachAnswer: risposta", {
     logId, answers: result.answers, confidence: result.confidence, section: result.section,
     latencyMs: call.latencyMs, model: call.model, fellBack: call.fellBack, costUsd: cost, usage,
+    appCheck: appCheckState(request),
   });
   return {
     logId,
@@ -551,14 +556,51 @@ async function deep(request) {
   logger.info("dataCoachDeep: risposta", {
     logId, answers: review.answers, agreesWithFast: review.agreesWithFast, confidence: review.confidence,
     chapters: chapters.indexes, latencyMs: review.latencyMs, model: review.model, fellBack: review.fellBack,
-    costUsd: review.costUsd, usage: review.usage,
+    costUsd: review.costUsd, usage: review.usage, appCheck: appCheckState(request),
   });
   return {logId, ...stored, createdAt: createdAt.toDate().toISOString()};
 }
 
+/**
+ * Stato del token App Check della richiesta, per il monitoraggio prima dell'enforcement: le callable v2 verificano il
+ * token se presente e valorizzano request.app solo quando e' valido.
+ * @param {object} request richiesta della callable
+ * @return {string} "valid" oppure "missing"
+ */
+function appCheckState(request) {
+  return request && request.app ? "valid" : "missing";
+}
+
+/**
+ * dataCoachPhoto: restituisce la foto registrata di una risposta (solo al proprietario), per la lista delle dubbie.
+ * @param {object} request richiesta della callable ({logId})
+ * @return {Promise<{logId: string, mediaType: string, base64: string}>} foto in base64
+ */
+async function photo(request) {
+  const user = requireUser(request);
+  const data = request.data && typeof request.data === "object" ? request.data : {};
+  const logId = typeof data.logId === "string" ? data.logId.trim() : "";
+  if (!LOG_ID_RE.test(logId)) throw invalid("logId mancante o non valido.");
+  const snap = await getFirestore().collection(LOG_COLLECTION).doc(logId).get();
+  if (!snap.exists) throw new HttpsError("not-found", "Risposta non trovata.");
+  const log = snap.data();
+  if (log.uid !== user.uid) throw new HttpsError("permission-denied", "Risposta di un altro utente.");
+  if (!log.photoPath || !Object.prototype.hasOwnProperty.call(MEDIA_TYPES, log.mediaType)) {
+    throw new HttpsError("failed-precondition", "Foto non disponibile per questa risposta.");
+  }
+  try {
+    const [bytes] = await getStorage().bucket(kbStore.BUCKET).file(log.photoPath).download();
+    logger.info("dataCoachPhoto: foto", {logId, bytes: bytes.length, appCheck: appCheckState(request)});
+    return {logId, mediaType: log.mediaType, base64: bytes.toString("base64")};
+  } catch (err) {
+    logger.warn("dataCoachPhoto: foto non leggibile", {logId, ...describeError(err)});
+    throw new HttpsError("failed-precondition", "Foto non piu' disponibile (le foto restano 30 giorni).");
+  }
+}
+
 module.exports = {
   anthropicKey, ALLOWED_EMAILS, LOG_COLLECTION, PRICES,
-  ping, answer, deep,
+  ping, answer, deep, photo, appCheckState,
   // Aiuti esportati per i test unitari (nessuna chiamata di rete).
   requireUser, parseAnswerData, usageOf, costUsd, isOverloaded, toHttpsError, callModel,
   selectChapterIndexes, loadChaptersFor, reviewDeep,
