@@ -69,6 +69,21 @@ service cloud.firestore {
       allow create, delete: if false;
     }
 
+    // Exam Coach (generic engine) - log of the answers, deep reviews and warm-ups (photos in the private bucket,
+    // text here). Only the owner's account (uid and email) reads; the page may only toggle the "flagged" mark;
+    // the functions write everything else; no deletion from the client.
+    match /examCoachLog/{id} {
+      allow read: if request.auth != null &&
+                     request.auth.uid == "x5PmQWOKoBcGrrqzxVIdVx5Mi0t1" &&
+                     request.auth.token.email == "francesco.perone00@gmail.com";
+      allow update: if request.auth != null &&
+                       request.auth.uid == "x5PmQWOKoBcGrrqzxVIdVx5Mi0t1" &&
+                       request.auth.token.email == "francesco.perone00@gmail.com" &&
+                       request.resource.data.diff(resource.data).affectedKeys().hasOnly(["flagged"]) &&
+                       request.resource.data.flagged is bool;
+      allow create, delete: if false;
+    }
+
     // Deny all other collections by default
     match /{document=**} {
       allow read, write: if false;

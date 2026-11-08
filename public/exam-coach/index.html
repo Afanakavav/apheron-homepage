@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Exam Coach</title>
+  <meta name="description" content="Private study tool: photograph a practice question and get the answer with a short explanation." />
+  <meta name="theme-color" content="#0E3B43" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Exam Coach" />
+  <meta name="format-detection" content="telephone=no" />
+  <!-- Absolute paths only: the page is served at /exam-coach/<examId>/ through a rewrite. -->
+  <link rel="manifest" href="/exam-coach/manifest.json" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/exam-coach/icon-192.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/exam-coach/apple-touch-icon.png" />
+  <link rel="preload" href="/fonts/manrope-var-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="/exam-coach/styles.css?v=1" />
+</head>
+<body data-view="login">
+  <div class="splash" id="splash" aria-hidden="true"><span class="splash-badge">EC</span></div>
+
+  <!-- ============ SIGN IN ============ -->
+  <main class="login" id="login">
+    <section class="login-card">
+      <p class="eyebrow">Exam Coach</p>
+      <h1>Sign in</h1>
+      <p class="lede"><strong data-exam-name>Exam Coach</strong> · private study tool. Sign in with your account.</p>
+      <!-- onsubmit: without app.js the browser must not send the password in the URL. -->
+      <form class="login-form" id="login-form" novalidate onsubmit="return false;">
+        <label for="login-email">Email</label>
+        <input id="login-email" name="email" type="email" inputmode="email" autocomplete="username" autocapitalize="none" spellcheck="false" required />
+        <label for="login-password">Password</label>
+        <input id="login-password" name="password" type="password" autocomplete="current-password" required />
+        <p class="form-error" id="login-error" role="alert"></p>
+        <button class="btn btn-primary btn-xl" type="submit" id="login-submit">Sign in</button>
+      </form>
+    </section>
+  </main>
+
+  <!-- ============ COACH ============ -->
+  <main class="coach" id="coach" hidden>
+    <header class="topbar">
+      <h1 class="brand">
+        <span class="brand-kicker">Exam Coach</span>
+        <span class="brand-exam" data-exam-name>Exam Coach</span>
+      </h1>
+      <!-- The label is the live text; the seconds counter is aria-hidden so its ticks are not announced. -->
+      <span class="status" id="status" data-state="starting" role="status"><span class="status-label">starting…</span><span class="status-seconds" aria-hidden="true"></span></span>
+      <button class="icon-btn" type="button" id="doubtful-open" aria-label="Doubtful questions">
+        <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 5.5a1.5 1.5 0 0 1 3 0c0 1-1.5 1.2-1.5 2.2"/><path d="M5.5 10.8v.01"/><path d="M4 12.5h3M4 18.5h3"/></svg>
+      </button>
+      <button class="icon-btn" type="button" id="settings-open" aria-label="Settings">
+        <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </button>
+    </header>
+
+    <section class="stage" id="stage">
+      <div class="capture" id="capture">
+        <div class="capture-art" aria-hidden="true">
+          <svg viewBox="0 0 96 96" width="96" height="96" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="10" y="22" width="76" height="56" rx="10"/><path d="M34 22l5-8h18l5 8"/><path d="M36 51l9 9 16-18" stroke-width="6"/></svg>
+        </div>
+        <button class="btn btn-primary btn-xl btn-camera" type="button" id="btn-camera">Take photo</button>
+        <button class="btn btn-xl" type="button" id="btn-library">Choose from library</button>
+        <p class="hint" id="capture-hint">Fit the whole question and all its options in the photo, upright and without glare.</p>
+      </div>
+      <div class="work" id="work" hidden>
+        <img class="thumb" id="thumb" alt="Photo of the question" />
+        <div class="result-root" id="result-root" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="doubtful" id="doubtful" hidden>
+      <div class="doubtful-head">
+        <h2>Doubtful questions</h2>
+        <button class="btn" type="button" id="doubtful-close">Back</button>
+      </div>
+      <div class="result-root" id="doubtful-list"></div>
+    </section>
+
+    <input class="vh" type="file" id="file-camera" accept="image/*" capture="environment" tabindex="-1" aria-hidden="true" />
+    <input class="vh" type="file" id="file-library" accept="image/*" tabindex="-1" aria-hidden="true" />
+  </main>
+
+  <!-- ============ SETTINGS ============ -->
+  <dialog class="settings" id="settings" aria-labelledby="settings-title">
+    <form method="dialog" class="settings-body">
+      <h2 id="settings-title">Settings</h2>
+      <label class="field switch" for="set-autodeep">
+        <span>Automatic deep review<small>When the confidence is low</small></span>
+        <input type="checkbox" id="set-autodeep" checked />
+      </label>
+      <p class="settings-user" id="settings-user"></p>
+      <p class="settings-user" id="settings-pack"></p>
+      <div class="settings-actions">
+        <button class="btn btn-primary" type="submit">Close</button>
+        <button class="btn btn-danger" type="button" id="btn-signout">Sign out</button>
+      </div>
+    </form>
+  </dialog>
+
+  <noscript><p class="noscript">Exam Coach needs JavaScript.</p></noscript>
+  <script src="/config.local.js" onerror="console.warn('config.local.js not found: using the placeholder configuration')"></script>
+  <script type="module" src="/exam-coach/boot.js?v=1"></script>
+  <script type="module" src="/exam-coach/app.js?v=1" onerror="document.getElementById('login-error').textContent = 'Could not load the sign-in service. Check the connection and reload.'"></script>
+</body>
+</html>

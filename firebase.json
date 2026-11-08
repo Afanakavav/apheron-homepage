@@ -89,6 +89,22 @@
         "destination": "/data-coach/index.html"
       },
       {
+        "source": "/exam-coach",
+        "destination": "/exam-coach/index.html"
+      },
+      {
+        "source": "/exam-coach/aigp",
+        "destination": "/exam-coach/index.html"
+      },
+      {
+        "source": "/exam-coach/aigp/**",
+        "destination": "/exam-coach/index.html"
+      },
+      {
+        "source": "/exam-coach/**",
+        "destination": "/exam-coach/index.html"
+      },
+      {
         "source": "/italian-lessons-dublin",
         "destination": "/italian-lessons-dublin/index.html"
       },
@@ -189,6 +205,15 @@
       },
       {
         "regex": "^/data-coach(/.*)?$",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache, no-store, must-revalidate"
+          }
+        ]
+      },
+      {
+        "regex": "^/exam-coach(/.*)?$",
         "headers": [
           {
             "key": "Cache-Control",
