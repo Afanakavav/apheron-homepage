@@ -2,7 +2,7 @@
 /**
  * Exam Coach: handlers of the callables of the generic engine (one knowledge pack per exam).
  *
- * - examCoachAnswer({examId, mode, image?, previousLogId?, force?}):
+ * - examCoachAnswer({examId, mode, image?, previousLogId?, force?, requestId?}):
  *   - mode "answer": photo -> Claude (engine/prompt.js buildRequest) -> letters, short explanation, citations,
  *     confidence; the photo goes to the private bucket (photos/<logId>.<ext>) in parallel (the reply waits for it
  *     at most PHOTO_WAIT_MS after the model call), the result to Firestore (examCoachLog/<logId>).
@@ -13,6 +13,11 @@
  *     cache when a study session opens; it also loads the pack on this instance. Logged like the others, because
  *     cache writes are the main cost.
  * - examCoachPhoto({logId}): the stored photo of an answer, in base64, to its owner only.
+ * - requestId (20 letters and digits, made by the page): the id of the request's log document, created with status
+ *   "running" before the model call and overwritten with the result ("ok" or "error"). iOS Safari drops a request
+ *   that receives nothing for about 60 s (a deep review takes 1-3 minutes), and a locked phone cuts it too; the
+ *   function goes on regardless, so the page reads the result from that document. A requestId already used is
+ *   refused ("already-exists"); without one the log document gets an automatic id, as before.
  *
  * Rules: no exam material and no key in this file or anywhere in this repository; packs come from the private
  * bucket (kb.js), the Anthropic key from Secret Manager (EXAM_COACH_ANTHROPIC_KEY) and is never logged.
@@ -63,6 +68,8 @@ const MEDIA_TYPES = {"image/jpeg": "jpg", "image/png": "png", "image/webp": "web
 const MAX_IMAGE_BASE64 = 5 * 1024 * 1024;
 const BASE64_RE = /^[A-Za-z0-9+/]+={0,2}$/;
 const LOG_ID_RE = /^[A-Za-z0-9_-]{1,64}$/;
+/** requestId sent by the page: the shape of a Firestore automatic id (20 letters and digits). */
+const REQUEST_ID_RE = /^[A-Za-z0-9]{20}$/;
 /**
  * Production settings used when pack.json has no "production" block (or leaves a field out). The block is
  * required at publish time; its absence is logged once per loaded pack version.
@@ -268,7 +275,8 @@ function parseImage(image) {
 /**
  * Validates the data of examCoachAnswer.
  * @param {*} data request.data
- * @return {{examId: string, mode: string, image: (object|null), previousLogId: (string|null), force: boolean}} input
+ * @return {{examId: string, mode: string, image: (object|null), previousLogId: (string|null), force: boolean,
+ *   requestId: (string|null)}} input
  */
 function parseAnswerData(data) {
   const d = plainData(data);
@@ -286,7 +294,12 @@ function parseAnswerData(data) {
   const image = mode !== "warm" && d.image !== undefined && d.image !== null ? parseImage(d.image) : null;
   if (mode === "answer" && !image) throw invalid("Photo missing.");
   if (mode === "deep" && !image && !previousLogId) throw invalid("Deep review needs the photo or previousLogId.");
-  return {examId, mode, image, previousLogId, force: d.force === true};
+  let requestId = null;
+  if (d.requestId !== undefined && d.requestId !== null && d.requestId !== "") {
+    requestId = typeof d.requestId === "string" ? d.requestId.trim() : "";
+    if (!REQUEST_ID_RE.test(requestId)) throw invalid("requestId is not valid.");
+  }
+  return {examId, mode, image, previousLogId, force: d.force === true, requestId};
 }
 
 /** pack.json objects whose missing "production" block was already logged (one per loaded version per instance). */
@@ -630,6 +643,41 @@ async function writeLog(ref, doc) {
   }
 }
 
+/** Firestore (gRPC) code of a create() on a document that already exists. */
+const ALREADY_EXISTS = 6;
+
+/**
+ * Log document of a request about to call the model. With the page's requestId it is created at once with status
+ * "running" (see the file header), so a page whose connection was cut can wait for the result on it; writeLog
+ * overwrites it at the end. A requestId already used is refused. The Firestore client retries a commit whose reply
+ * was lost, and the retry then finds the document its first attempt created: runId (made here) tells that case from
+ * a real second request. Any other failure to create it is logged and the request goes on (writeLog still writes
+ * the result).
+ * @param {object} db Firestore
+ * @param {object} input parsed request data (requestId)
+ * @param {object} base fields known before the model call
+ * @return {Promise<object>} document reference
+ */
+async function openLog(db, input, base) {
+  const coll = db.collection(LOG_COLLECTION);
+  if (!input.requestId) return coll.doc();
+  const ref = coll.doc(input.requestId);
+  const runId = crypto.randomUUID();
+  const doc = {...base, status: "running", runId};
+  if (isEmulator()) doc.test = true;
+  try {
+    await ref.create(doc);
+  } catch (err) {
+    if (err && (err.code === ALREADY_EXISTS || err.code === "already-exists")) {
+      const snap = await ref.get().catch(() => null);
+      if (snap && snap.exists && snap.data().runId === runId) return ref;
+      throw new HttpsError("already-exists", "This request was already sent.");
+    }
+    logger.warn("examCoachAnswer: running log not written", {logId: ref.id, ...describeError(err)});
+  }
+  return ref;
+}
+
 /**
  * Starts writing the photo to the bucket; a failure is logged and resolves to null.
  * @param {{mediaType: string, bytes: Buffer}} image validated photo
@@ -780,6 +828,9 @@ function errorFields(httpsErr, err) {
       code: httpsErr.code,
       reason: httpsErr.details && httpsErr.details.reason ? httpsErr.details.reason : null,
       ...describeError(cause),
+      // The sentence the page shows (this file's own short English text), for a page that reads the error from the
+      // log after a cut connection; "message" above is the cause's, which is never shown.
+      userMessage: String(httpsErr.message || "").slice(0, 240),
     },
   };
 }
@@ -803,7 +854,7 @@ function modelDeadline(t0, mode) {
  * @return {Promise<object>} warm-up result
  */
 async function warmUp(ctx) {
-  const logRef = getFirestore().collection(LOG_COLLECTION).doc();
+  const logRef = await openLog(getFirestore(), ctx.input, ctx.base);
   const logId = logRef.id;
   let call;
   try {
@@ -911,8 +962,16 @@ async function answerQuestion(ctx) {
     }
   }
 
-  const logRef = db.collection(LOG_COLLECTION).doc();
+  const logRef = await openLog(db, input, {...ctx.base, previousLogId: input.previousLogId});
   const logId = logRef.id;
+  // An error before the model call: a "running" log document (requestId) gets the error, so the page stops waiting.
+  const failEarly = async (httpsErr) => {
+    if (input.requestId) {
+      await writeLog(logRef, {...ctx.base, previousLogId: input.previousLogId, ...failedCallFields(httpsErr),
+        ...errorFields(httpsErr, httpsErr), totalMs: Date.now() - ctx.t0});
+    }
+    return httpsErr;
+  };
   let image = input.image;
   let photoWrite;
   if (image && previous && previous.log.photoPath && previous.log.photoHash === sha256(image.bytes)) {
@@ -924,15 +983,15 @@ async function answerQuestion(ctx) {
   } else {
     const prevPath = previous.log.photoPath;
     if (!prevPath || !hasOwn(MEDIA_TYPES, previous.log.mediaType)) {
-      throw new HttpsError("failed-precondition", "The photo of that answer is not available: send it again.");
+      throw await failEarly(new HttpsError("failed-precondition", "The photo of that answer is not available: send it again."));
     }
     try {
       const bytes = await downloadPhoto(prevPath);
       image = {mediaType: previous.log.mediaType, base64: bytes.toString("base64"), bytes};
     } catch (err) {
       logger.warn("examCoachAnswer: previous photo not readable", {previousLogId: input.previousLogId, ...describeError(err)});
-      throw new HttpsError("failed-precondition",
-          "The photo of that answer is no longer available (photos are kept for 30 days): send it again.");
+      throw await failEarly(new HttpsError("failed-precondition",
+          "The photo of that answer is no longer available (photos are kept for 30 days): send it again."));
     }
     photoWrite = Promise.resolve(prevPath);
   }
@@ -1070,7 +1129,7 @@ async function photo(request) {
 
 module.exports = {
   SECRET_NAME, anthropicKey, ALLOWED_EMAILS, LOG_COLLECTION, FUNCTION_TIMEOUT_S, PAGE_TIMEOUT_MS, MODEL_BUDGET_MS,
-  HANDLER_MARGIN_MS, PHOTO_WAIT_MS,
+  HANDLER_MARGIN_MS, PHOTO_WAIT_MS, REQUEST_ID_RE,
   answer, photo, appCheckState,
   // Helpers exported for unit tests (no network calls).
   setClient, requireUser, parseAnswerData, parseImage, productionSettings, usageOf, iterationsOf, costOf, servedByOf,

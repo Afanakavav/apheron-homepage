@@ -1,7 +1,7 @@
 // Exam Coach — runs before app.js and without Firebase: names the exam in the title and the views, and moves
 // /exam-coach/ to the canonical /exam-coach/<examId>/ so the page and the home-screen app share one URL.
 
-import { examFromPath, examPath } from "./core.js?v=1";
+import { examFromPath, examPath } from "./core.js?v=2";
 
 const exam = examFromPath(location.pathname);
 

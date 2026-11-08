@@ -25,6 +25,17 @@ Request `data`:
 | `image` | `{mediaType, base64}` | JPEG, PNG or WebP, plain base64 (no `data:` prefix), at most 5 MiB of base64. Required for `answer`; for `deep` optional when `previousLogId` is given; ignored for `warm` |
 | `previousLogId` | string | `deep` only: the answer to review; its answer is passed to the model as "previous" and its photo is reused when no `image` is sent |
 | `force` | boolean | `deep` only: run again even if this answer already has a stored deep review |
+| `requestId` | string | optional, 20 letters and digits made by the page: the id of the request's log document (see below); a value already used is refused with `already-exists` |
+
+**Cut connections.** iOS Safari drops a request that receives nothing for about 60 s (a deep review at effort max
+takes 1-3 minutes), and a locked phone or a switch to another app cuts it too; the function goes on regardless. So
+with a `requestId` the log document `examCoachLog/<requestId>` is created with `status: "running"` before the model
+call (after the stored-deep check) and overwritten with the result (`ok`) or the error (`error`, with `error.code`).
+The page sends a `requestId` on every call and, when the call fails without the function's own error message, waits
+for that document (`public/exam-coach/app.js`, `callCoach`). Without a `requestId` the document gets an automatic id
+and is written only at the end, as before. An error document keeps the sentence the page shows in
+`error.userMessage` (`error.message` is the cause's text, never shown). The running document carries a `runId`, so a
+Firestore commit retry that finds the document its own first attempt created is not refused as a second request.
 
 Modes:
 
@@ -60,6 +71,7 @@ Errors are `HttpsError`s with short English messages; model errors carry `detail
 | Code | `details.reason` | When |
 |---|---|---|
 | `unauthenticated` / `permission-denied` | | not signed in; not the allowed user (UID and email) |
+| `already-exists` | | the `requestId` was already used |
 | `invalid-argument` | | bad input (no reason), or `bad-request`: the API rejected the request |
 | `deadline-exceeded` | `timeout` | the model call went past its budget (see Timeouts) |
 | `unavailable` | `overloaded` / `pack` | overload or server error after 2 retries on the same model; the pack could not be downloaded |
@@ -125,7 +137,7 @@ One document per call, warm-ups and failed calls included (cache writes are the 
 | `failedCostUsd`, `attempts`, `failedAttempts` | retries: each failed attempt has its error, partial `usage`, `iterations` and `costUsd` |
 | `latencyMs`, `totalMs` | model call, whole handler |
 | `photoPath`, `photoTimedOut`, `mediaType`, `photoHash`, `photoBytes` | photo (`photos/<logId>.<ext>` in the bucket); `photoTimedOut` true when the reply did not wait for the write |
-| `appCheck`, `createdAt`, `status`, `error`, `flagged`, `test` | `status` is `ok` or `error`; `flagged` is the only field the page may change (`firestore.rules`); `test` only in the emulator |
+| `appCheck`, `createdAt`, `status`, `error`, `flagged`, `test` | `status` is `running` (only while a request with a `requestId` is at work), `ok` or `error`; `flagged` is the only field the page may change (`firestore.rules`); `test` only in the emulator |
 
 ## Private bucket `gs://apheron-homepage-exam-coach`
 

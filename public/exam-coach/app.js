@@ -5,8 +5,11 @@ import { auth, db, signInWithEmailAndPassword, signOut, onAuthStateChanged, doc,
 import { getApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-functions.js";
 // Same URL as in /firebase-config.js: same Firestore module instance, so the same db.
-import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { examFromPath, shouldWarm, loadSettings, saveSettings, loadLastActive, saveLastActive } from "./core.js?v=1";
+import { collection, query, where, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import {
+  examFromPath, shouldWarm, loadSettings, saveSettings, loadLastActive, saveLastActive,
+  CALL_TIMEOUT_MS, LOG_ARRIVAL_MS, LOG_GRACE_MS, LOG_TICK_GAP_MS, newRequestId, logOutcome, isCutConnection,
+} from "./core.js?v=2";
 import { compressImage } from "./image.js?v=1";
 import * as ui from "./ui.js?v=1";
 
@@ -29,10 +32,10 @@ const storage = safeStorage();
 const functions = getFunctions(getApp(), "europe-west1");
 // The server keeps an answer's model time (a cold cache write included) and its log well inside 180 s: the page
 // waits that long, so it never gives up on an answer that is still being paid for.
-const callAnswer = httpsCallable(functions, "examCoachAnswer", { timeout: 180000 });
+const callAnswer = httpsCallable(functions, "examCoachAnswer", { timeout: CALL_TIMEOUT_MS.answer });
 // Warm-up and deep review may write the whole cached knowledge base or think longer: same function (540 s timeout),
 // and the page waits a little longer than the function can run.
-const callLong = httpsCallable(functions, "examCoachAnswer", { timeout: 560000 });
+const callLong = httpsCallable(functions, "examCoachAnswer", { timeout: CALL_TIMEOUT_MS.deep });
 const callPhoto = httpsCallable(functions, "examCoachPhoto", { timeout: 35000 });
 
 const $ = (id) => document.getElementById(id);
@@ -108,8 +111,76 @@ function messageOf(err) {
 
 // Errors that a second attempt a few seconds later would not fix (or would only make worse).
 function isFinalError(err) {
-  return /permission-denied|invalid-argument|not-found|unauthenticated|failed-precondition|resource-exhausted/
+  return /permission-denied|invalid-argument|not-found|unauthenticated|failed-precondition|resource-exhausted|already-exists/
       .test(String((err && err.code) || ""));
+}
+
+// ---------- calls whose connection may be cut ----------
+
+// The log document of a request whose connection was cut. It resolves with the result (status "ok") and rejects with
+// the stored error (status "error"). It rejects with the call's own error when the document never shows up (the
+// request did not reach the function), and with deadline-exceeded when it is still running at the end of the call's
+// time. Neither limit is applied sooner than LOG_GRACE_MS after the failure or after the page wakes up from the
+// background, so the listener can reconnect and report a result that is already stored. The page may read its own
+// log documents (firestore.rules).
+function resultFromLog(requestId, mode, sentAt, callErr) {
+  return new Promise((resolve, reject) => {
+    let done = false;
+    let seen = false;
+    let unsubscribe = null;
+    let arrivalAt = Math.max(sentAt + LOG_ARRIVAL_MS, Date.now() + LOG_GRACE_MS);
+    let endAt = Math.max(sentAt + (CALL_TIMEOUT_MS[mode] || CALL_TIMEOUT_MS.deep), arrivalAt);
+    let lastTick = Date.now();
+    const finish = (settle, value) => {
+      if (done) return;
+      done = true;
+      clearInterval(timer);
+      if (unsubscribe) unsubscribe();
+      settle(value);
+    };
+    // Checked every second rather than with one long timer: a page frozen in the background resumes with the clock.
+    const timer = setInterval(() => {
+      const now = Date.now();
+      if (now - lastTick > LOG_TICK_GAP_MS) {
+        arrivalAt = Math.max(arrivalAt, now + LOG_GRACE_MS);
+        endAt = Math.max(endAt, now + LOG_GRACE_MS);
+      }
+      lastTick = now;
+      if (!seen && now >= arrivalAt) finish(reject, callErr);
+      else if (now >= endAt) {
+        finish(reject, Object.assign(new Error("deadline-exceeded"), { code: "functions/deadline-exceeded" }));
+      }
+    }, 1000);
+    unsubscribe = onSnapshot(doc(db, LOG_COLLECTION, requestId), (snap) => {
+      const data = snap.exists() ? snap.data() : null;
+      const outcome = logOutcome(data);
+      if (outcome.state === "missing") return;
+      seen = true;
+      if (outcome.state === "ok") finish(resolve, { ...data, logId: snap.id });
+      else if (outcome.state === "error") {
+        // The function's own sentence when the document has it, so the detail line reads as on a direct reply.
+        finish(reject, Object.assign(new Error(outcome.message || outcome.code), { code: `functions/${outcome.code}` }));
+      }
+    }, () => finish(reject, callErr));
+    if (done) unsubscribe();
+  });
+}
+
+// Every call to examCoachAnswer carries a requestId, and the function names the request's log document after it.
+// When the connection is cut (isCutConnection in core.js) the function goes on, so the page waits for the result in
+// that document instead of failing; onWaiting lets the caller say so on screen.
+async function callCoach(callable, payload, onWaiting) {
+  const requestId = newRequestId();
+  const sentAt = Date.now();
+  try {
+    const { data } = await callable({ ...payload, requestId });
+    return { data, sentAt };
+  } catch (err) {
+    if (isFinalError(err) || !isCutConnection(err)) throw err;
+    if (onWaiting) onWaiting();
+    const data = await resultFromLog(requestId, payload.mode, sentAt, err);
+    return { data, sentAt };
+  }
 }
 
 // ---------- App Check ----------
@@ -187,8 +258,7 @@ async function warm() {
     for (let attempt = 1; ; attempt++) {
       try {
         await appCheckReady();
-        const sentAt = Date.now();
-        const { data } = await callLong({ examId: exam.id, mode: "warm" });
+        const { data, sentAt } = await callCoach(callLong, { examId: exam.id, mode: "warm" });
         noteReply(data, sentAt);
         setStatus("ready", "ready");
         setHint(HINT_READY);
@@ -313,8 +383,8 @@ async function askAbout(file) {
       const img = await compressing;
       state.image = { mediaType: img.mediaType, base64: img.base64 };
       await appCheckReady();
-      const sentAt = Date.now();
-      const { data } = await callAnswer({ examId: exam.id, mode: "answer", image: state.image });
+      const { data, sentAt } = await callCoach(callAnswer, { examId: exam.id, mode: "answer", image: state.image },
+          () => { label.textContent = "Connection lost, waiting for the answer…"; });
       noteReply(data, sentAt);
       const fast = ui.normalizeResult(data);
       if (!Number.isFinite(fast.latencyMs)) fast.latencyMs = Date.now() - t0;
@@ -357,8 +427,10 @@ async function deepen() {
       await appCheckReady();
       const payload = { examId: exam.id, mode: "deep", previousLogId: fast.logId };
       if (state.image) payload.image = state.image;
-      const sentAt = Date.now();
-      const { data } = await callLong(payload);
+      const { data, sentAt } = await callCoach(callLong, payload, () => {
+        const label = slot.querySelector(".busy-label");
+        if (label) label.textContent = "Still reviewing…";
+      });
       noteReply(data, sentAt);
       const deep = ui.normalizeResult(data);
       if (!Number.isFinite(deep.latencyMs)) deep.latencyMs = Date.now() - t0;

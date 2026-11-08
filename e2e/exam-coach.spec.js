@@ -44,6 +44,22 @@ const FIREBASE_MOCKS = {
       return { docs };
     }
     export async function updateDoc(ref, patch) { window.__updates.push({ id: ref.id, patch }); Object.assign(window.__docs[ref.id], patch); }
+    // Polls window.__docs and reports each change of the document; window.__snapshots counts the open listeners.
+    // window.__snapshotDelay delays the first report (a listener reconnecting after the page was frozen).
+    export function onSnapshot(ref, next, error) {
+      let last;
+      let timer = null;
+      const emit = () => {
+        const d = window.__docs[ref.id];
+        const key = JSON.stringify(d === undefined ? null : d);
+        if (key === last) return;
+        last = key;
+        next({ id: ref.id, exists: () => d !== undefined, data: () => (d === undefined ? undefined : { ...d }) });
+      };
+      window.__snapshots = (window.__snapshots || 0) + 1;
+      const first = setTimeout(() => { emit(); timer = setInterval(emit, 50); }, window.__snapshotDelay || 0);
+      return () => { clearTimeout(first); clearInterval(timer); window.__snapshots--; };
+    }
     export async function addDoc() {}
     export async function deleteDoc() {}
     export async function setDoc() {}`,
@@ -86,12 +102,18 @@ const MOCK_SERVER = `
   };`;
 
 // Test controls on top of MOCK_SERVER: hold a mode's replies until released, make the next warm-ups fail with the
-// given codes, patch the replies of a mode, and record when each call was sent (page clock).
+// given codes (errors sent by the function, so with its own sentence), patch the replies of a mode, record when each
+// call was sent (page clock), and cut the connection of the next calls of a mode (window.__cuts[mode]: "ok",
+// "ok-late", "never" or "error:<code>[:<sentence>]"). A cut call fails like a dropped fetch in the Firebase SDK
+// (code and message "internal"): at once, or for "ok-late" only when the hold "cut" is released (the page learns of
+// the cut when it wakes up). Except with "never" the function goes on: it creates the log document named after the
+// requestId with status "running" and, once the mode's hold is released, stores the result or the error there.
 const MOCK_CONTROLS = `
   window.__sentAt = [];
   window.__holds = {};
   window.__warmErrors = [];
   window.__replyPatch = {};
+  window.__cuts = {};
   window.__hold = (mode) => {
     let release;
     const promise = new Promise((resolve) => { release = resolve; });
@@ -105,16 +127,39 @@ const MOCK_CONTROLS = `
   const base = window.__server;
   window.__server = async (name, data) => {
     window.__sentAt.push(Date.now());
+    const cut = (window.__cuts[data.mode] || []).shift();
+    if (cut) {
+      if (cut !== "never") {
+        window.__docs[data.requestId] = { status: "running", mode: data.mode };
+        (async () => {
+          const held = window.__holds[data.mode];
+          if (held) await held.promise;
+          if (cut.startsWith("error:")) {
+            const [, code, ...sentence] = cut.split(":");
+            const error = { code, message: "cause text, never shown" };
+            if (sentence.length) error.userMessage = sentence.join(":");
+            window.__docs[data.requestId] = { status: "error", mode: data.mode, error };
+          } else {
+            const reply = { ...(await base(name, data)), ...(window.__replyPatch[data.mode] || {}) };
+            window.__docs[data.requestId] = { ...reply, logId: data.requestId, status: "ok", flagged: false };
+          }
+        })();
+      }
+      if (cut === "ok-late" && window.__holds.cut) await window.__holds.cut.promise;
+      throw Object.assign(new Error("internal"), { code: "functions/internal" });
+    }
     const hold = window.__holds[data.mode];
     if (hold) await hold.promise;
     if (data.mode === "warm" && window.__warmErrors.length) {
       const code = window.__warmErrors.shift();
-      throw Object.assign(new Error(code), { code: "functions/" + code });
+      throw Object.assign(new Error("The function failed (" + code + ")."), { code: "functions/" + code });
     }
     return { ...(await base(name, data)), ...(window.__replyPatch[data.mode] || {}) };
   };`;
 
 const PHOTO = path.join(__dirname, "..", "public", "exam-coach", "icon-192.png");
+// Every examCoachAnswer call carries a requestId: 20 letters and digits made by the page.
+const REQUEST_ID = expect.stringMatching(/^[A-Za-z0-9]{20}$/);
 
 /**
  * Opens the page with the Firebase SDK mocked (MOCK_SERVER and MOCK_CONTROLS), the page clock installed, signed in.
@@ -564,7 +609,7 @@ test.describe("Exam Coach", () => {
     await expect(page.locator("#coach")).toBeVisible();
     await expect(page.locator("#status")).toHaveText("ready");
     expect(await calls()).toEqual([
-      { name: "examCoachAnswer", region: "europe-west1", timeout: 560000, data: { examId: "aigp", mode: "warm" } },
+      { name: "examCoachAnswer", region: "europe-west1", timeout: 560000, data: { examId: "aigp", mode: "warm", requestId: REQUEST_ID } },
     ]);
 
     // Visible again within 55 minutes: no second warm-up.
@@ -580,9 +625,10 @@ test.describe("Exam Coach", () => {
     await expect(page.getByRole("button", { name: "Deep review" })).toBeHidden();
     const [, answer, deep] = await calls();
     expect(answer).toEqual({ name: "examCoachAnswer", region: "europe-west1", timeout: 180000,
-      data: { examId: "aigp", mode: "answer", image: { mediaType: "image/jpeg", jpeg: true } } });
+      data: { examId: "aigp", mode: "answer", image: { mediaType: "image/jpeg", jpeg: true }, requestId: REQUEST_ID } });
     expect(deep).toEqual({ name: "examCoachAnswer", region: "europe-west1", timeout: 560000,
-      data: { examId: "aigp", mode: "deep", previousLogId: "log-a", image: { mediaType: "image/jpeg", jpeg: true } } });
+      data: { examId: "aigp", mode: "deep", previousLogId: "log-a", image: { mediaType: "image/jpeg", jpeg: true }, requestId: REQUEST_ID } });
+    expect(new Set((await calls()).map((c) => c.data.requestId)).size).toBe(3);
 
     await page.getByRole("button", { name: "Mark as doubtful" }).click();
     await expect(page.getByRole("button", { name: "Marked as doubtful" })).toBeDisabled();
@@ -607,7 +653,7 @@ test.describe("Exam Coach", () => {
     await page.clock.fastForward("56:00");
     await page.evaluate(() => document.dispatchEvent(new Event("visibilitychange")));
     await expect.poll(async () => (await calls()).length).toBe(before + 1);
-    expect((await calls()).at(-1).data).toEqual({ examId: "aigp", mode: "warm" });
+    expect((await calls()).at(-1).data).toEqual({ examId: "aigp", mode: "warm", requestId: REQUEST_ID });
 
     // Settings: auto-deep saved under exam-coach:settings; sign-out returns to the login form.
     await page.getByRole("button", { name: "Settings" }).click();
@@ -705,6 +751,179 @@ test.describe("Exam Coach", () => {
     await expect(page.locator("#result-root .result > .result-head .letters")).toHaveText("B");
     await page.getByRole("button", { name: "Settings" }).click();
     await expect(page.locator("#settings-pack")).toHaveText("Knowledge base v-answer");
+  });
+
+  test("core.js makes 20-character request ids, reads log outcomes and tells a cut connection from a function error", async ({ page }) => {
+    await page.goto(BASE);
+    const r = await page.evaluate(async () => {
+      const core = await import("/exam-coach/core.js");
+      const ids = Array.from({ length: 500 }, () => core.newRequestId());
+      // 25 bytes of 255 (out of the 62-symbol range, drawn again), then 61 ("9"): rejection sampling and refills.
+      let n = 0;
+      const source = { getRandomValues: (a) => { for (let i = 0; i < a.length; i++) a[i] = n++ < 25 ? 255 : 61; return a; } };
+      return {
+        shaped: ids.every((id) => /^[A-Za-z0-9]{20}$/.test(id)),
+        unique: new Set(ids).size,
+        drawnAgain: core.newRequestId(source),
+        outcomes: [null, {}, { status: "running" }, { status: "ok" }, { status: "error", error: { code: "deadline-exceeded" } },
+          { status: "error", error: { code: "functions/unavailable" } }, { status: "error", error: { code: "<b>x</b>" } },
+          { status: "error" },
+          { status: "error", error: { code: "failed-precondition", message: "cause", userMessage: " The model declined to answer this question. " } },
+          { status: "error", error: { code: "internal", userMessage: "x".repeat(241) } }].map(core.logOutcome),
+        cut: [
+          { code: "functions/internal", message: "internal" },
+          { code: "functions/deadline-exceeded", message: "deadline-exceeded" },
+          { code: "functions/unavailable", message: "unavailable" },
+          { code: "functions/internal", message: "Internal error. Try again later." },
+          { code: "functions/unavailable", message: "The exam material is not available. Try again shortly." },
+          { code: "functions/permission-denied", message: "permission-denied" },
+          { code: "functions/resource-exhausted", message: "resource-exhausted" },
+          null,
+        ].map(core.isCutConnection),
+        timeouts: core.CALL_TIMEOUT_MS,
+        waits: [core.LOG_ARRIVAL_MS, core.LOG_GRACE_MS, core.LOG_TICK_GAP_MS],
+      };
+    });
+    expect(r.shaped).toBe(true);
+    expect(r.unique).toBe(500);
+    expect(r.drawnAgain).toBe("99999999999999999999");
+    expect(r.outcomes).toEqual([
+      { state: "missing" }, { state: "running" }, { state: "running" }, { state: "ok" },
+      { state: "error", code: "deadline-exceeded", message: "" }, { state: "error", code: "unavailable", message: "" },
+      { state: "error", code: "internal", message: "" }, { state: "error", code: "internal", message: "" },
+      { state: "error", code: "failed-precondition", message: "The model declined to answer this question." },
+      { state: "error", code: "internal", message: "" },
+    ]);
+    expect(r.cut).toEqual([true, true, true, false, false, false, false, false]);
+    expect(r.timeouts).toEqual({ answer: 180000, warm: 560000, deep: 560000 });
+    expect(r.waits).toEqual([30000, 8000, 3000]);
+  });
+
+  test("app.js recovers a deep review whose connection is cut (iOS drops idle requests after ~60 s) from its log document", async ({ page }) => {
+    await openSignedIn(page);
+    await expect(page.locator("#status")).toHaveText("ready");
+    // The low-confidence answer starts the automatic deep review; its connection is cut while the function works on.
+    await page.evaluate(() => { window.__cuts.deep = ["ok"]; window.__hold("deep"); });
+    await page.locator("#file-camera").setInputFiles(PHOTO);
+    await expect(page.locator("#result-root .result > .result-head .letters")).toHaveText("B");
+    const slotLabel = page.locator("#result-root .deep-slot .busy-label");
+    await expect(slotLabel).toHaveText("Still reviewing…");
+    const requestId = await page.evaluate(() => window.__calls.at(-1).data.requestId);
+    expect(requestId).toMatch(/^[A-Za-z0-9]{20}$/);
+    expect(await page.evaluate((id) => window.__docs[id].status, requestId)).toBe("running");
+
+    // Three minutes later the function is still working: the page keeps waiting, with no error and no new call.
+    await page.clock.fastForward("03:00");
+    await page.waitForTimeout(200);
+    await expect(slotLabel).toHaveText("Still reviewing…");
+    expect(await page.evaluate(() => window.__calls.length)).toBe(3);
+
+    // The result lands in the log document: shown as the deep review, under the request id.
+    await page.evaluate(() => window.__release("deep"));
+    await expect(page.locator("#result-root .deep-head")).toHaveText("Changes to C");
+    await expect(page.locator("#result-root .deep .citation")).toHaveText(["M2/L1"]);
+    await expect(page.getByRole("button", { name: "Deep review" })).toBeHidden();
+    expect(await page.evaluate(() => window.__snapshots)).toBe(0);
+    await page.getByRole("button", { name: "Mark as doubtful" }).click();
+    await expect(page.getByRole("button", { name: "Marked as doubtful" })).toBeDisabled();
+    expect(await page.evaluate(() => window.__updates)).toEqual([
+      { id: "log-a", patch: { flagged: true } }, { id: requestId, patch: { flagged: true } },
+    ]);
+  });
+
+  test("app.js gives up on a cut call whose log never shows up, shows a stored error, and never waits on a function's own error", async ({ page }) => {
+    // A warm-up whose request never reached the function: it waits 30 s for its log document, then the usual retry.
+    const calls = await openSignedIn(page, { beforeSignIn: () => { window.__cuts.warm = ["never"]; } });
+    await expect.poll(async () => (await calls()).length).toBe(1);
+    await page.clock.runFor(29000);
+    await expect(page.locator("#status .status-label")).toHaveText("warming");
+    expect(await calls()).toHaveLength(1);
+    await page.clock.runFor(7000);
+    await expect(page.locator("#status")).toHaveText("ready");
+    expect((await calls()).map((c) => c.mode)).toEqual(["warm", "warm"]);
+    const label = page.locator("#result-root .busy-label");
+
+    // The request never reached the function: no log document within 30 s of the call, then the call's own error.
+    await page.evaluate(() => { window.__cuts.answer = ["never"]; });
+    await page.locator("#file-camera").setInputFiles(PHOTO);
+    await expect(label).toHaveText("Connection lost, waiting for the answer…");
+    await page.clock.runFor(20000);
+    await expect(label).toHaveText("Connection lost, waiting for the answer…");
+    await page.clock.runFor(11000);
+    await expect(page.locator("#result-root .error")).toHaveText("Something went wrong, try again");
+    expect(await page.evaluate(() => window.__snapshots)).toBe(0);
+
+    // The function stored an error for the cut request: its message, at once; with the function's own sentence when
+    // the log has it (the cause's text is never shown).
+    await page.getByRole("button", { name: "New question" }).click();
+    await page.evaluate(() => { window.__cuts.answer = ["error:deadline-exceeded"]; });
+    await page.locator("#file-camera").setInputFiles(PHOTO);
+    await expect(page.locator("#result-root .error")).toHaveText("It took too long, try again");
+    await page.getByRole("button", { name: "New question" }).click();
+    await page.evaluate(() => { window.__cuts.answer = ["error:failed-precondition:The model declined to answer this question."]; });
+    await page.locator("#file-camera").setInputFiles(PHOTO);
+    await expect(page.locator("#result-root .error")).toHaveText(
+        "Not available any more, take a new photoThe model declined to answer this question.");
+    await expect(page.locator("#result-root .error")).not.toContainText("cause text");
+
+    // A cut answer stored fine: shown, with the request id as its log id.
+    await page.getByRole("button", { name: "New question" }).click();
+    await page.evaluate(() => { window.__cuts.answer = ["ok"]; window.__replyPatch.answer = { confidence: "high" }; });
+    await page.locator("#file-camera").setInputFiles(PHOTO);
+    await expect(page.locator("#result-root .result > .result-head .letters")).toHaveText("B");
+    const answerId = await page.evaluate(() => window.__calls.at(-1).data.requestId);
+    expect(await page.locator("#result-root .result").getAttribute("data-log-id")).toBe(answerId);
+
+    // An error sent by the function (its own sentence) is shown without waiting for any log document.
+    await page.evaluate(() => {
+      const base = window.__server;
+      window.__server = async (name, data) => {
+        if (data.mode === "deep") throw Object.assign(new Error("Model unavailable. Try again shortly."), { code: "functions/unavailable" });
+        return base(name, data);
+      };
+    });
+    await page.getByRole("button", { name: "Deep review" }).click();
+    await expect(page.locator("#result-root .deep-slot .error")).toContainText("Service unavailable, try again shortly");
+    expect(await page.evaluate(() => window.__snapshots)).toBe(0);
+    await expect(page.getByRole("button", { name: "Deep review" })).toBeEnabled();
+  });
+
+  test("app.js shows a result stored while the phone was locked, and gives up on a still-running call only after a grace period", async ({ page }) => {
+    await openSignedIn(page);
+    await expect(page.locator("#status")).toHaveText("ready");
+
+    // Phone locked during an answer: the function stores it at once, but the page learns of the cut only when it
+    // wakes up 4 minutes later (past the 180 s of an answer), and Firestore takes 3 s to report the document.
+    await page.evaluate(() => {
+      window.__cuts.answer = ["ok-late"];
+      window.__hold("cut");
+      window.__replyPatch.answer = { confidence: "high" };
+    });
+    await page.locator("#file-camera").setInputFiles(PHOTO);
+    await expect.poll(() => page.evaluate(() => window.__calls.length)).toBe(2);
+    const id = await page.evaluate(() => window.__calls.at(-1).data.requestId);
+    await expect.poll(() => page.evaluate((i) => window.__docs[i] && window.__docs[i].status, id)).toBe("ok");
+    await page.clock.fastForward("04:00");
+    await page.evaluate(() => { window.__snapshotDelay = 3000; window.__release("cut"); });
+    await page.clock.runFor(1500);
+    await expect(page.locator("#result-root .busy-label")).toHaveText("Connection lost, waiting for the answer…");
+    await page.clock.runFor(3000);
+    await expect(page.locator("#result-root .result > .result-head .letters")).toHaveText("B");
+    expect(await page.locator("#result-root .result").getAttribute("data-log-id")).toBe(id);
+
+    // A deep review still running when the page wakes up past its 560 s: no instant failure, the grace period first.
+    await page.evaluate(() => { window.__snapshotDelay = 0; window.__cuts.deep = ["ok"]; window.__hold("deep"); });
+    await page.getByRole("button", { name: "Deep review" }).click();
+    const slot = page.locator("#result-root .deep-slot");
+    await expect(slot.locator(".busy-label")).toHaveText("Still reviewing…");
+    await page.clock.runFor(1000);
+    await page.clock.fastForward("09:30");
+    await page.clock.runFor(1500);
+    await expect(slot.locator(".busy-label")).toHaveText("Still reviewing…");
+    await page.clock.runFor(8000);
+    await expect(slot.locator(".error")).toHaveText("It took too long, try again");
+    await expect(page.getByRole("button", { name: "Deep review" })).toBeEnabled();
+    expect(await page.evaluate(() => window.__snapshots)).toBe(0);
   });
 
   test("the coach view has an h1, a status whose ticking seconds are hidden from screen readers, and fits 320 px", async ({ page }) => {

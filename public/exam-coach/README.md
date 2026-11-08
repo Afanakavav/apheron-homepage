@@ -15,7 +15,8 @@ private bucket and is read by the functions (`functions/exam-coach/`).
 - `app.js` — glue: Firebase auth, App Check gate, callables `examCoachAnswer` (modes `warm`, `answer`, `deep`) and
   `examCoachPhoto` in `europe-west1`, the `flagged` mark on `examCoachLog` documents (the only field
   `firestore.rules` lets the page change), settings in `localStorage` (`exam-coach:settings`).
-- `core.js` — pure helpers: exam from the path, settings, warm-up timing (`exam-coach:last-active`).
+- `core.js` — pure helpers: exam from the path, settings, warm-up timing (`exam-coach:last-active`), request ids
+  and cut connections.
 - `image.js` — photo compression: long edge at most 2576 px, JPEG 0.85, EXIF orientation, byte cap 3.5 MB.
 - `ui.js` — pure rendering (no Firebase): answer card, deep review, doubtful list, English error messages.
 - `styles.css`, `manifest.json` (start_url and scope `/exam-coach/aigp/`), icons.
@@ -35,6 +36,17 @@ refused: the page says "Security check failed: reload the page", not "sign in ag
 
 Client timeouts: answer 180 s; warm-up and deep review 560 s (the function's timeout is 540 s). The knowledge base
 version in the settings comes from the last reply (`packVersion`).
+
+## Cut connections
+iOS Safari drops a request that receives nothing for about 60 s, and a deep review at effort max takes 1-3 minutes;
+locking the phone or switching app cuts the call too. The function goes on and stores its result anyway, so every
+`examCoachAnswer` call carries a `requestId` (`core.js`, `newRequestId`), which the function uses as the id of the
+log document (created as `running` before the model call). When a call fails without the function's own message
+(`isCutConnection`: the SDK's bare `internal`, `unavailable` or `deadline-exceeded`), `app.js` (`callCoach`) listens
+to `examCoachLog/<requestId>` instead: it shows the result (`ok`) or its error (`error`); it gives up with the call's
+own error if the document does not appear within 30 s of the call (8 s after the failure at least), and with
+`deadline-exceeded` at the end of the call's time. Meanwhile the waiting row says "Still reviewing…" or "Connection
+lost, waiting for the answer…".
 
 ## Use on iPhone
 Safari → `apheron.io/exam-coach/aigp/` → Share → **Add to Home Screen**. "Take photo" opens the camera, "Choose from
