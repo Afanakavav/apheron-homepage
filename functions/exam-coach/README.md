@@ -59,7 +59,7 @@ Errors are `HttpsError`s with short English messages; model errors carry `detail
 
 | Code | `details.reason` | When |
 |---|---|---|
-| `unauthenticated` / `permission-denied` | | not signed in; not the allowed user; email not verified |
+| `unauthenticated` / `permission-denied` | | not signed in; not the allowed user (UID and email) |
 | `invalid-argument` | | bad input (no reason), or `bad-request`: the API rejected the request |
 | `deadline-exceeded` | `timeout` | the model call went past its budget (see Timeouts) |
 | `unavailable` | `overloaded` / `pack` | overload or server error after 2 retries on the same model; the pack could not be downloaded |
@@ -154,12 +154,10 @@ and `manifest.config` equals `pack.production.config` (when `production.config` 
    deletes `photos/` after 30 days; the functions' runtime service account needs `roles/storage.objectAdmin` on it.
 2. Secret: `firebase functions:secrets:set EXAM_COACH_ANTHROPIC_KEY --project apheron-homepage` (the deploy grants
    the runtime service account access to it). The name is `SECRET_NAME` in `coach.js`.
-3. The allowed account must have a verified email (`emailVerified` in Firebase Auth), otherwise every call and every
-   read of `examCoachLog` is refused. **Open:** the owner's account (email/password, sign-up disabled) currently has
-   `emailVerified: false`. Either the account's email gets verified, or the owner approves removing the
-   `email_verified` check from `coach.js` (`requireUser`) and from the `examCoachLog` block of `firestore.rules`,
-   leaving the email allowlist as in Data Coach v1 (which then relies on sign-up staying disabled and on no other
-   sign-in provider being enabled).
+3. Access is bound to the owner's Firebase UID plus email (`ALLOWED_UIDS` / `ALLOWED_EMAILS` in `coach.js`, and the
+   `examCoachLog` block of `firestore.rules`). The owner's account (email/password, sign-up disabled) has
+   `emailVerified: false`, so `email_verified` is deliberately not checked: the UID, which only that account
+   presents, replaces it. A new allowed user needs both lists and the rules updated.
 4. The page must initialize App Check (reCAPTCHA Enterprise provider) before calling: both callables enforce it.
    A production smoke test without the page must send an `X-Firebase-AppCheck` token, for example one minted with the
    Admin SDK (`getAppCheck().createToken(appId)`), next to the ID token.

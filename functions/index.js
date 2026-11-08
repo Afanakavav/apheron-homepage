@@ -381,7 +381,7 @@ exports.dataCoachPhoto = onCall(
 );
 
 /**
- * Exam Coach (generic engine, one knowledge pack per exam): callables in europe-west1, single user with a verified
+ * Exam Coach (generic engine, one knowledge pack per exam): callables in europe-west1, single user bound by UID and
  * email, App Check enforced, Anthropic key from Secret Manager (EXAM_COACH_ANTHROPIC_KEY). Logic in
  * exam-coach/coach.js; the packs live in a private bucket, never in this repository (see exam-coach/README.md).
  * examCoachAnswer serves the answer, deep and warm modes, so a warm-up loads the pack on the same service; its
